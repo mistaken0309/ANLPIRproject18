@@ -33,15 +33,15 @@ from keras.layers import (Input, Embedding, Convolution1D, Dropout, SpatialDropo
 # win_unicode_console.enable()
 ############## DATA IMPORT AND ANALYSIS ##############
 
-models_dir = ('./project/models')        
+models_dir = ('./models')        
 if not os.path.isdir(models_dir):
     os.makedirs(models_dir)
     print("Home directory %s was created." %models_dir)
 
-if os.path.exists('./project/models/qa_W2V_basic.h5'): os.remove('./project/models/qa_W2V_basic.h5')
-if os.path.exists('./project/models/qa_W2V_overlap.h5'): os.remove('./project/models/qa_W2V_overlap.h5')
-if os.path.exists('./project/models/qa_ft_basic.h5'): os.remove('./project/models/qa_ft_basic.h5')
-if os.path.exists('./project/models/qa_ft_overlap.h5'): os.remove('./project/models/qa_ft_overlap.h5')
+if os.path.exists('./models/qa_W2V_basic.h5'): os.remove('./models/qa_W2V_basic.h5')
+if os.path.exists('./models/qa_W2V_overlap.h5'): os.remove('./models/qa_W2V_overlap.h5')
+if os.path.exists('./models/qa_ft_basic.h5'): os.remove('./models/qa_ft_basic.h5')
+if os.path.exists('./models/qa_ft_overlap.h5'): os.remove('./models/qa_ft_overlap.h5')
 
 # we import the datasets in pandas dataframes
 train = pd.read_csv('data/WikiQA-train.tsv', sep='\t')
@@ -310,7 +310,7 @@ def basic_model_pred(emb, dictionar, dim, newname):
             np.vstack(train['Label'].tolist()), batch_size=100, epochs=100000, shuffle=True, verbose=2,
             callbacks=[EpochEval(data(dev), map_score_filtered, patience=5)])
 
-    nameb ='./project/models' + newname + '_basic.h5'
+    nameb ='./models' + newname + '_basic.h5'
     os.rename('qa.h5', nameb)
 
     print("\n\n basic model - over test set \n")
@@ -338,7 +338,7 @@ def overlap_model_pred(emb, dictionar, dim, dim2, newname):
           np.vstack(train['Label'].tolist()), batch_size=100, epochs=100000, shuffle=True, verbose=2,
           callbacks=[EpochEval(dataTre(dev), map_score_filtered, patience=5)])
 
-    nameo ='./project/models' + newname + '_overlap.h5'
+    nameo ='./models' + newname + '_overlap.h5'
     os.rename('qa.h5', nameo)
 
     print("\n\nmodel with overlaps - over test set \n")

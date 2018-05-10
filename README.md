@@ -1,4 +1,4 @@
-# LUS Final Project  - CRF and RNN
+# ANLPIR Project 2018 - 
 
 ## Usage
 To run the project, clone the project
