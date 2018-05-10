@@ -1,3 +1,4 @@
+Home directory ./project/models was created.
 STARTING TO load embeddings data/aquaint+wiki.txt.gz.ndim=50.bin
 DONE WITH loading embeddings data/aquaint+wiki.txt.gz.ndim=50.bin
 
@@ -29,56 +30,56 @@ ________________________________________________________________________________
  basic model fit
 
 Epoch 1/100000
- - 32s - loss: 0.2770 - acc: 0.9484
+ - 38s - loss: 0.2768 - acc: 0.9484
 	map_score_filtered = 0.3734
 	Best map_score_filtered: 0.3734
 Epoch 2/100000
- - 31s - loss: 0.2019 - acc: 0.9489
+ - 35s - loss: 0.2019 - acc: 0.9489
 	map_score_filtered = 0.4818
 	Best map_score_filtered: 0.4818
 Epoch 3/100000
- - 31s - loss: 0.1933 - acc: 0.9489
+ - 32s - loss: 0.1933 - acc: 0.9489
 	map_score_filtered = 0.6043
 	Best map_score_filtered: 0.6043
 Epoch 4/100000
- - 31s - loss: 0.1862 - acc: 0.9488
+ - 33s - loss: 0.1862 - acc: 0.9488
 	map_score_filtered = 0.6270
 	Best map_score_filtered: 0.6270
 Epoch 5/100000
- - 31s - loss: 0.1808 - acc: 0.9487
+ - 32s - loss: 0.1808 - acc: 0.9487
 	map_score_filtered = 0.6273
 Epoch 6/100000
- - 31s - loss: 0.1757 - acc: 0.9487
+ - 33s - loss: 0.1757 - acc: 0.9487
 	map_score_filtered = 0.6349
 	Best map_score_filtered: 0.6349
 Epoch 7/100000
- - 31s - loss: 0.1705 - acc: 0.9487
+ - 34s - loss: 0.1704 - acc: 0.9487
 	map_score_filtered = 0.6415
 	Best map_score_filtered: 0.6415
 Epoch 8/100000
- - 31s - loss: 0.1644 - acc: 0.9496
+ - 33s - loss: 0.1644 - acc: 0.9496
 	map_score_filtered = 0.6347
 Epoch 9/100000
- - 31s - loss: 0.1578 - acc: 0.9506
+ - 33s - loss: 0.1578 - acc: 0.9506
 	map_score_filtered = 0.6386
 Epoch 10/100000
- - 31s - loss: 0.1502 - acc: 0.9510
+ - 32s - loss: 0.1502 - acc: 0.9510
 	map_score_filtered = 0.6416
 Epoch 11/100000
- - 31s - loss: 0.1413 - acc: 0.9530
+ - 32s - loss: 0.1413 - acc: 0.9530
 	map_score_filtered = 0.6549
 	Best map_score_filtered: 0.6549
 Epoch 12/100000
- - 31s - loss: 0.1318 - acc: 0.9551
+ - 32s - loss: 0.1318 - acc: 0.9551
 	map_score_filtered = 0.6380
 Epoch 13/100000
- - 34s - loss: 0.1213 - acc: 0.9572
+ - 33s - loss: 0.1213 - acc: 0.9572
 	map_score_filtered = 0.6251
 Epoch 14/100000
- - 35s - loss: 0.1093 - acc: 0.9612
+ - 32s - loss: 0.1093 - acc: 0.9612
 	map_score_filtered = 0.6023
 Epoch 15/100000
- - 36s - loss: 0.0980 - acc: 0.9649
+ - 33s - loss: 0.0980 - acc: 0.9649
 	map_score_filtered = 0.6015
 Epoch 16/100000
  - 31s - loss: 0.0872 - acc: 0.9686
@@ -91,8 +92,8 @@ Epoch 16/100000
 
  basic model - over training set 
 
-0.7614265483166249
-0.31363436472937956
+0.7614265483166243
+0.3136343647293796
 
 
 creating overlap model with W2V embedding
@@ -143,69 +144,73 @@ ________________________________________________________________________________
 model with overlaps fit
 
 Epoch 1/100000
- - 37s - loss: 0.2229 - acc: 0.9476
-	map_score_filtered = 0.5475
-	Best map_score_filtered: 0.5475
+ - 37s - loss: 0.2235 - acc: 0.9476
+	map_score_filtered = 0.5489
+	Best map_score_filtered: 0.5489
 Epoch 2/100000
- - 36s - loss: 0.1905 - acc: 0.9489
-	map_score_filtered = 0.6168
-	Best map_score_filtered: 0.6168
+ - 36s - loss: 0.1906 - acc: 0.9489
+	map_score_filtered = 0.6162
+	Best map_score_filtered: 0.6162
 Epoch 3/100000
- - 36s - loss: 0.1814 - acc: 0.9489
+ - 36s - loss: 0.1816 - acc: 0.9489
 	map_score_filtered = 0.6565
 	Best map_score_filtered: 0.6565
 Epoch 4/100000
- - 37s - loss: 0.1731 - acc: 0.9489
-	map_score_filtered = 0.6880
-	Best map_score_filtered: 0.6880
+ - 36s - loss: 0.1733 - acc: 0.9489
+	map_score_filtered = 0.6874
+	Best map_score_filtered: 0.6874
 Epoch 5/100000
- - 37s - loss: 0.1652 - acc: 0.9491
-	map_score_filtered = 0.6996
-	Best map_score_filtered: 0.6996
+ - 36s - loss: 0.1653 - acc: 0.9491
+	map_score_filtered = 0.7000
+	Best map_score_filtered: 0.7000
 Epoch 6/100000
- - 42s - loss: 0.1579 - acc: 0.9496
+ - 37s - loss: 0.1580 - acc: 0.9496
 	map_score_filtered = 0.6977
 Epoch 7/100000
- - 40s - loss: 0.1506 - acc: 0.9512
+ - 38s - loss: 0.1508 - acc: 0.9512
 	map_score_filtered = 0.7000
 Epoch 8/100000
- - 41s - loss: 0.1425 - acc: 0.9522
-	map_score_filtered = 0.6985
+ - 37s - loss: 0.1427 - acc: 0.9521
+	map_score_filtered = 0.6992
 Epoch 9/100000
- - 41s - loss: 0.1337 - acc: 0.9540
+ - 38s - loss: 0.1340 - acc: 0.9539
 	map_score_filtered = 0.7040
 	Best map_score_filtered: 0.7040
 Epoch 10/100000
- - 41s - loss: 0.1238 - acc: 0.9559
-	map_score_filtered = 0.7120
-	Best map_score_filtered: 0.7120
+ - 38s - loss: 0.1241 - acc: 0.9557
+	map_score_filtered = 0.7079
+	Best map_score_filtered: 0.7079
 Epoch 11/100000
- - 40s - loss: 0.1130 - acc: 0.9599
-	map_score_filtered = 0.7077
+ - 42s - loss: 0.1134 - acc: 0.9599
+	map_score_filtered = 0.7115
+	Best map_score_filtered: 0.7115
 Epoch 12/100000
- - 40s - loss: 0.1012 - acc: 0.9632
-	map_score_filtered = 0.6880
+ - 39s - loss: 0.1016 - acc: 0.9629
+	map_score_filtered = 0.6920
 Epoch 13/100000
- - 40s - loss: 0.0890 - acc: 0.9680
-	map_score_filtered = 0.6862
+ - 40s - loss: 0.0895 - acc: 0.9677
+	map_score_filtered = 0.6845
 Epoch 14/100000
- - 40s - loss: 0.0769 - acc: 0.9726
+ - 40s - loss: 0.0773 - acc: 0.9722
 	map_score_filtered = 0.6876
 Epoch 15/100000
- - 40s - loss: 0.0645 - acc: 0.9783
-	map_score_filtered = 0.6895
+ - 39s - loss: 0.0650 - acc: 0.9781
+	map_score_filtered = 0.6888
+Epoch 16/100000
+ - 38s - loss: 0.0535 - acc: 0.9835
+	map_score_filtered = 0.6774
 
 
 model with overlaps - over test set 
 
-0.6794064469537019
-0.2598999265330829
+0.6834097643536029
+0.2614313543003464
 
 
 model with overlaps - over training set 
 
-0.8037884093266287
-0.33108336935891364
+0.8362861259474057
+0.34446929703643736
 STARTING TO load embeddings data/wiki-news-300d-1M.vec
 DONE WITH loading embeddings data/wiki-news-300d-1M.vec
 
@@ -237,35 +242,35 @@ ________________________________________________________________________________
  basic model fit
 
 Epoch 1/100000
- - 165s - loss: 0.2099 - acc: 0.9466
+ - 148s - loss: 0.2099 - acc: 0.9466
 	map_score_filtered = 0.5524
 	Best map_score_filtered: 0.5524
 Epoch 2/100000
- - 168s - loss: 0.1955 - acc: 0.9489
+ - 152s - loss: 0.1955 - acc: 0.9489
 	map_score_filtered = 0.6022
 	Best map_score_filtered: 0.6022
 Epoch 3/100000
- - 164s - loss: 0.1868 - acc: 0.9489
+ - 152s - loss: 0.1868 - acc: 0.9489
 	map_score_filtered = 0.6359
 	Best map_score_filtered: 0.6359
 Epoch 4/100000
- - 164s - loss: 0.1715 - acc: 0.9487
+ - 148s - loss: 0.1715 - acc: 0.9487
 	map_score_filtered = 0.6458
 	Best map_score_filtered: 0.6458
 Epoch 5/100000
- - 149s - loss: 0.1522 - acc: 0.9512
+ - 146s - loss: 0.1522 - acc: 0.9512
 	map_score_filtered = 0.6407
 Epoch 6/100000
- - 145s - loss: 0.1297 - acc: 0.9565
+ - 147s - loss: 0.1297 - acc: 0.9565
 	map_score_filtered = 0.6345
 Epoch 7/100000
- - 144s - loss: 0.1062 - acc: 0.9629
+ - 149s - loss: 0.1062 - acc: 0.9629
 	map_score_filtered = 0.6152
 Epoch 8/100000
- - 145s - loss: 0.0831 - acc: 0.9711
+ - 173s - loss: 0.0831 - acc: 0.9711
 	map_score_filtered = 0.5740
 Epoch 9/100000
- - 144s - loss: 0.0650 - acc: 0.9779
+ - 173s - loss: 0.0650 - acc: 0.9779
 	map_score_filtered = 0.5389
 
 
@@ -275,8 +280,8 @@ Epoch 9/100000
 
  basic model - over training set 
 
-0.7324978348461352
-0.30171852243071773
+0.7325183132004928
+0.3017269575393624
 
 
 creating models with FastText embedding
@@ -327,53 +332,53 @@ ________________________________________________________________________________
 model with overlaps fit
 
 Epoch 1/100000
- - 152s - loss: 0.2126 - acc: 0.9479
+ - 176s - loss: 0.2114 - acc: 0.9479
 	map_score_filtered = 0.6063
 	Best map_score_filtered: 0.6063
 Epoch 2/100000
- - 150s - loss: 0.1844 - acc: 0.9489
-	map_score_filtered = 0.6729
-	Best map_score_filtered: 0.6729
+ - 185s - loss: 0.1841 - acc: 0.9489
+	map_score_filtered = 0.6700
+	Best map_score_filtered: 0.6700
 Epoch 3/100000
- - 150s - loss: 0.1683 - acc: 0.9489
-	map_score_filtered = 0.7170
-	Best map_score_filtered: 0.7170
+ - 173s - loss: 0.1677 - acc: 0.9489
+	map_score_filtered = 0.7172
+	Best map_score_filtered: 0.7172
 Epoch 4/100000
- - 149s - loss: 0.1475 - acc: 0.9499
-	map_score_filtered = 0.7298
-	Best map_score_filtered: 0.7298
+ - 161s - loss: 0.1466 - acc: 0.9499
+	map_score_filtered = 0.7302
+	Best map_score_filtered: 0.7302
 Epoch 5/100000
- - 150s - loss: 0.1218 - acc: 0.9564
-	map_score_filtered = 0.7336
-	Best map_score_filtered: 0.7336
+ - 157s - loss: 0.1206 - acc: 0.9567
+	map_score_filtered = 0.7388
+	Best map_score_filtered: 0.7388
 Epoch 6/100000
- - 150s - loss: 0.0944 - acc: 0.9650
-	map_score_filtered = 0.7502
-	Best map_score_filtered: 0.7502
+ - 156s - loss: 0.0930 - acc: 0.9655
+	map_score_filtered = 0.7521
+	Best map_score_filtered: 0.7521
 Epoch 7/100000
- - 150s - loss: 0.0667 - acc: 0.9766
+ - 157s - loss: 0.0652 - acc: 0.9775
 	map_score_filtered = 0.7292
 Epoch 8/100000
- - 149s - loss: 0.0426 - acc: 0.9884
-	map_score_filtered = 0.7132
+ - 156s - loss: 0.0414 - acc: 0.9892
+	map_score_filtered = 0.7089
 Epoch 9/100000
- - 150s - loss: 0.0258 - acc: 0.9953
-	map_score_filtered = 0.6883
+ - 164s - loss: 0.0250 - acc: 0.9953
+	map_score_filtered = 0.6891
 Epoch 10/100000
- - 151s - loss: 0.0160 - acc: 0.9974
-	map_score_filtered = 0.6988
+ - 157s - loss: 0.0156 - acc: 0.9976
+	map_score_filtered = 0.6944
 Epoch 11/100000
- - 150s - loss: 0.0114 - acc: 0.9978
-	map_score_filtered = 0.6856
+ - 157s - loss: 0.0112 - acc: 0.9978
+	map_score_filtered = 0.6976
 
 
 model with overlaps - over test set 
 
-0.67787376439812
-0.2593136146348363
+0.6740914265279749
+0.25786672030673335
 
 
 model with overlaps - over training set 
 
-0.9292964195515493
-0.3827805752711155
+0.9306407099139287
+0.3833342933608626
