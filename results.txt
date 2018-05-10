@@ -1,0 +1,379 @@
+STARTING TO load embeddings data/aquaint+wiki.txt.gz.ndim=50.bin
+DONE WITH loading embeddings data/aquaint+wiki.txt.gz.ndim=50.bin
+
+
+creating basic model with W2V embedding
+
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+sequential_1 (Sequential)       (None, 100)          1916000     input_1[0][0]                    
+__________________________________________________________________________________________________
+sequential_2 (Sequential)       (None, 100)          1916000     input_2[0][0]                    
+__________________________________________________________________________________________________
+concatenate_1 (Concatenate)     (None, 200)          0           sequential_1[1][0]               
+                                                                 sequential_2[1][0]               
+__________________________________________________________________________________________________
+sequential_3 (Sequential)       (None, 1)            20201       concatenate_1[0][0]              
+==================================================================================================
+Total params: 3,852,201
+Trainable params: 3,852,201
+Non-trainable params: 0
+__________________________________________________________________________________________________
+
+
+ basic model fit
+
+Epoch 1/100000
+ - 32s - loss: 0.2770 - acc: 0.9484
+	map_score_filtered = 0.3734
+	Best map_score_filtered: 0.3734
+Epoch 2/100000
+ - 31s - loss: 0.2019 - acc: 0.9489
+	map_score_filtered = 0.4818
+	Best map_score_filtered: 0.4818
+Epoch 3/100000
+ - 31s - loss: 0.1933 - acc: 0.9489
+	map_score_filtered = 0.6043
+	Best map_score_filtered: 0.6043
+Epoch 4/100000
+ - 31s - loss: 0.1862 - acc: 0.9488
+	map_score_filtered = 0.6270
+	Best map_score_filtered: 0.6270
+Epoch 5/100000
+ - 31s - loss: 0.1808 - acc: 0.9487
+	map_score_filtered = 0.6273
+Epoch 6/100000
+ - 31s - loss: 0.1757 - acc: 0.9487
+	map_score_filtered = 0.6349
+	Best map_score_filtered: 0.6349
+Epoch 7/100000
+ - 31s - loss: 0.1705 - acc: 0.9487
+	map_score_filtered = 0.6415
+	Best map_score_filtered: 0.6415
+Epoch 8/100000
+ - 31s - loss: 0.1644 - acc: 0.9496
+	map_score_filtered = 0.6347
+Epoch 9/100000
+ - 31s - loss: 0.1578 - acc: 0.9506
+	map_score_filtered = 0.6386
+Epoch 10/100000
+ - 31s - loss: 0.1502 - acc: 0.9510
+	map_score_filtered = 0.6416
+Epoch 11/100000
+ - 31s - loss: 0.1413 - acc: 0.9530
+	map_score_filtered = 0.6549
+	Best map_score_filtered: 0.6549
+Epoch 12/100000
+ - 31s - loss: 0.1318 - acc: 0.9551
+	map_score_filtered = 0.6380
+Epoch 13/100000
+ - 34s - loss: 0.1213 - acc: 0.9572
+	map_score_filtered = 0.6251
+Epoch 14/100000
+ - 35s - loss: 0.1093 - acc: 0.9612
+	map_score_filtered = 0.6023
+Epoch 15/100000
+ - 36s - loss: 0.0980 - acc: 0.9649
+	map_score_filtered = 0.6015
+Epoch 16/100000
+ - 31s - loss: 0.0872 - acc: 0.9686
+	map_score_filtered = 0.5816
+
+
+ basic model - over test set 
+
+
+
+ basic model - over training set 
+
+0.7614265483166249
+0.31363436472937956
+
+
+creating overlap model with W2V embedding
+
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_5 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_3 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_6 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_4 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+embedding_3 (Embedding)         (None, 40, 5)        15          input_5[0][0]                    
+__________________________________________________________________________________________________
+embedding_4 (Embedding)         (None, 40, 50)       1890900     input_3[0][0]                    
+__________________________________________________________________________________________________
+embedding_5 (Embedding)         (None, 40, 5)        15          input_6[0][0]                    
+__________________________________________________________________________________________________
+embedding_6 (Embedding)         (None, 40, 50)       1890900     input_4[0][0]                    
+__________________________________________________________________________________________________
+concatenate_2 (Concatenate)     (None, 40, 55)       0           embedding_3[0][0]                
+                                                                 embedding_4[0][0]                
+__________________________________________________________________________________________________
+concatenate_3 (Concatenate)     (None, 40, 55)       0           embedding_5[0][0]                
+                                                                 embedding_6[0][0]                
+__________________________________________________________________________________________________
+sequential_7 (Sequential)       (None, 100)          27600       concatenate_2[0][0]              
+__________________________________________________________________________________________________
+sequential_8 (Sequential)       (None, 100)          27600       concatenate_3[0][0]              
+__________________________________________________________________________________________________
+input_7 (InputLayer)            (None, 1)            0                                            
+__________________________________________________________________________________________________
+concatenate_4 (Concatenate)     (None, 201)          0           sequential_7[1][0]               
+                                                                 sequential_8[1][0]               
+                                                                 input_7[0][0]                    
+__________________________________________________________________________________________________
+sequential_9 (Sequential)       (None, 1)            20301       concatenate_4[0][0]              
+==================================================================================================
+Total params: 3,857,331
+Trainable params: 3,857,331
+Non-trainable params: 0
+__________________________________________________________________________________________________
+
+
+model with overlaps fit
+
+Epoch 1/100000
+ - 37s - loss: 0.2229 - acc: 0.9476
+	map_score_filtered = 0.5475
+	Best map_score_filtered: 0.5475
+Epoch 2/100000
+ - 36s - loss: 0.1905 - acc: 0.9489
+	map_score_filtered = 0.6168
+	Best map_score_filtered: 0.6168
+Epoch 3/100000
+ - 36s - loss: 0.1814 - acc: 0.9489
+	map_score_filtered = 0.6565
+	Best map_score_filtered: 0.6565
+Epoch 4/100000
+ - 37s - loss: 0.1731 - acc: 0.9489
+	map_score_filtered = 0.6880
+	Best map_score_filtered: 0.6880
+Epoch 5/100000
+ - 37s - loss: 0.1652 - acc: 0.9491
+	map_score_filtered = 0.6996
+	Best map_score_filtered: 0.6996
+Epoch 6/100000
+ - 42s - loss: 0.1579 - acc: 0.9496
+	map_score_filtered = 0.6977
+Epoch 7/100000
+ - 40s - loss: 0.1506 - acc: 0.9512
+	map_score_filtered = 0.7000
+Epoch 8/100000
+ - 41s - loss: 0.1425 - acc: 0.9522
+	map_score_filtered = 0.6985
+Epoch 9/100000
+ - 41s - loss: 0.1337 - acc: 0.9540
+	map_score_filtered = 0.7040
+	Best map_score_filtered: 0.7040
+Epoch 10/100000
+ - 41s - loss: 0.1238 - acc: 0.9559
+	map_score_filtered = 0.7120
+	Best map_score_filtered: 0.7120
+Epoch 11/100000
+ - 40s - loss: 0.1130 - acc: 0.9599
+	map_score_filtered = 0.7077
+Epoch 12/100000
+ - 40s - loss: 0.1012 - acc: 0.9632
+	map_score_filtered = 0.6880
+Epoch 13/100000
+ - 40s - loss: 0.0890 - acc: 0.9680
+	map_score_filtered = 0.6862
+Epoch 14/100000
+ - 40s - loss: 0.0769 - acc: 0.9726
+	map_score_filtered = 0.6876
+Epoch 15/100000
+ - 40s - loss: 0.0645 - acc: 0.9783
+	map_score_filtered = 0.6895
+
+
+model with overlaps - over test set 
+
+0.6794064469537019
+0.2598999265330829
+
+
+model with overlaps - over training set 
+
+0.8037884093266287
+0.33108336935891364
+STARTING TO load embeddings data/wiki-news-300d-1M.vec
+DONE WITH loading embeddings data/wiki-news-300d-1M.vec
+
+
+creating basic model with FastText embedding
+
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_8 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_9 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+sequential_13 (Sequential)      (None, 100)          10137400    input_8[0][0]                    
+__________________________________________________________________________________________________
+sequential_14 (Sequential)      (None, 100)          10137400    input_9[0][0]                    
+__________________________________________________________________________________________________
+concatenate_5 (Concatenate)     (None, 200)          0           sequential_13[1][0]              
+                                                                 sequential_14[1][0]              
+__________________________________________________________________________________________________
+sequential_15 (Sequential)      (None, 1)            20201       concatenate_5[0][0]              
+==================================================================================================
+Total params: 20,295,001
+Trainable params: 20,295,001
+Non-trainable params: 0
+__________________________________________________________________________________________________
+
+
+ basic model fit
+
+Epoch 1/100000
+ - 165s - loss: 0.2099 - acc: 0.9466
+	map_score_filtered = 0.5524
+	Best map_score_filtered: 0.5524
+Epoch 2/100000
+ - 168s - loss: 0.1955 - acc: 0.9489
+	map_score_filtered = 0.6022
+	Best map_score_filtered: 0.6022
+Epoch 3/100000
+ - 164s - loss: 0.1868 - acc: 0.9489
+	map_score_filtered = 0.6359
+	Best map_score_filtered: 0.6359
+Epoch 4/100000
+ - 164s - loss: 0.1715 - acc: 0.9487
+	map_score_filtered = 0.6458
+	Best map_score_filtered: 0.6458
+Epoch 5/100000
+ - 149s - loss: 0.1522 - acc: 0.9512
+	map_score_filtered = 0.6407
+Epoch 6/100000
+ - 145s - loss: 0.1297 - acc: 0.9565
+	map_score_filtered = 0.6345
+Epoch 7/100000
+ - 144s - loss: 0.1062 - acc: 0.9629
+	map_score_filtered = 0.6152
+Epoch 8/100000
+ - 145s - loss: 0.0831 - acc: 0.9711
+	map_score_filtered = 0.5740
+Epoch 9/100000
+ - 144s - loss: 0.0650 - acc: 0.9779
+	map_score_filtered = 0.5389
+
+
+ basic model - over test set 
+
+
+
+ basic model - over training set 
+
+0.7324978348461352
+0.30171852243071773
+
+
+creating models with FastText embedding
+
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_12 (InputLayer)           (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_10 (InputLayer)           (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_13 (InputLayer)           (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_11 (InputLayer)           (None, 40)           0                                            
+__________________________________________________________________________________________________
+embedding_9 (Embedding)         (None, 40, 5)        15          input_12[0][0]                   
+__________________________________________________________________________________________________
+embedding_10 (Embedding)        (None, 40, 300)      9987300     input_10[0][0]                   
+__________________________________________________________________________________________________
+embedding_11 (Embedding)        (None, 40, 5)        15          input_13[0][0]                   
+__________________________________________________________________________________________________
+embedding_12 (Embedding)        (None, 40, 300)      9987300     input_11[0][0]                   
+__________________________________________________________________________________________________
+concatenate_6 (Concatenate)     (None, 40, 305)      0           embedding_9[0][0]                
+                                                                 embedding_10[0][0]               
+__________________________________________________________________________________________________
+concatenate_7 (Concatenate)     (None, 40, 305)      0           embedding_11[0][0]               
+                                                                 embedding_12[0][0]               
+__________________________________________________________________________________________________
+sequential_19 (Sequential)      (None, 100)          152600      concatenate_6[0][0]              
+__________________________________________________________________________________________________
+sequential_20 (Sequential)      (None, 100)          152600      concatenate_7[0][0]              
+__________________________________________________________________________________________________
+input_14 (InputLayer)           (None, 1)            0                                            
+__________________________________________________________________________________________________
+concatenate_8 (Concatenate)     (None, 201)          0           sequential_19[1][0]              
+                                                                 sequential_20[1][0]              
+                                                                 input_14[0][0]                   
+__________________________________________________________________________________________________
+sequential_21 (Sequential)      (None, 1)            20301       concatenate_8[0][0]              
+==================================================================================================
+Total params: 20,300,131
+Trainable params: 20,300,131
+Non-trainable params: 0
+__________________________________________________________________________________________________
+
+
+model with overlaps fit
+
+Epoch 1/100000
+ - 152s - loss: 0.2126 - acc: 0.9479
+	map_score_filtered = 0.6063
+	Best map_score_filtered: 0.6063
+Epoch 2/100000
+ - 150s - loss: 0.1844 - acc: 0.9489
+	map_score_filtered = 0.6729
+	Best map_score_filtered: 0.6729
+Epoch 3/100000
+ - 150s - loss: 0.1683 - acc: 0.9489
+	map_score_filtered = 0.7170
+	Best map_score_filtered: 0.7170
+Epoch 4/100000
+ - 149s - loss: 0.1475 - acc: 0.9499
+	map_score_filtered = 0.7298
+	Best map_score_filtered: 0.7298
+Epoch 5/100000
+ - 150s - loss: 0.1218 - acc: 0.9564
+	map_score_filtered = 0.7336
+	Best map_score_filtered: 0.7336
+Epoch 6/100000
+ - 150s - loss: 0.0944 - acc: 0.9650
+	map_score_filtered = 0.7502
+	Best map_score_filtered: 0.7502
+Epoch 7/100000
+ - 150s - loss: 0.0667 - acc: 0.9766
+	map_score_filtered = 0.7292
+Epoch 8/100000
+ - 149s - loss: 0.0426 - acc: 0.9884
+	map_score_filtered = 0.7132
+Epoch 9/100000
+ - 150s - loss: 0.0258 - acc: 0.9953
+	map_score_filtered = 0.6883
+Epoch 10/100000
+ - 151s - loss: 0.0160 - acc: 0.9974
+	map_score_filtered = 0.6988
+Epoch 11/100000
+ - 150s - loss: 0.0114 - acc: 0.9978
+	map_score_filtered = 0.6856
+
+
+model with overlaps - over test set 
+
+0.67787376439812
+0.2593136146348363
+
+
+model with overlaps - over training set 
+
+0.9292964195515493
+0.3827805752711155
