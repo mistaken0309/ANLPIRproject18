@@ -38,6 +38,7 @@ if not os.path.isdir(models_dir):
     os.makedirs(models_dir)
     print("Home directory %s was created." %models_dir)
 
+# remove previously created models
 if os.path.exists('./models/qa_W2V_basic.h5'): os.remove('./models/qa_W2V_basic.h5')
 if os.path.exists('./models/qa_W2V_overlap.h5'): os.remove('./models/qa_W2V_overlap.h5')
 if os.path.exists('./models/qa_ft_basic.h5'): os.remove('./models/qa_ft_basic.h5')
@@ -72,13 +73,12 @@ max_len_q = 40
 max_len_a = 40
 
 dictionary = {'PAD':0, 'UNK':1}
-#dictionary
 dictionaryW2V = {'PAD':0, 'UNK':1}
 
 # ft = KeyedVectors.load_word2vec_format('data/wiki-news-300d-1M.vec', binary=False)
 dictionaryFT = {'PAD':0, 'UNK':1}
 
-#functions and 
+#functions 
 stop = set(stopwords.words('english'))
 def count_feat(que, ans):
     return len((set(que)&set(ans))-stop)
@@ -88,7 +88,8 @@ def overlap_feats(st, overlapping):
     return [1 if word not in overlapping else 2 for word in st]
 
 
-# path of embeddings,
+# import the embedded data into a dictionary
+# path = path of embeddings,
 # binary = true if word2vec, = false if fastText
 def import_data_with_embeddings_into_dict(path, binary):
     # load the word embedding and prepare the dictionary for our dataset
@@ -106,7 +107,7 @@ def import_data_with_embeddings_into_dict(path, binary):
             i+=1
     len(dictionary)
 
-    # add mapping to ids
+    # add mapping to IDs
     train['Question_'] = train['Question_tok'].map(word2id)
     train['Sentence_'] = train['Sentence_tok'].map(word2id)
     dev['Question_'] = dev['Question_tok'].map(word2id)
@@ -118,6 +119,7 @@ def import_data_with_embeddings_into_dict(path, binary):
     max(len(list(sent)) for sent in train['Question_'])
     max(len(list(sent)) for sent in train['Sentence_'])
 
+    # pad the lenght of a seentence to a max value (max_len)
     train['Question_'] = train['Question_'].apply(lambda s: pad_sequences([s], max_len_q)[0])
     train['Sentence_'] = train['Sentence_'].apply(lambda s: pad_sequences([s], max_len_a)[0])
     dev['Question_'] = dev['Question_'].apply(lambda s: pad_sequences([s], max_len_q)[0])
@@ -166,6 +168,9 @@ class EpochEval(Callback):
 
 
 # prepare the embedding matrix for model initialization
+# dictionar = dictionary we have created
+# emb_ = embedding from files (W2V or FastText)
+# dim = 50 / /
 def emb_matrix(dictionar, emb_, dim):
     embedding_matrix = np.zeros((len(dictionar), dim))
     for word in dictionar:
@@ -177,6 +182,9 @@ def emb_matrix(dictionar, emb_, dim):
 ############################ SIMPLEST MODEL ############################
 # This is the simplest version of the model where the two sentence embedding 
 # (Created via Convolution+Pooling) are concatenated and classified using a MLP.
+# emb = embedding imported
+# dictionar = dictionary created (either with W2V or with FastText)
+# dim = dimensions for the model creation
 def basic_model(emb, dictionar, dim):        
     np.random.seed(42)
 
@@ -216,7 +224,13 @@ def basic_model(emb, dictionar, dim):
 ############ SECOND MODEL ############
 ## The second version of the network will use an additional features (i.e. word overlap count) 
 ## this is a very informative feature that alone provides ~49 MAP
-def model_with_overlaps(emb2, dictionar, dim, dim2):
+
+# emb = embedding imported
+# dictionar = dictionary created (either with W2V or with FastText)
+# dim = lenght of weights
+# dim2 = dim for the model creation
+# newname = name for the output model
+def model_with_overlaps(embo, dictionar, dim, dim2):
     train['count'] = pd.Series(count_feat(que, ans) for que, ans in zip(train['Question_tok'], train['Sentence_tok']))
     test['count'] = pd.Series(count_feat(que, ans) for que, ans in zip(test['Question_tok'], test['Sentence_tok']))
     dev['count'] = pd.Series(count_feat(que, ans) for que, ans in zip(dev['Question_tok'], dev['Sentence_tok']))
@@ -256,12 +270,11 @@ def model_with_overlaps(emb2, dictionar, dim, dim2):
 
     ## create embedding with word overlaps
     que_ov_emb = Embedding(3, 5,input_length=max_len_q)(que_ov)
-    que_word_emb = Embedding(len(dictionar), dim , weights=[emb_matrix(dictionar, emb2, dim)],input_length=max_len_q, trainable=True)(que)
-
+    que_word_emb = Embedding(len(dictionar), dim, weights=[emb_matrix(dictionar, embo, dim)],input_length=max_len_q, trainable=True)(que)
     que_emb = concatenate([que_ov_emb, que_word_emb])
 
     ans_ov_emb = Embedding(3, 5,input_length=max_len_a)(ans_ov)
-    ans_word_emb = Embedding(len(dictionar), dim , weights=[emb_matrix(dictionar, emb2, dim)],input_length=max_len_a, trainable=True)(ans)
+    ans_word_emb = Embedding(len(dictionar), dim , weights=[emb_matrix(dictionar, embo, dim)],input_length=max_len_a, trainable=True)(ans)
 
     ans_emb = concatenate([ans_ov_emb, ans_word_emb])
 
@@ -292,15 +305,19 @@ def model_with_overlaps(emb2, dictionar, dim, dim2):
     model.compile(loss='binary_crossentropy', optimizer=Adam(0.0001), metrics=['accuracy'])
     return model
 
-# data model prediction for basic model
+# verticalize and list dataset without overlaps
 def data(dataset):
     return (dataset['QuestionID'],dataset['SentenceID']), [np.vstack(dataset['Question_'].tolist()), np.vstack(dataset['Sentence_'].tolist())], np.vstack(dataset['Label'].tolist())
 
-# data model prediction with words overlaps
-def dataTre(dataset):
+# verticalize and list dataset with overlaps
+def dataOver(dataset):
     return (dataset['QuestionID'],dataset['SentenceID']), [np.vstack(dataset['Question_'].tolist()), np.vstack(dataset['Sentence_'].tolist()),np.vstack(dataset['Question_ov'].tolist()), np.vstack(dataset['Sentence_ov'].tolist()), dataset['count'].as_matrix()], np.vstack(dataset['Label'].tolist())
 
 
+# emb = embedding imported
+# dictionar = dictionary created (either with W2V or with FastText)
+# dim = dimensions for the model creation
+# newname = name for the output model
 def basic_model_pred(emb, dictionar, dim, newname): 
     # model prediction for basic model
     
@@ -330,20 +347,25 @@ def basic_model_pred(emb, dictionar, dim, newname):
     train['pred'] = pd.Series(y for y in pred)
     train
 
-def overlap_model_pred(emb, dictionar, dim, dim2, newname): 
+# emb = embedding imported
+# dictionar = dictionary created (either with W2V or with FastText)
+# dim = lenght of weights
+# dim2 = dim for the model creation
+# newname = name for the output model
+def overlap_model_pred(embo, dictionar, dim, dim2, newname): 
     # model prediction with words overlaps
-    model_over = model_with_overlaps(emb, dictionar, dim, dim2)
+    model_over = model_with_overlaps(embo, dictionar, dim, dim2)
     print("\n\nmodel with overlaps fit\n")
     model_over.fit([np.vstack(train['Question_'].tolist()), np.vstack(train['Sentence_'].tolist()), np.vstack(train['Question_ov'].tolist()), np.vstack(train['Sentence_ov'].tolist()), train['count'].as_matrix()],
           np.vstack(train['Label'].tolist()), batch_size=100, epochs=100000, shuffle=True, verbose=2,
-          callbacks=[EpochEval(dataTre(dev), map_score_filtered, patience=5)])
+          callbacks=[EpochEval(dataOver(dev), map_score_filtered, patience=5)])
 
     nameo ='./models' + newname + '_overlap.h5'
     os.rename('qa.h5', nameo)
 
     print("\n\nmodel with overlaps - over test set \n")
     model_over = load_model(nameo)
-    (qid,_ ), X, lab = dataTre(test)
+    (qid,_ ), X, lab = dataOver(test)
     pred_over = model_over.predict(X)
     print(map_score_filtered(qid, lab, pred_over))
     print(map_score(qid, lab, pred_over))
@@ -351,7 +373,7 @@ def overlap_model_pred(emb, dictionar, dim, dim2, newname):
     test[0:5]
 
     print("\n\nmodel with overlaps - over training set \n")
-    (qid,_ ), X, lab = dataTre(train)
+    (qid,_ ), X, lab = dataOver(train)
     pred_over = model_over.predict(X)
     print(map_score_filtered(qid, lab, pred_over))
     print(map_score(qid, lab, pred_over))
