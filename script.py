@@ -65,14 +65,13 @@ test['Sentence_tok'] = test['Sentence'].map(preprocess)
 train[0:5]
 
 #map word to IDs
-def word2id(sent):
-    return list(map(lambda x: dictionary.get(x, 1), sent))
+def word2id(sent, dictionar):
+    return list(map(lambda x: dictionar.get(x, 1), sent))
 
 # Pad sentence size to a fixed size lenght
 max_len_q = 40
 max_len_a = 40
 
-dictionary = {'PAD':0, 'UNK':1}
 dictionaryW2V = {'PAD':0, 'UNK':1}
 
 # ft = KeyedVectors.load_word2vec_format('data/wiki-news-300d-1M.vec', binary=False)
@@ -91,7 +90,7 @@ def overlap_feats(st, overlapping):
 # import the embedded data into a dictionary
 # path = path of embeddings,
 # binary = true if word2vec, = false if fastText
-def import_data_with_embeddings_into_dict(path, binary):
+def import_data_with_embeddings_into_dict(path, binary, dictionar):
     # load the word embedding and prepare the dictionary for our dataset
     print("STARTING TO load embeddings {}".format(path))
     embed = KeyedVectors.load_word2vec_format(path, binary=binary)
@@ -103,9 +102,9 @@ def import_data_with_embeddings_into_dict(path, binary):
     i = 2
     for _, tok in enumerate(toks):
         if tok in embed:
-            dictionary[tok] = i
+            dictionar[tok] = i
             i+=1
-    len(dictionary)
+    len(dictionar)
 
     # add mapping to IDs
     train['Question_'] = train['Question_tok'].map(word2id)
@@ -275,17 +274,14 @@ def model_with_overlaps(embo, dictionar, dim, dim2):
 
     ans_ov_emb = Embedding(3, 5,input_length=max_len_a)(ans_ov)
     ans_word_emb = Embedding(len(dictionar), dim , weights=[emb_matrix(dictionar, embo, dim)],input_length=max_len_a, trainable=True)(ans)
-
     ans_emb = concatenate([ans_ov_emb, ans_word_emb])
 
     que_model = Sequential()
-    #que_model.add(Embedding(len(dictionary), 50 , weights=[emb_matrix(dictionary, w2v)],input_length=max_len_q, trainable=True))
     que_model.add(Convolution1D(100, 5, activation='tanh', kernel_initializer='lecun_uniform', input_shape=(max_len_a, dim2)))
     que_model.add(GlobalMaxPooling1D())
 
 
     ans_model = Sequential()
-    #ans_model.add(Embedding(len(dictionary), 50 , weights=[emb_matrix(dictionary, w2v)],input_length=max_len_a, trainable=True))
     ans_model.add(Convolution1D(100, 5, activation='tanh', kernel_initializer='lecun_uniform', input_shape=(max_len_a, dim2)))
     ans_model.add(GlobalMaxPooling1D())
 
@@ -381,18 +377,15 @@ def overlap_model_pred(embo, dictionar, dim, dim2, newname):
     train[0:5]
 
 # create embeddings
-emb2 = import_data_with_embeddings_into_dict('data/aquaint+wiki.txt.gz.ndim=50.bin', binary=True)
-dictionaryW2V = dictionary
-dictionary = {'PAD':0, 'UNK':1}
+embW2V = import_data_with_embeddings_into_dict('data/aquaint+wiki.txt.gz.ndim=50.bin', binary=True)
 print("\n\ncreating basic model with W2V embedding\n")
-basic_model_pred(emb2, dictionaryW2V, 50, '/qa_W2V')
+basic_model_pred(embW2V, dictionaryW2V, 50, '/qa_W2V')
 print("\n\ncreating overlap model with W2V embedding\n")
-overlap_model_pred(emb2, dictionaryW2V, 50, 55, '/qa_W2V')
+overlap_model_pred(embW2V, dictionaryW2V, 50, 55, '/qa_W2V')
 
 
-emb_over = import_data_with_embeddings_into_dict('data/wiki-news-300d-1M.vec', binary=False)
-dictionaryFT = dictionary
+embFT = import_data_with_embeddings_into_dict('data/wiki-news-300d-1M.vec', binary=False, dictionaryFT)
 print("\n\ncreating basic model with FastText embedding\n")
-basic_model_pred(emb_over, dictionaryFT, 300, '/qa_ft')
+basic_model_pred(embFT, dictionaryFT, 300, '/qa_ft')
 print("\n\ncreating models with FastText embedding\n")
-overlap_model_pred(emb_over, dictionaryFT, 300, 305, '/qa_ft')
+overlap_model_pred(embFT, dictionaryFT, 300, 305, '/qa_ft')
