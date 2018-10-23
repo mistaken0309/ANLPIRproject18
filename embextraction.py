@@ -1,6 +1,7 @@
 # import win_unicode_console # imported to not have problems with the absence of unicode encoding while working on Windows OS
 from importlib import reload
 import os
+import time
 
 # lybraries
 import pandas as pd
@@ -28,13 +29,6 @@ dev = pd.read_csv('data/WikiQA-dev.tsv', sep='\t')
 test = pd.read_csv('data/WikiQA-test.tsv', sep='\t')
 train
 
-########################################## TOKENIZATION ##########################################
-#sentences are tokenized and lowercased
-# def lower(sent):
-#     return sent.lower()
-def preprocess(sent):
-    return word_tokenize(sent.lower())
-
 ################################## VARIABLES AND EASY FUNCTIONS ##################################
 # Size to pad the sentences to
 max_len_q = 40
@@ -42,6 +36,15 @@ max_len_a = 40
 
 dim = 300
 stop = set(stopwords.words('english'))
+
+########################################## TOKENIZATION ##########################################
+#sentences are tokenized and lowercased
+def preprocess(sent):
+    return word_tokenize(sent.lower())
+
+# map word to IDs
+def word2id(sent, d):
+    return list(map(lambda x: d.get(x, 1), sent))
 
 ################################## FUNCTIONS TO COMPUTE OVERLAP ###################################
 def count_feat(que, ans):
@@ -52,32 +55,20 @@ def overlap_feats(st, overlapping):
     return [1 if word not in overlapping else 2 for word in st]
 
 ############################################## SPACY #############################################
-
 nlp = spacy.load('en_core_web_lg')
-
-# def pos_emb(st):
-#     st = nlp(st)
-#     return [w.pos for w in st]
-# def pos_emb_tag(st):
-#     st = nlp(st)
-#     return [w.tag for w in st]
-# def brown_cluster(st):
-#     st = nlp(st)
-#     return [w.cluster for w in st]     
-
 
 ############################### EXECUTION OF IMPORT OF EMBEDDINGS ################################
 train=train.head(5)
 
-# apply preprocessing
-# train['Q_low'] = train['Question'].map(lower)
-# train['A_low'] = train['Sentence'].map(lower)
-train['Question_tok'] = train['Question'].map(preprocess)
+# lower and tokenize questions and answers
+train['Question_tok'] = train['Question'].map(preprocess) 
 train['Sentence_tok'] = train['Sentence'].map(preprocess)
 # dev['Question_tok'] = dev['Question'].map(preprocess)
 # dev['Sentence_tok'] = dev['Sentence'].map(preprocess)
 # test['Question_tok'] = test['Question'].map(preprocess)
 # test['Sentence_tok'] = test['Sentence'].map(preprocess)
+
+# time.sleep(10)
 
 # create toks list from dataset
 toks = (set(chain.from_iterable(train['Question_tok'])) | set(chain.from_iterable(train['Sentence_tok']))) # | \
@@ -89,48 +80,20 @@ print("STARTING TO load embeddings {}".format('data/aquaint+wiki.txt.gz.ndim=50.
 embW2V = KeyedVectors.load_word2vec_format('data/aquaint+wiki.txt.gz.ndim=50.bin', binary=True)
 print("DONE WITH loading embeddings {}".format('data/aquaint+wiki.txt.gz.ndim=50.bin'))
 
+
 # print("STARTING TO load embeddings {}".format('data/wiki-news-300d-1M.vec'))
 # embFT = KeyedVectors.load_word2vec_format('data/wiki-news-300d-1M.vec', binary=False)
 # print("DONE WITH loading embeddings {}".format('data/wiki-news-300d-1M.vec'))
 
-
-
-
 ########################## IMPORT FT AND W2V EMB AND CREATE DICTIONARY ###########################
 ########################################## DICTIONARIES ##########################################
-# dictionary = {'PAD':0, 'UNK':1}
-diction = dict()
+dictBC = dict()
+dictPOS = dict()
+dict_POS = {'PAD':0, 'UNK':1}
+dict_BC = {'PAD':0, 'UNK':1}
 dict_W2V = {'PAD':0, 'UNK':1}
-dict_FT = {'PAD':0, 'UNK':1}
+# dict_FT = {'PAD':0, 'UNK':1}
 
-#map word to IDs
-def word2id(sent, d):
-    return list(map(lambda x: d.get(x, 1), sent))
-
-# import the embedded data into a dictionary
-# path = path of embeddings,
-# binary = true if word2vec, = false if fastText
-# def map_w2ID(binary):
-    # add mapping to IDs
-    # print("Mapping words to IDs")
-    # if binary:
-        # train['Q_W2V'] = train['Question_tok'].map(word2id)
-        # train['A_W2V'] = train['Sentence_tok'].map(word2id)
-        # dev['Q_W2V'] = dev['Question_tok'].map(word2id)
-        # dev['A_W2V'] = train['Sentence_tok'].map(word2id)
-        # train['Q_W2V'] = train['Question_tok'].map(word2id)
-        # train['A_W2V'] = train['Sentence_tok'].map(word2id)
-        # print(max(len(list(sent)) for sent in train['Q_W2V']))
-        # print(max(len(list(sent)) for sent in train['A_W2V']))
-    # else:
-        # train['Q_FT'] = train['Question_tok'].map(word2id)
-        # train['A_FT'] = train['Sentence_tok'].map(word2id)
-        # dev['Q_FT'] = dev['Question_tok'].map(word2id)
-        # dev['A_FT'] = train['Sentence_tok'].map(word2id)
-        # train['Q_FT'] = train['Question_tok'].map(word2id)
-        # train['A_FT'] = train['Sentence_tok'].map(word2id)
-        # print(max(len(list(sent)) for sent in train['Q_FT']))
-        # print(max(len(list(sent)) for sent in train['A_FT']))
 
 def create_dict(toks, embed, dictionar):
     i = 2
@@ -142,127 +105,102 @@ def create_dict(toks, embed, dictionar):
 
 # create dictionaries
 create_dict(toks, embW2V, dict_W2V)
-create_dict(toks, embFT, dict_FT)
+# create_dict(toks, embFT, dict_FT)
 # print(dict_W2V)
 
-# create word IDs
-# dictionary = dict_\W2V
-# map_w2ID(binary=True)
-# dictionary = dict_FT
-# map_w2ID(binary=False)
 
-################################## CREATE WORD OVERLAP EMBEDDING #################################
-def update_dict(w, ov):
-    w2v = dict_W2V.get(w.text, 1)
-    # ft = dict_FT.get(w.text, 1)
-
-    if str(w.text) not in diction:
-        # print("A new tuple")
-        w2vs = set()
-        # fts = set()
-        tt = set()
-        clusters = set()
-        olaps = set()
-
-        w2vs.add(w2v)
-        # fts.add(ft)
-        tt.add(w.pos)
-        clusters.add(w.cluster)
-
-        olaps.add(ov)
-        diction[str(w.text)] = (w2vs, tt, clusters, olaps)
-        # diction[str(w.text)] = (w2vs, fts, tt, clusters, olaps)
-        # print("Q - new dictionary:")
+################################## CREATE WORD OVERLAP EMBEDDING #################################    
+def update_dict(w, e, diction):
+    if w not in diction:
+        s = set()
+        s.add(e)
+        diction[w] = s
     else:
-        tup = diction[str(w.text)]
-        # print("A existing tup for "+ w.text +":")
-        # print(tup)
-        if w2v not in tup[0]:
-            print("not in w2vs (" + str(w2v)+")")
-            tup[0].add(w2v)
-            print(tup[0])
-        if ft not in tup[1]:
-            print("not in fts ("+str(ft)+")")
-            tup[1].add(ft)
-        if not w.pos in tup[2]:
-            print("not in tags("+str(w.pos)+")")
-            tup[2].add(w.pos)
-        if not w.cluster in tup[3]:
-            print("not in brown clusters("+str(w.cluster)+")")
-            tup[3].add(w.cluster)
-        if not ov in tup[4]:
-            print("not in overlapss("+str(ov)+")")
-            tup[4].add(ov)
+        s = diction[w]
+        if not e in s:
+            print("adding ("+str(e)+")")
+            s.add(e)
+            diction[w] = s
 
-        # if not w.pos in tup[1]:
-        #     print("not in tags (" + str(w.pos) +")")
-        #     tup[1].add(w.pos)
-        #     print(tup[1])
-        # if not w.cluster in tup[2]:
-        #     print("not in brown clusters (" + str(w.cluster)+")")
-        #     tup[2].add(w.cluster)
-        #     print(tup[2])
-        # if not ov in tup[3]:
-        #     print("not in overlapss (" + str(ov)+")")
-        #     tup[3].add(ov)
-        #     print(tup[3])
-
-
-    
 def embeddes(x):
     que_tok = x['Question_tok']
     ans_tok = x['Sentence_tok']
-    
+
+    # CREATE OVERLAP DATA
     x['count'] = count_feat(que_tok, ans_tok)
     overl = overlap(que_tok, ans_tok)
     x['overlap'] = overl
     Q_overl = overlap_feats(que_tok, overl)
     A_overl = overlap_feats(ans_tok, overl)
-    x['Q_overlap'] = Q_overl
-    x['A_overlap'] = A_overl
+    x['Q_OV'] = Q_overl
+    x['A_OV'] = A_overl
     # print(ov)
     
     x['Q_W2V'] = word2id(x['Question_tok'], dict_W2V)
     x['A_W2V'] = word2id(x['Sentence_tok'], dict_W2V)
-    x['Q_FT'] = word2id(x['Question_tok'], dict_FT)
-    x['A_FT'] = word2id(x['Sentence_tok'], dict_FT)
-
+    # x['Q_FT'] = word2id(x['Question_tok'], dict_FT)
+    # x['A_FT'] = word2id(x['Sentence_tok'], dict_FT)
 
     que = nlp(x['Question'])
     tags_Q = list()
     bcs_Q = list()
     
-    # print(que)
-    # print(len(que))
-    for w, ov in zip(que, Q_overl):
+    # CREATE POS TAGS AND 
+    for w in que:
         tags_Q.append(w.pos)
         bcs_Q.append(w.cluster)
-        update_dict(w, ov)
+        update_dict(str(w.text), w.pos, dictPOS)
+        update_dict(str(w.text), w.cluster, dictBC)
 
     ans = nlp(x['Sentence'])
     tags_A = list()
     bcs_A = list()
     # print(ans)
-    for w, ov in zip(ans, A_overl):
+    for w in ans:
         tags_A.append(w.pos)
         bcs_A.append(w.cluster)
-        update_dict(w, ov)
+        update_dict(str(w.text), w.pos, dictPOS)
+        update_dict(str(w.text), w.cluster, dictBC)
 
-    x['Q_pos'] = tags_Q
-    x['Q_clus'] = bcs_Q
+    x['Q_POS'] = tags_Q
+    x['Q_CLUS'] = bcs_Q
 
-    x['A_pos'] = tags_A
-    x['A_clus'] = bcs_A
+    x['A_POS'] = tags_A
+    x['A_CLUS'] = bcs_A
 
     return x
 
 
 
+def emb_matrix(dictionar, emb_, dim):
+    print(len(dictionar))
+    print("dictionary")
+    print(dictionar)
+    
+    embedding_matrix = np.zeros((len(dictionar), dim))
+    for word in dictionar:
+        if word in emb_:
+            # embedding_matrix[dictionar[word]] = [emb_[word]]
+            embedding_matrix[dictionar[word]] = [word, emb_[word]]
+    print("an embedding matrix")
+    print(embedding_matrix)
+    return embedding_matrix
+
 # print("creating spacy embeddings")
 train = train.apply(embeddes, axis=1)
 
-train.to_csv(path_or_buf='train_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+create_dict(toks, dictPOS, dict_POS)
+print("dictionary of pos tags")
+print(dict_POS)
+# print(max(len(list(sent)) for sent in train['Q_W2V']))
+print(max(len(dictPOS[x]) for x in dictPOS))
+# print(max(dict_POS, key= lambda x: len(set(dict_POS[x]))))
 
+# emb_matrix(dict_POS, dictPOS, dim)
+
+# print(train[['Question_tok', 'count', 'Q_W2V', 'Q_POS']])
+
+# train.to_csv(path_or_buf='train_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
 
 
 # train2.to_csv(path_or_buf='train_embeddings.csv', sep=',', na_rep='', header=1, index=True,
@@ -273,22 +211,3 @@ train.to_csv(path_or_buf='train_embeddings.csv', sep=',', na_rep='', header=1, i
 # print(diction)
 
 # print(train[['Q_W2V', 'A_W2V', 'Q_overlap', 'S_overlap', 'Q_gen_pos', 'A_gen_pos', 'Q_b_clus', 'A_b_clus']].head())
-
-
-# print("Creating overlaps")
-# train['count'] = pd.Series(count_feat(que, ans) for que, ans in zip(train['Question_tok'], train['Sentence_tok']))
-# test['count'] = pd.Series(count_feat(que, ans) for que, ans in zip(test['Question_tok'], test['Sentence_tok']))
-# dev['count'] = pd.Series(count_feat(que, ans) for que, ans in zip(dev['Question_tok'], dev['Sentence_tok']))
-
-############################## WORD OVERLAP ##############################
-# train['overlap'] = pd.Series(overlap(que, ans) for que, ans in zip(train['Question_tok'], train['Sentence_tok']))
-# test['overlap'] = pd.Series(overlap(que, ans) for que, ans in zip(test['Question_tok'], test['Sentence_tok']))
-# dev['overlap'] = pd.Series(overlap(que, ans) for que, ans in zip(dev['Question_tok'], dev['Sentence_tok']))
-
-## Now we use word overlaps as binary feature at the embedding level
-# train['Q_overlap'] = pd.Series(overlap_feats(que, ov) for que, ov in zip(train['Question_tok'], train['overlap']))
-# train['A_overlap'] = pd.Series(overlap_feats(que, ov) for que, ov in zip(train['Sentence_tok'], train['overlap']))
-# dev['Q_overlap'] = pd.Series(overlap_feats(que, ov) for que, ov in zip(dev['Question_tok'], dev['overlap']))
-# dev['A_overlap'] = pd.Series(overlap_feats(que, ov) for que, ov in zip(dev['Sentence_tok'], dev['overlap']))
-# test['Q_overlap'] = pd.Series(overlap_feats(que, ov) for que, ov in zip(test['Question_tok'], test['overlap']))
-# test['A_overlap'] = pd.Series(overlap_feats(que, ov) for que, ov in zip(test['Sentence_tok'], test['overlap']))
