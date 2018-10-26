@@ -193,90 +193,18 @@ def emb_matrix(dictionar, emb_, dim):
                 embedding_matrix[dictionar[word]] = emb_[word]
     return embedding_matrix
 
-
-
-
-##################################################################################################
-####################### CREATE EMBEDDING, MODIFY TRAIN, AND STORE TO FILES #######################
+##########################################################################################################################
+################################### CREATE EMBEDDING, MODIFY TRAIN, AND STORE TO FILES ###################################
 train = train.apply(embeddes, axis=1)
-
-uniqval = list(set([j for i in list(embBC.values()) for j in i]))
-uniqval.sort()
-
-create_array(uniqval, embBC)
-
-create_dict(toks, embW2V, dict_W2V)
-create_dict(toks, embFT, dict_FT)
-create_dict(toks, embPOS, dict_POS)
-create_dict(toks, embBC, dict_BC)
-
-matrix_W2V = emb_matrix(dict_W2V, embW2V, 50)
-matrix_FT = emb_matrix(dict_FT, embFT, 300)
-matrix_POS = emb_matrix(dict_POS, embPOS, 20)
-
-dim=max(len(embBC[x]) for x in embBC)
-matrix_BC = emb_matrix(dict_BC, embBC, len(uniqval))
-
-train.to_csv(path_or_buf='train_embeddings_5.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
-
-w = csv.writer(open("dictW2V_5.csv", "w"))
-for key, val in dictW2V.items():
-    w.writerow([key, val])
-
-w = csv.writer(open("dictFT_5.csv", "w"))
-for key, val in dictFT.items():
-    w.writerow([key, val])
-
-w = csv.writer(open("embPOS_5.csv", "w"))
-for key, val in embPOS.items():
-    w.writerow([key, val])
-
-w = csv.writer(open("embBC_5.csv", "w"))
-for key, val in embBC.items():
-    w.writerow([key, val])
-
-##################################################################################################
-######################## CREATE EMBEDDING, MODIFY DEV, AND STORE TO FILES ########################
 dev = dev.apply(embeddes, axis=1)
-dev.to_csv(path_or_buf='dev_embeddings_5.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
-
-uniqval = list(set([j for i in list(embBC.values()) for j in i]))
-uniqval.sort()
-
-create_array(uniqval, embBC)
-
-create_dict(toks, embW2V, dict_W2V)
-create_dict(toks, embFT, dict_FT)
-create_dict(toks, embPOS, dict_POS)
-create_dict(toks, embBC, dict_BC)
-
-matrix_W2V = emb_matrix(dict_W2V, embW2V, 50)
-matrix_FT = emb_matrix(dict_FT, embFT, 300)
-matrix_POS = emb_matrix(dict_POS, embPOS, 20)
-
-dim=max(len(embBC[x]) for x in embBC)
-matrix_BC = emb_matrix(dict_BC, embBC, len(uniqval))
-
-w = csv.writer(open("dictW2V_5.csv", "w"))
-for key, val in dictW2V.items():
-    w.writerow([key, val])
-
-w = csv.writer(open("dictFT_5.csv", "w"))
-for key, val in dictFT.items():
-    w.writerow([key, val])
-
-w = csv.writer(open("embPOS_5.csv", "w"))
-for key, val in embPOS.items():
-    w.writerow([key, val])
-
-w = csv.writer(open("embBC_5.csv", "w"))
-for key, val in embBC.items():
-    w.writerow([key, val])
-
-##################################################################################################
-######################## CREATE EMBEDDING, MODIFY TEST, AND STORE TO FILES #######################
 test = test.apply(embeddes, axis=1)
 
+train.to_csv(path_or_buf='train_embeddings_5.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+test.to_csv(path_or_buf='test_embeddings_5.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+dev.to_csv(path_or_buf='dev_embeddings_5.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+
+##########################################################################################################################
+##################################### CREATE EMBEDDING DICTIONARIES ######################################
 uniqval = list(set([j for i in list(embBC.values()) for j in i]))
 uniqval.sort()
 
@@ -286,24 +214,16 @@ create_dict(toks, embW2V, dict_W2V)
 create_dict(toks, embFT, dict_FT)
 create_dict(toks, embPOS, dict_POS)
 create_dict(toks, embBC, dict_BC)
-
+##########################################################################################################
+####################################### CREATE EMBEDDING MATRICES ########################################
 matrix_W2V = emb_matrix(dict_W2V, embW2V, 50)
 matrix_FT = emb_matrix(dict_FT, embFT, 300)
 matrix_POS = emb_matrix(dict_POS, embPOS, 20)
 
 dim=max(len(embBC[x]) for x in embBC)
 matrix_BC = emb_matrix(dict_BC, embBC, len(uniqval))
-
-train.to_csv(path_or_buf='train_embeddings_5.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
-
-w = csv.writer(open("dictW2V_5.csv", "w"))
-for key, val in dictW2V.items():
-    w.writerow([key, val])
-
-w = csv.writer(open("dictFT_5.csv", "w"))
-for key, val in dictFT.items():
-    w.writerow([key, val])
-
+##########################################################################################################
+####################################### WRITE DICTIONARIES TO FILE #######################################
 w = csv.writer(open("embPOS_5.csv", "w"))
 for key, val in embPOS.items():
     w.writerow([key, val])
@@ -312,4 +232,33 @@ w = csv.writer(open("embBC_5.csv", "w"))
 for key, val in embBC.items():
     w.writerow([key, val])
 
-##################################################################################################
+w = csv.writer(open("dictW2V_5.csv", "w"))
+for key, val in dict_W2V.items():
+    w.writerow([key, val])
+
+w = csv.writer(open("dictFT_5.csv", "w"))
+for key, val in dict_FT.items():
+    w.writerow([key, val])
+
+w = csv.writer(open("embPOS_5.csv", "w"))
+for key, val in dict_POS.items():
+    w.writerow([key, val])
+
+w = csv.writer(open("embBC_5.csv", "w"))
+for key, val in dict_BC.items():
+    w.writerow([key, val])
+##########################################################################################################
+######################################### WRITE MATRICES TO FILE #########################################
+w = csv.writer(open("matW2V_5.csv", "w"))
+for key, val in embBC.items():
+    w.writerow([key, val])
+w = csv.writer(open("matFT_5.csv", "w"))
+for key, val in embBC.items():
+    w.writerow([key, val])
+w = csv.writer(open("matPOS_5.csv", "w"))
+for key, val in embBC.items():
+    w.writerow([key, val])
+w = csv.writer(open("matBC_5.csv", "w"))
+for key, val in embBC.items():
+    w.writerow([key, val])
+##########################################################################################################
