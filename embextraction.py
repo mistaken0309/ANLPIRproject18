@@ -1,4 +1,3 @@
-# import win_unicode_console # imported to not have problems with the absence of unicode encoding while working on Windows OS
 from importlib import reload
 import os
 import time
@@ -139,7 +138,6 @@ def embeddes(x):
     A_overl = overlap_feats(ans_tok, overl)
     x['Q_OV'] = Q_overl
     x['A_OV'] = A_overl
-    # print(ov)
     
     x['Q_W2V'] = word2id(x['Question_tok'], dict_W2V)
     x['A_W2V'] = word2id(x['Sentence_tok'], dict_W2V)
@@ -153,7 +151,6 @@ def embeddes(x):
     # CREATE POS TAGS AND 
     for w in que:
         tags_Q.append(w.pos)
-        tags[w.pos]=w.pos_
         bcs_Q.append(w.cluster)
         update_emb(str(w.text), w.pos, embPOS)
         update_dict(str(w.text), w.cluster, embBC)
@@ -163,7 +160,6 @@ def embeddes(x):
     bcs_A = list()
     for w in ans:
         tags_A.append(w.pos)
-        tags[w.pos]=w.pos_
         bcs_A.append(w.cluster)
         update_emb(str(w.text), w.pos, embPOS)
         update_dict(str(w.text), w.cluster, embBC)
@@ -199,9 +195,9 @@ train = train.apply(embeddes, axis=1)
 dev = dev.apply(embeddes, axis=1)
 test = test.apply(embeddes, axis=1)
 
-train.to_csv(path_or_buf='train_embeddings_5.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
-test.to_csv(path_or_buf='test_embeddings_5.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
-dev.to_csv(path_or_buf='dev_embeddings_5.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+train.to_csv(path_or_buf='train_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+test.to_csv(path_or_buf='test_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+dev.to_csv(path_or_buf='dev_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
 
 ##########################################################################################################################
 ##################################### CREATE EMBEDDING DICTIONARIES ######################################
@@ -224,41 +220,30 @@ dim=max(len(embBC[x]) for x in embBC)
 matrix_BC = emb_matrix(dict_BC, embBC, len(uniqval))
 ##########################################################################################################
 ####################################### WRITE DICTIONARIES TO FILE #######################################
-w = csv.writer(open("embPOS_5.csv", "w"))
+w = csv.writer(open("data/results/embPOS.csv", "w"))
 for key, val in embPOS.items():
     w.writerow([key, val])
 
-w = csv.writer(open("embBC_5.csv", "w"))
+w = csv.writer(open("data/results/embBC.csv", "w"))
 for key, val in embBC.items():
     w.writerow([key, val])
 
-w = csv.writer(open("dictW2V_5.csv", "w"))
+w = csv.writer(open("data/results/dictW2V.csv", "w"))
 for key, val in dict_W2V.items():
     w.writerow([key, val])
 
-w = csv.writer(open("dictFT_5.csv", "w"))
+w = csv.writer(open("/data/results/dictFT.csv", "w"))
 for key, val in dict_FT.items():
     w.writerow([key, val])
 
-w = csv.writer(open("embPOS_5.csv", "w"))
+w = csv.writer(open("data/results/dictPOS.csv", "w"))
 for key, val in dict_POS.items():
     w.writerow([key, val])
 
-w = csv.writer(open("embBC_5.csv", "w"))
+w = csv.writer(open("data/results/dictBC.csv", "w"))
 for key, val in dict_BC.items():
     w.writerow([key, val])
 ##########################################################################################################
 ######################################### WRITE MATRICES TO FILE #########################################
-w = csv.writer(open("matW2V_5.csv", "w"))
-for key, val in embBC.items():
-    w.writerow([key, val])
-w = csv.writer(open("matFT_5.csv", "w"))
-for key, val in embBC.items():
-    w.writerow([key, val])
-w = csv.writer(open("matPOS_5.csv", "w"))
-for key, val in embBC.items():
-    w.writerow([key, val])
-w = csv.writer(open("matBC_5.csv", "w"))
-for key, val in embBC.items():
-    w.writerow([key, val])
+np.savez_compressed("/data/results/matrices", w2v=matrix_W2V, ft=matrix_FT, pos=matrix_POS, bc=matrix_BC)
 ##########################################################################################################
