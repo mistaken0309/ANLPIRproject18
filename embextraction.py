@@ -2,6 +2,7 @@
 from importlib import reload
 import os
 import time
+import csv
 
 # lybraries
 import pandas as pd
@@ -27,7 +28,6 @@ import spacy
 train = pd.read_csv('data/WikiQA-train.tsv', sep='\t')
 dev = pd.read_csv('data/WikiQA-dev.tsv', sep='\t')
 test = pd.read_csv('data/WikiQA-test.tsv', sep='\t')
-train
 
 ################################## VARIABLES AND EASY FUNCTIONS ##################################
 # Size to pad the sentences to
@@ -59,40 +59,41 @@ nlp = spacy.load('en_core_web_lg')
 
 ############################### EXECUTION OF IMPORT OF EMBEDDINGS ################################
 train=train.head(5)
+dev=dev.head(5)
+test=test.head(5)
 
 # lower and tokenize questions and answers
 train['Question_tok'] = train['Question'].map(preprocess) 
 train['Sentence_tok'] = train['Sentence'].map(preprocess)
-# dev['Question_tok'] = dev['Question'].map(preprocess)
-# dev['Sentence_tok'] = dev['Sentence'].map(preprocess)
-# test['Question_tok'] = test['Question'].map(preprocess)
-# test['Sentence_tok'] = test['Sentence'].map(preprocess)
-
-# time.sleep(10)
+dev['Question_tok'] = dev['Question'].map(preprocess)
+dev['Sentence_tok'] = dev['Sentence'].map(preprocess)
+test['Question_tok'] = test['Question'].map(preprocess)
+test['Sentence_tok'] = test['Sentence'].map(preprocess)
 
 # create toks list from dataset
-toks = (set(chain.from_iterable(train['Question_tok'])) | set(chain.from_iterable(train['Sentence_tok']))) # | \
-    # set(chain.from_iterable(dev['Question_tok'])) | set(chain.from_iterable(dev['Sentence_tok']))     | \
-    # set(chain.from_iterable(test['Question_tok'])) | set(chain.from_iterable(test['Sentence_tok'])))
+toks = (set(chain.from_iterable(train['Question_tok'])) | set(chain.from_iterable(train['Sentence_tok']))   | \
+    set(chain.from_iterable(dev['Question_tok'])) | set(chain.from_iterable(dev['Sentence_tok']))           | \
+    set(chain.from_iterable(test['Question_tok'])) | set(chain.from_iterable(test['Sentence_tok'])))
 
+##################################### IMPORT FT AND W2V EMB ######################################
 # load the word embedding and prepare the dictionary for our dataset
 print("STARTING TO load embeddings {}".format('data/aquaint+wiki.txt.gz.ndim=50.bin'))
 embW2V = KeyedVectors.load_word2vec_format('data/aquaint+wiki.txt.gz.ndim=50.bin', binary=True)
 print("DONE WITH loading embeddings {}".format('data/aquaint+wiki.txt.gz.ndim=50.bin'))
 
 
-# print("STARTING TO load embeddings {}".format('data/wiki-news-300d-1M.vec'))
-# embFT = KeyedVectors.load_word2vec_format('data/wiki-news-300d-1M.vec', binary=False)
-# print("DONE WITH loading embeddings {}".format('data/wiki-news-300d-1M.vec'))
+print("STARTING TO load embeddings {}".format('data/wiki-news-300d-1M.vec'))
+embFT = KeyedVectors.load_word2vec_format('data/wiki-news-300d-1M.vec', binary=False)
+print("DONE WITH loading embeddings {}".format('data/wiki-news-300d-1M.vec'))
 
-########################## IMPORT FT AND W2V EMB AND CREATE DICTIONARY ###########################
+##################################### IMPORT FT AND W2V EMB ######################################
 ########################################## DICTIONARIES ##########################################
-dictBC = dict()
-dictPOS = dict()
+embBC = dict()
+embPOS = dict()
 dict_POS = {'PAD':0, 'UNK':1}
 dict_BC = {'PAD':0, 'UNK':1}
 dict_W2V = {'PAD':0, 'UNK':1}
-# dict_FT = {'PAD':0, 'UNK':1}
+dict_FT = {'PAD':0, 'UNK':1}
 
 
 def create_dict(toks, embed, dictionar):
@@ -103,24 +104,28 @@ def create_dict(toks, embed, dictionar):
             i+=1
     len(dictionar)
 
-# create dictionaries
-create_dict(toks, embW2V, dict_W2V)
-# create_dict(toks, embFT, dict_FT)
-# print(dict_W2V)
-
-
-################################## CREATE WORD OVERLAP EMBEDDING #################################    
+######################### CREATE WORD EMBEDDINGS AND RELATED DICTIONARIES ########################    
 def update_dict(w, e, diction):
     if w not in diction:
-        s = set()
-        s.add(e)
+        s = list()
+        s.append(e)
         diction[w] = s
     else:
         s = diction[w]
         if not e in s:
-            print("adding ("+str(e)+")")
-            s.add(e)
+            s.append(e)
             diction[w] = s
+
+def update_emb(w, e, diction):
+    s = np.zeros((20,), dtype=int)
+    if w in diction:
+        s=diction[w]
+    if e:
+        s[(e%83)+1]=1
+    else:
+        s[0]=1
+    diction[w]=s
+
 
 def embeddes(x):
     que_tok = x['Question_tok']
@@ -138,8 +143,8 @@ def embeddes(x):
     
     x['Q_W2V'] = word2id(x['Question_tok'], dict_W2V)
     x['A_W2V'] = word2id(x['Sentence_tok'], dict_W2V)
-    # x['Q_FT'] = word2id(x['Question_tok'], dict_FT)
-    # x['A_FT'] = word2id(x['Sentence_tok'], dict_FT)
+    x['Q_FT'] = word2id(x['Question_tok'], dict_FT)
+    x['A_FT'] = word2id(x['Sentence_tok'], dict_FT)
 
     que = nlp(x['Question'])
     tags_Q = list()
@@ -148,66 +153,163 @@ def embeddes(x):
     # CREATE POS TAGS AND 
     for w in que:
         tags_Q.append(w.pos)
+        tags[w.pos]=w.pos_
         bcs_Q.append(w.cluster)
-        update_dict(str(w.text), w.pos, dictPOS)
-        update_dict(str(w.text), w.cluster, dictBC)
+        update_emb(str(w.text), w.pos, embPOS)
+        update_dict(str(w.text), w.cluster, embBC)
 
     ans = nlp(x['Sentence'])
     tags_A = list()
     bcs_A = list()
-    # print(ans)
     for w in ans:
         tags_A.append(w.pos)
+        tags[w.pos]=w.pos_
         bcs_A.append(w.cluster)
-        update_dict(str(w.text), w.pos, dictPOS)
-        update_dict(str(w.text), w.cluster, dictBC)
+        update_emb(str(w.text), w.pos, embPOS)
+        update_dict(str(w.text), w.cluster, embBC)
 
     x['Q_POS'] = tags_Q
     x['Q_CLUS'] = bcs_Q
 
     x['A_POS'] = tags_A
     x['A_CLUS'] = bcs_A
-
     return x
 
+################################# CREATE EMBEDDING ARRAYS FOR BC #################################
+def create_array(values, emb):
+    dim=len(values)
+    for w in emb:
+        s = np.zeros((dim,), dtype=int)
+        l = emb[w]
+        for v in l:
+            s[values.index(v)] = 1
+        emb[w] = s
 
-
-def emb_matrix(dictionar, emb_, dim):
-    print(len(dictionar))
-    print("dictionary")
-    print(dictionar)
-    
+##################################### CREATE EMBEDDING MATRIX ####################################
+def emb_matrix(dictionar, emb_, dim):        
     embedding_matrix = np.zeros((len(dictionar), dim))
     for word in dictionar:
         if word in emb_:
-            # embedding_matrix[dictionar[word]] = [emb_[word]]
-            embedding_matrix[dictionar[word]] = [word, emb_[word]]
-    print("an embedding matrix")
-    print(embedding_matrix)
+                embedding_matrix[dictionar[word]] = emb_[word]
     return embedding_matrix
 
-# print("creating spacy embeddings")
+
+
+
+##################################################################################################
+####################### CREATE EMBEDDING, MODIFY TRAIN, AND STORE TO FILES #######################
 train = train.apply(embeddes, axis=1)
 
-create_dict(toks, dictPOS, dict_POS)
-print("dictionary of pos tags")
-print(dict_POS)
-# print(max(len(list(sent)) for sent in train['Q_W2V']))
-print(max(len(dictPOS[x]) for x in dictPOS))
-# print(max(dict_POS, key= lambda x: len(set(dict_POS[x]))))
+uniqval = list(set([j for i in list(embBC.values()) for j in i]))
+uniqval.sort()
 
-# emb_matrix(dict_POS, dictPOS, dim)
+create_array(uniqval, embBC)
 
-# print(train[['Question_tok', 'count', 'Q_W2V', 'Q_POS']])
+create_dict(toks, embW2V, dict_W2V)
+create_dict(toks, embFT, dict_FT)
+create_dict(toks, embPOS, dict_POS)
+create_dict(toks, embBC, dict_BC)
 
-# train.to_csv(path_or_buf='train_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+matrix_W2V = emb_matrix(dict_W2V, embW2V, 50)
+matrix_FT = emb_matrix(dict_FT, embFT, 300)
+matrix_POS = emb_matrix(dict_POS, embPOS, 20)
 
+dim=max(len(embBC[x]) for x in embBC)
+matrix_BC = emb_matrix(dict_BC, embBC, len(uniqval))
 
-# train2.to_csv(path_or_buf='train_embeddings.csv', sep=',', na_rep='', header=1, index=True,
-#                 index_label=None, mode='w', doublequote=True, escapechar='\\')
+train.to_csv(path_or_buf='train_embeddings_5.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
 
-# print(train2[['Question_tok', 'Q_W2V', 'Q_clus', 'count', 'overlap', 'Q_overlap', 'A_overlap']])
-# print(type(diction))
-# print(diction)
+w = csv.writer(open("dictW2V_5.csv", "w"))
+for key, val in dictW2V.items():
+    w.writerow([key, val])
 
-# print(train[['Q_W2V', 'A_W2V', 'Q_overlap', 'S_overlap', 'Q_gen_pos', 'A_gen_pos', 'Q_b_clus', 'A_b_clus']].head())
+w = csv.writer(open("dictFT_5.csv", "w"))
+for key, val in dictFT.items():
+    w.writerow([key, val])
+
+w = csv.writer(open("embPOS_5.csv", "w"))
+for key, val in embPOS.items():
+    w.writerow([key, val])
+
+w = csv.writer(open("embBC_5.csv", "w"))
+for key, val in embBC.items():
+    w.writerow([key, val])
+
+##################################################################################################
+######################## CREATE EMBEDDING, MODIFY DEV, AND STORE TO FILES ########################
+dev = dev.apply(embeddes, axis=1)
+dev.to_csv(path_or_buf='dev_embeddings_5.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+
+uniqval = list(set([j for i in list(embBC.values()) for j in i]))
+uniqval.sort()
+
+create_array(uniqval, embBC)
+
+create_dict(toks, embW2V, dict_W2V)
+create_dict(toks, embFT, dict_FT)
+create_dict(toks, embPOS, dict_POS)
+create_dict(toks, embBC, dict_BC)
+
+matrix_W2V = emb_matrix(dict_W2V, embW2V, 50)
+matrix_FT = emb_matrix(dict_FT, embFT, 300)
+matrix_POS = emb_matrix(dict_POS, embPOS, 20)
+
+dim=max(len(embBC[x]) for x in embBC)
+matrix_BC = emb_matrix(dict_BC, embBC, len(uniqval))
+
+w = csv.writer(open("dictW2V_5.csv", "w"))
+for key, val in dictW2V.items():
+    w.writerow([key, val])
+
+w = csv.writer(open("dictFT_5.csv", "w"))
+for key, val in dictFT.items():
+    w.writerow([key, val])
+
+w = csv.writer(open("embPOS_5.csv", "w"))
+for key, val in embPOS.items():
+    w.writerow([key, val])
+
+w = csv.writer(open("embBC_5.csv", "w"))
+for key, val in embBC.items():
+    w.writerow([key, val])
+
+##################################################################################################
+######################## CREATE EMBEDDING, MODIFY TEST, AND STORE TO FILES #######################
+test = test.apply(embeddes, axis=1)
+
+uniqval = list(set([j for i in list(embBC.values()) for j in i]))
+uniqval.sort()
+
+create_array(uniqval, embBC)
+
+create_dict(toks, embW2V, dict_W2V)
+create_dict(toks, embFT, dict_FT)
+create_dict(toks, embPOS, dict_POS)
+create_dict(toks, embBC, dict_BC)
+
+matrix_W2V = emb_matrix(dict_W2V, embW2V, 50)
+matrix_FT = emb_matrix(dict_FT, embFT, 300)
+matrix_POS = emb_matrix(dict_POS, embPOS, 20)
+
+dim=max(len(embBC[x]) for x in embBC)
+matrix_BC = emb_matrix(dict_BC, embBC, len(uniqval))
+
+train.to_csv(path_or_buf='train_embeddings_5.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+
+w = csv.writer(open("dictW2V_5.csv", "w"))
+for key, val in dictW2V.items():
+    w.writerow([key, val])
+
+w = csv.writer(open("dictFT_5.csv", "w"))
+for key, val in dictFT.items():
+    w.writerow([key, val])
+
+w = csv.writer(open("embPOS_5.csv", "w"))
+for key, val in embPOS.items():
+    w.writerow([key, val])
+
+w = csv.writer(open("embBC_5.csv", "w"))
+for key, val in embBC.items():
+    w.writerow([key, val])
+
+##################################################################################################
