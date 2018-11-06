@@ -20,6 +20,8 @@ from itertools import chain
 # embedding models
 from gensim.models import KeyedVectors
 
+from keras.preprocessing.sequence import pad_sequences
+
 import spacy
 
 ########################################### READ FILES ###########################################
@@ -30,11 +32,13 @@ test = pd.read_csv('data/WikiQA-test.tsv', sep='\t')
 
 ################################## VARIABLES AND EASY FUNCTIONS ##################################
 # Size to pad the sentences to
-max_len_q = 40
-max_len_a = 40
+max_len_q = 25
+max_len_a = 100
 
 dim = 300
 stop = set(stopwords.words('english'))
+
+nlp = spacy.load('en_core_web_lg')
 
 ########################################## TOKENIZATION ##########################################
 #sentences are tokenized and lowercased
@@ -53,13 +57,10 @@ def overlap(que, ans):
 def overlap_feats(st, overlapping):
     return [1 if word not in overlapping else 2 for word in st]
 
-############################################## SPACY #############################################
-nlp = spacy.load('en_core_web_lg')
-
-############################### EXECUTION OF IMPORT OF EMBEDDINGS ################################
-train=train.head(5)
-dev=dev.head(5)
-test=test.head(5)
+################################# FIRST PREPROCESSING OF DATASET #################################
+# train=train.head(5)
+# dev=dev.head(5)
+# test=test.head(5)
 
 # lower and tokenize questions and answers
 train['Question_tok'] = train['Question'].map(preprocess) 
@@ -68,6 +69,17 @@ dev['Question_tok'] = dev['Question'].map(preprocess)
 dev['Sentence_tok'] = dev['Sentence'].map(preprocess)
 test['Question_tok'] = test['Question'].map(preprocess)
 test['Sentence_tok'] = test['Sentence'].map(preprocess)
+
+# print(max(len(list(sent)) for sent in train['Question_tok']))
+# print(max(len(list(sent)) for sent in train['Sentence_tok']))
+# print(max(len(list(sent)) for sent in dev['Question_tok']))
+# print(max(len(list(sent)) for sent in dev['Sentence_tok']))
+# print(max(len(list(sent)) for sent in test['Question_tok']))
+# print(max(len(list(sent)) for sent in test['Sentence_tok']))
+
+# print("going to sleep")
+# time.sleep(1000)
+
 
 # create toks list from dataset
 toks = (set(chain.from_iterable(train['Question_tok'])) | set(chain.from_iterable(train['Sentence_tok']))   | \
@@ -120,7 +132,11 @@ def update_emb(w, e, diction):
     if w in diction:
         s=diction[w]
     if e:
-        s[(e%83)+1]=1
+        if e == 102:
+            s[19]=1
+        else:
+            s[(e%83)+1]=1
+        
     else:
         s[0]=1
     diction[w]=s
@@ -195,6 +211,24 @@ train = train.apply(embeddes, axis=1)
 dev = dev.apply(embeddes, axis=1)
 test = test.apply(embeddes, axis=1)
 
+
+train['Q_W2V'] = train['Q_W2V'].apply(lambda s: pad_sequences([s], max_len_q)[0])
+train['A_W2V'] = train['A_W2V'].apply(lambda s: pad_sequences([s], max_len_a)[0])
+train['Q_FT'] = train['Q_FT'].apply(lambda s: pad_sequences([s], max_len_q)[0])
+train['A_FT'] = train['A_FT'].apply(lambda s: pad_sequences([s], max_len_a)[0])
+dev['Q_W2V'] = dev['Q_W2V'].apply(lambda s: pad_sequences([s], max_len_q)[0])
+dev['A_W2V'] = dev['A_W2V'].apply(lambda s: pad_sequences([s], max_len_a)[0])
+dev['Q_FT'] = dev['Q_FT'].apply(lambda s: pad_sequences([s], max_len_q)[0])
+dev['A_FT'] = dev['A_FT'].apply(lambda s: pad_sequences([s], max_len_a)[0])
+test['Q_W2V'] = test['Q_W2V'].apply(lambda s: pad_sequences([s], max_len_q)[0])
+test['A_W2V'] = test['A_W2V'].apply(lambda s: pad_sequences([s], max_len_a)[0])
+test['Q_FT'] = test['Q_FT'].apply(lambda s: pad_sequences([s], max_len_q)[0])
+test['A_FT'] = test['A_FT'].apply(lambda s: pad_sequences([s], max_len_a)[0])
+
+
+print("columns of train:")
+print(list(train.columns.values))
+
 train.to_csv(path_or_buf='train_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
 test.to_csv(path_or_buf='test_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
 dev.to_csv(path_or_buf='dev_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
@@ -232,7 +266,7 @@ w = csv.writer(open("data/results/dictW2V.csv", "w"))
 for key, val in dict_W2V.items():
     w.writerow([key, val])
 
-w = csv.writer(open("/data/results/dictFT.csv", "w"))
+w = csv.writer(open("data/results/dictFT.csv", "w"))
 for key, val in dict_FT.items():
     w.writerow([key, val])
 
@@ -245,5 +279,6 @@ for key, val in dict_BC.items():
     w.writerow([key, val])
 ##########################################################################################################
 ######################################### WRITE MATRICES TO FILE #########################################
-np.savez_compressed("/data/results/matrices", w2v=matrix_W2V, ft=matrix_FT, pos=matrix_POS, bc=matrix_BC)
+np.savez_compressed("data/results/matrices", w2v=matrix_W2V, ft=matrix_FT, pos=matrix_POS, bc=matrix_BC)
+# np.savez_compressed("data/results/matrices", w2v=matrix_W2V, pos=matrix_POS, bc=matrix_BC)
 ##########################################################################################################
