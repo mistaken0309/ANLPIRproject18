@@ -1,6 +1,7 @@
-# import win_unicode_console # imported to not have problems with the absence of unicode encoding while working on Windows OS
 from importlib import reload
 import os
+
+import time
 
 # lybraries
 import pandas as pd
@@ -64,18 +65,19 @@ test['Question_tok'] = test['Question'].map(preprocess)
 test['Sentence_tok'] = test['Sentence'].map(preprocess)
 train[0:5]
 
-#map word to IDs
-def word2id(sent, dictionar):
-    return list(map(lambda x: dictionar.get(x, 1), sent))
 
 # Pad sentence size to a fixed size lenght
 max_len_q = 40
 max_len_a = 40
 
 dictionaryW2V = {'PAD':0, 'UNK':1}
-
+dictionary = {'PAD':0, 'UNK':1}
 # ft = KeyedVectors.load_word2vec_format('data/wiki-news-300d-1M.vec', binary=False)
 dictionaryFT = {'PAD':0, 'UNK':1}
+
+#map word to IDs
+def word2id(sent):
+    return list(map(lambda x: dictionary.get(x, 1), sent))
 
 #functions 
 stop = set(stopwords.words('english'))
@@ -90,7 +92,7 @@ def overlap_feats(st, overlapping):
 # import the embedded data into a dictionary
 # path = path of embeddings,
 # binary = true if word2vec, = false if fastText
-def import_data_with_embeddings_into_dict(path, binary, dictionar):
+def import_data_with_embeddings_into_dict(path, binary, dictionar, dictionary):
     # load the word embedding and prepare the dictionary for our dataset
     print("STARTING TO load embeddings {}".format(path))
     embed = KeyedVectors.load_word2vec_format(path, binary=binary)
@@ -99,13 +101,15 @@ def import_data_with_embeddings_into_dict(path, binary, dictionar):
         set(chain.from_iterable(dev['Question_tok'])) | set(chain.from_iterable(dev['Sentence_tok']))     | \
         set(chain.from_iterable(test['Question_tok'])) | set(chain.from_iterable(test['Sentence_tok'])))
 
+    example = True
     i = 2
     for _, tok in enumerate(toks):
         if tok in embed:
             dictionar[tok] = i
             i+=1
-    len(dictionar)
+    print(len(dictionar))
 
+    dictionary = dictionar
     # add mapping to IDs
     train['Question_'] = train['Question_tok'].map(word2id)
     train['Sentence_'] = train['Sentence_tok'].map(word2id)
@@ -130,39 +134,7 @@ def import_data_with_embeddings_into_dict(path, binary, dictionar):
     return embed
 
 
-# In this setting, accuracy is not a relevant metric for classification. 
-# For this reason, we create a custom Callback to implement early stopping and model saving.
-class EpochEval(Callback):
 
-    def __init__(self, validation_data, evaluate, patience=np.Inf, save_model=False, score_c=None):
-        #super(Callback, self).__init__()
-        super().__init__()
-
-        (self.qids, self.aids), self.X, self.y = validation_data
-        self.evaluate = evaluate
-        self.best = -np.Inf
-        self.patience = patience
-        self.wait = 0
-        self.waited = False
-        self.save_model = save_model
-
-
-    def on_epoch_end(self, epoch, logs={}):
-        print
-        prediction = self.model.predict(self.X)
-        val = self.evaluate(self.qids, self.y, prediction)
-        print("\t{0} = {1:.4f}".format(self.evaluate.__name__, val))
-        if val*0.995 > self.best:
-            self.model.save('qa.h5')
-            print ('\tBest {0}: {1:.4f}'.format(self.evaluate.__name__, val))
-            self.best = val
-            self.wait = 0
-            self.waited = False
-        else:
-            self.wait += 1
-            if self.wait >= self.patience:
-                self.model.stop_training = True
-        print
 
 
 
@@ -170,11 +142,13 @@ class EpochEval(Callback):
 # dictionar = dictionary we have created
 # emb_ = embedding from files (W2V or FastText)
 # dim = 50 / /
-def emb_matrix(dictionar, emb_, dim):
+def emb_matrix(dictionar, emb_, dim):    
     embedding_matrix = np.zeros((len(dictionar), dim))
     for word in dictionar:
         if word in emb_:
             embedding_matrix[dictionar[word]] = emb_[word]
+    print("an embedding matrix")
+    print(embedding_matrix)
     return embedding_matrix
 
 
@@ -333,7 +307,6 @@ def basic_model_pred(emb, dictionar, dim, newname):
     map_score_filtered(qid, lab, pred)
     map_score(qid, lab, pred)
     test['pred'] = pd.Series(y for y in pred)
-    test[0:5]
 
     print("\n\n basic model - over training set \n")
     (qid,_ ), X, lab = data(train)
@@ -341,7 +314,6 @@ def basic_model_pred(emb, dictionar, dim, newname):
     print(map_score_filtered(qid, lab, pred))
     print(map_score(qid, lab, pred))
     train['pred'] = pd.Series(y for y in pred)
-    train
 
 # emb = embedding imported
 # dictionar = dictionary created (either with W2V or with FastText)
@@ -366,7 +338,6 @@ def overlap_model_pred(embo, dictionar, dim, dim2, newname):
     print(map_score_filtered(qid, lab, pred_over))
     print(map_score(qid, lab, pred_over))
     test['pred_ov'] = pd.Series(y for y in pred_over)
-    test[0:5]
 
     print("\n\nmodel with overlaps - over training set \n")
     (qid,_ ), X, lab = dataOver(train)
@@ -374,17 +345,16 @@ def overlap_model_pred(embo, dictionar, dim, dim2, newname):
     print(map_score_filtered(qid, lab, pred_over))
     print(map_score(qid, lab, pred_over))
     train['pred_ov'] = pd.Series(y for y in pred_over)
-    train[0:5]
 
 # create embeddings
-embW2V = import_data_with_embeddings_into_dict('data/aquaint+wiki.txt.gz.ndim=50.bin', binary=True)
+embW2V = import_data_with_embeddings_into_dict('data/aquaint+wiki.txt.gz.ndim=50.bin', binary=True, dictionar=dictionaryW2V, dictionary=dictionary)
 print("\n\ncreating basic model with W2V embedding\n")
 basic_model_pred(embW2V, dictionaryW2V, 50, '/qa_W2V')
 print("\n\ncreating overlap model with W2V embedding\n")
 overlap_model_pred(embW2V, dictionaryW2V, 50, 55, '/qa_W2V')
 
 
-embFT = import_data_with_embeddings_into_dict('data/wiki-news-300d-1M.vec', binary=False, dictionaryFT)
+embFT = import_data_with_embeddings_into_dict('data/wiki-news-300d-1M.vec', binary=False, dictionar=dictionaryFT)
 print("\n\ncreating basic model with FastText embedding\n")
 basic_model_pred(embFT, dictionaryFT, 300, '/qa_ft')
 print("\n\ncreating models with FastText embedding\n")
