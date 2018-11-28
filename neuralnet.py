@@ -307,15 +307,15 @@ def create_2feat_model(emb_q, emb_a, emb_fq, emb_fa, col_q_1, col_a_1, col_q_2, 
 
     featQ_in = Sequential()
     featQ_in.add(emb_fq)
-    featQ_in.add(Convolution1D(100, 5, activation='tanh'))
-    featQ_in.add(GlobalAveragePooling1D())
-    # featQ_in.add(Flatten())
+    # featQ_in.add(Convolution1D(100, 5, activation='tanh'))
+    # featQ_in.add(GlobalAveragePooling1D())
+    featQ_in.add(Flatten())
 
     featA_in = Sequential()
     featA_in.add(emb_fa)
-    featA_in.add(Convolution1D(100, 5, activation='tanh'))
-    featA_in.add(GlobalAveragePooling1D())
-    # featA_in.add(Flatten())
+    # featA_in.add(Convolution1D(100, 5, activation='tanh'))
+    # featA_in.add(GlobalAveragePooling1D())
+    featA_in.add(Flatten())
 
     q_emb = que_in(que)
     a_emb = ans_in(ans)
@@ -325,8 +325,8 @@ def create_2feat_model(emb_q, emb_a, emb_fq, emb_fa, col_q_1, col_a_1, col_q_2, 
     qa_matrix = concatenate([q_emb, a_emb, fq_emb, fa_emb]) 
     # qa_matrix = flatten
     # out = create_classify(qa_matrix, 5600)
-    # out = create_classify(qa_matrix, 1800)
-    out = create_classify(qa_matrix, 400)
+    out = create_classify(qa_matrix, 1800)
+    # out = create_classify(qa_matrix, 400)
 
 
     model = Model(inputs=[que, ans, feat_q, feat_a], outputs=[out])
