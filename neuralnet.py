@@ -29,6 +29,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.optimizers import Adam
 from keras.models import Model, Sequential, load_model
 from keras.layers import (Input, Embedding, Convolution1D, Dropout, SpatialDropout1D, dot,
+                            Reshape, Merge, Flatten,
                             GlobalMaxPooling1D, GlobalAveragePooling1D, concatenate, Dense)
 
 max_len_q = 40 #25
@@ -168,9 +169,11 @@ que = Input(shape=(max_len_q,))
 feat_q = Input(shape=(max_len_q,))
 ans = Input(shape=(max_len_a,))
 feat_a = Input(shape=(max_len_a,))
+
 que_ov = Input(shape=(max_len_q,))
 ans_ov = Input(shape=(max_len_a,))
 cnt = Input(shape=(1,))
+
 que_pos = Input(shape=(max_len_q,))
 ans_pos = Input(shape=(max_len_a,))
 que_bc = Input(shape=(max_len_q,))
@@ -178,8 +181,8 @@ ans_bc = Input(shape=(max_len_a,))
 
 
 que_ov_emb = Embedding(3, 5,input_length=max_len_q)(que_ov)
-que_w2v_emb_c = Embedding(len(dict_w2v), 50, input_length=max_len_q, weights=[em_W2V], trainable=True)(que)
-# que_ft_emb_c = Embedding(len(dict_ft), 300, input_length=max_len_q, weights=[em_FT], trainable=True)(que)
+que_w2v_emb_c = Embedding(len(dict_w2v), 50, input_length=max_len_q, weights=[em_W2V], trainable=False)(que)
+# que_ft_emb_c = Embedding(len(dict_ft), 300, input_length=max_len_q, weights=[em_FT], trainable=False)(que)
 que_pos_emb_c = Embedding(len(dict_pos), 20, input_length=max_len_q, weights=[em_POS], trainable=True)(feat_q)
 que_bc_emb_c = Embedding(len(dict_bc), 20, input_length=max_len_q, weights=[em_BC], trainable=True)(feat_q)
 
@@ -192,8 +195,8 @@ q_pos_bc = concatenate([que_w2v_emb_c, que_pos_emb_c])
 
 # embeddings for overlap model
 ans_ov_emb = Embedding(3, 5,input_length=max_len_a)(ans_ov)
-ans_w2v_emb_c = Embedding(len(dict_w2v), 50, input_length=max_len_a, weights=[em_W2V], trainable=True)(ans)
-# ans_ft_emb_c = Embedding(len(dict_ft), 300, input_length=max_len_a, weights=[em_FT], trainable=True)(ans)
+ans_w2v_emb_c = Embedding(len(dict_w2v), 50, input_length=max_len_a, weights=[em_W2V], trainable=False)(ans)
+# ans_ft_emb_c = Embedding(len(dict_ft), 300, input_length=max_len_a, weights=[em_FT], trainable=False)(ans)
 ans_pos_emb_c = Embedding(len(dict_pos), 20, input_length=max_len_a, weights=[em_POS], trainable=True)(feat_a)
 ans_bc_emb_c = Embedding(len(dict_bc), 20, input_length=max_len_a, weights=[em_BC], trainable=True)(feat_a)
 
@@ -205,10 +208,10 @@ a_ov_bc = concatenate([ans_ov_emb, ans_bc_emb_c])
 a_pos_bc = concatenate([ans_pos_emb_c, ans_bc_emb_c])
 
 # embeddings for w2v in the basic model
-que_w2v_emb = Embedding(len(dict_w2v), 50, input_length=max_len_q, weights=[em_W2V], trainable=True)
-ans_w2v_emb = Embedding(len(dict_w2v), 50, input_length=max_len_a, weights=[em_W2V], trainable=True)
-# que_ft_emb = Embedding(len(dict_ft), 300, input_length=max_len_q, weights=[em_FT], trainable=True)
-# ans_ft_emb = Embedding(len(dict_ft), 300, input_length=max_len_a, weights=[em_FT], trainable=True)
+que_w2v_emb = Embedding(len(dict_w2v), 50, input_length=max_len_q, weights=[em_W2V], trainable=False)
+ans_w2v_emb = Embedding(len(dict_w2v), 50, input_length=max_len_a, weights=[em_W2V], trainable=False)
+# que_ft_emb = Embedding(len(dict_ft), 300, input_length=max_len_q, weights=[em_FT], trainable=False)
+# ans_ft_emb = Embedding(len(dict_ft), 300, input_length=max_len_a, weights=[em_FT], trainable=False)
 que_pos_emb = Embedding(len(dict_pos), 20, input_length=max_len_q, weights=[em_POS], trainable=True)
 ans_pos_emb = Embedding(len(dict_pos), 20, input_length=max_len_a, weights=[em_POS], trainable=True)
 que_bc_emb = Embedding(len(dict_bc), 20, input_length=max_len_q, weights=[em_BC], trainable=True)
@@ -222,6 +225,8 @@ def create_classify(join, cl_dim):
     classify = Sequential()
     classify.add(Dense(100, activation='tanh', input_dim=cl_dim))
     classify.add(Dense(1, activation='sigmoid'))
+    print("CLASSIFY")
+    classify.summary()
     return classify(join)
 
 ###############################################################################################################
@@ -247,13 +252,14 @@ def create_1feat_model(emb_q, emb_a, col_q, col_a, newname):
     model = Model(inputs=[que, ans], outputs=[out])
     model.summary()
     
-    # model.compile(loss='binary_crossentropy', optimizer=Adam(0.0001), metrics=['accuracy'])
-    # model.fit([np.vstack(train[col_q]), np.vstack(train[col_a])], np.vstack(train['Label'].tolist()), 
-    #         batch_size=100, epochs=100000, shuffle=True, verbose=2,
-    #         callbacks=[EpochEval(data(dev, col_q, col_a), map_score_filtered, patience=5)])
+    model.compile(loss='binary_crossentropy', optimizer=Adam(0.0001), metrics=['accuracy'])
+    print("MODEL FIT 1 feat")
+    model.fit([np.vstack(train[col_q]), np.vstack(train[col_a])], np.vstack(train['Label'].tolist()), 
+            batch_size=100, epochs=100000, shuffle=True, verbose=2,
+            callbacks=[EpochEval(data(dev, col_q, col_a), map_score_filtered, patience=5)])
 
-    # nameb ='./models' + newname + '_basic.h5'
-    # os.rename('qa.h5', nameb)
+    nameb ='./models' + newname + '_basic.h5'
+    os.rename('qa.h5', nameb)
 ###############################################################################################################
 ######################################### ONE FEAT WITH OVERLAP MODEL #########################################
 def create_1feat_ov_model(emb_q, emb_a, col_q, col_a, size, newname):
@@ -276,6 +282,7 @@ def create_1feat_ov_model(emb_q, emb_a, col_q, col_a, size, newname):
     model_ov = Model(inputs=[que, ans, que_ov, ans_ov, cnt], outputs=[out])
     model_ov.summary()
     model_ov.compile(loss='binary_crossentropy', optimizer=Adam(0.0001), metrics=['accuracy'])
+    print("MODEL FIT 1 feat with ov")
     model_ov.fit([np.vstack(train[col_q]), np.vstack(train[col_a]), np.vstack(train['Q_OV']), np.vstack(train['A_OV']), train['count'].values],
             np.vstack(train['Label'].tolist()), batch_size=100, epochs=100000, shuffle=True, verbose=2,
             callbacks=[EpochEval(dataOver(dev, col_q, col_a), map_score_filtered, patience=5)])
@@ -289,38 +296,41 @@ def create_2feat_model(emb_q, emb_a, emb_fq, emb_fa, col_q_1, col_a_1, col_q_2, 
     que_in = Sequential()
     que_in.add(emb_q)
     que_in.add(Convolution1D(100, 5, activation='tanh'))
-    que_in.add(GlobalMaxPooling1D())
-    
-    featQ_in = Sequential()
-    featQ_in.add(emb_fq)
-    featQ_in.add(Convolution1D(100, 5, activation='tanh'))
-    featQ_in.add(GlobalMaxPooling1D())
-
-    q_emb = que_in(que)
-    fq_emb = featQ_in(feat_q)
-    
+    que_in.add(GlobalAveragePooling1D())
+    # que_in.add(Flatten())
 
     ans_in = Sequential()
     ans_in.add(emb_a)
     ans_in.add(Convolution1D(100, 5, activation='tanh'))
-    ans_in.add(GlobalMaxPooling1D())
+    ans_in.add(GlobalAveragePooling1D())
+    # ans_in.add(Flatten())
+
+    featQ_in = Sequential()
+    featQ_in.add(emb_fq)
+    featQ_in.add(Convolution1D(100, 5, activation='tanh'))
+    featQ_in.add(GlobalAveragePooling1D())
+    # featQ_in.add(Flatten())
 
     featA_in = Sequential()
     featA_in.add(emb_fa)
     featA_in.add(Convolution1D(100, 5, activation='tanh'))
-    featA_in.add(GlobalMaxPooling1D())
+    featA_in.add(GlobalAveragePooling1D())
+    # featA_in.add(Flatten())
 
-    a_emb = ans_in(que)
+    q_emb = que_in(que)
+    a_emb = ans_in(ans)
+    fq_emb = featQ_in(feat_q)
     fa_emb = featA_in(feat_a)
 
-    qa_matrix = concatenate([q_emb, a_emb, fq_emb, fa_emb])
-
+    qa_matrix = concatenate([q_emb, a_emb, fq_emb, fa_emb]) 
+    # qa_matrix = flatten
+    # out = create_classify(qa_matrix, 5600)
+    # out = create_classify(qa_matrix, 1800)
     out = create_classify(qa_matrix, 400)
 
 
     model = Model(inputs=[que, ans, feat_q, feat_a], outputs=[out])
     model.summary()
-    
     model.compile(loss='binary_crossentropy', optimizer=Adam(0.0001), metrics=['accuracy'])
 
     print("MODEL FIT")
@@ -328,7 +338,7 @@ def create_2feat_model(emb_q, emb_a, emb_fq, emb_fa, col_q_1, col_a_1, col_q_2, 
             np.vstack(train['Label'].tolist()), batch_size=100, epochs=100000, shuffle=True, verbose=2,
             callbacks=[EpochEval(dataTwo(dev, col_q_1, col_a_1, col_q_2, col_a_2), map_score_filtered, patience=5)])
 
-    nameb ='./models' + newname + '_basic.h5'
+    nameb ='./models' + newname + '.h5'
     os.rename('qa.h5', nameb)
 ###############################################################################################################
 
@@ -336,9 +346,9 @@ def create_2feat_model(emb_q, emb_a, emb_fq, emb_fa, col_q_1, col_a_1, col_q_2, 
 
 
 
-# create_1feat_model(que_w2v_emb, ans_w2v_emb, 'Q_W2V', 'A_W2V', "/qa_W2V")
+create_1feat_model(que_w2v_emb, ans_w2v_emb, 'Q_W2V', 'A_W2V', "/qa_W2V")
 # create_1feat_model(que_ft_emb, ans_ft_emb, 'Q_FT', 'A_FT', "/qa_FT")
-create_1feat_model(que_pos_emb, ans_pos_emb, 'Q_POS', 'A_POS', "/qa_POS")
+# create_1feat_model(que_pos_emb, ans_pos_emb, 'Q_POS', 'A_POS', "/qa_POS")
 # create_1feat_model(que_bc_emb, ans_bc_emb, 'Q_BC', 'A_BC', "/qa_BC")
 
 
