@@ -29,7 +29,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.optimizers import Adam
 from keras.models import Model, Sequential, load_model
 from keras.layers import (Input, Embedding, Convolution1D, Dropout, SpatialDropout1D, dot,
-                            Reshape, Merge, Flatten,
+                            Reshape, Merge, Flatten, Concatenate,
                             GlobalMaxPooling1D, GlobalAveragePooling1D, concatenate, Dense)
 
 max_len_q = 40 #25
@@ -166,8 +166,8 @@ class EpochEval(Callback):
 
 
 que = Input(shape=(max_len_q,))
-feat_q = Input(shape=(max_len_q,))
 ans = Input(shape=(max_len_a,))
+feat_q = Input(shape=(max_len_q,))
 feat_a = Input(shape=(max_len_a,))
 
 que_ov = Input(shape=(max_len_q,))
@@ -295,38 +295,38 @@ def create_2feat_model(emb_q, emb_a, emb_fq, emb_fa, col_q_1, col_a_1, col_q_2, 
     
     que_in = Sequential()
     que_in.add(emb_q)
-    que_in.add(Convolution1D(100, 5, activation='tanh'))
-    que_in.add(GlobalAveragePooling1D())
-    # que_in.add(Flatten())
-
-    ans_in = Sequential()
-    ans_in.add(emb_a)
-    ans_in.add(Convolution1D(100, 5, activation='tanh'))
-    ans_in.add(GlobalAveragePooling1D())
-    # ans_in.add(Flatten())
+    que_emb = que_in(que)
 
     featQ_in = Sequential()
     featQ_in.add(emb_fq)
-    # featQ_in.add(Convolution1D(100, 5, activation='tanh'))
-    # featQ_in.add(GlobalAveragePooling1D())
-    featQ_in.add(Flatten())
+    fq_emb = featQ_in(feat_q)
+
+    q_matrix = concatenate([que_emb, fq_emb], axis=2)
+
+    que_conc = Sequential()
+    que_conc.add(Convolution1D(100, 5, activation='tanh', kernel_initializer='lecun_uniform', input_shape=(max_len_q, 70)))
+    que_conc.add(GlobalAveragePooling1D())
+    q_emb = que_conc(q_matrix)
+    
+
+    ans_in = Sequential()
+    ans_in.add(emb_q)
+    ans_emb = ans_in(ans)
 
     featA_in = Sequential()
     featA_in.add(emb_fa)
-    # featA_in.add(Convolution1D(100, 5, activation='tanh'))
-    # featA_in.add(GlobalAveragePooling1D())
-    featA_in.add(Flatten())
-
-    q_emb = que_in(que)
-    a_emb = ans_in(ans)
-    fq_emb = featQ_in(feat_q)
     fa_emb = featA_in(feat_a)
 
-    qa_matrix = concatenate([q_emb, a_emb, fq_emb, fa_emb]) 
-    # qa_matrix = flatten
-    # out = create_classify(qa_matrix, 5600)
-    out = create_classify(qa_matrix, 1800)
-    # out = create_classify(qa_matrix, 400)
+    a_matrix = concatenate([ans_emb, fa_emb], axis=2)
+
+
+    ans_conc = Sequential()
+    ans_conc.add(Convolution1D(100, 5, activation='tanh', kernel_initializer='lecun_uniform', input_shape=(max_len_a, 70)))
+    ans_conc.add(GlobalAveragePooling1D())
+    a_emb = ans_conc(a_matrix)
+
+    qa_matrix = concatenate([q_emb, a_emb])
+    out = create_classify(qa_matrix, 200)
 
 
     model = Model(inputs=[que, ans, feat_q, feat_a], outputs=[out])
@@ -346,16 +346,15 @@ def create_2feat_model(emb_q, emb_a, emb_fq, emb_fa, col_q_1, col_a_1, col_q_2, 
 
 
 
-create_1feat_model(que_w2v_emb, ans_w2v_emb, 'Q_W2V', 'A_W2V', "/qa_W2V")
+# create_1feat_model(que_w2v_emb, ans_w2v_emb, 'Q_W2V', 'A_W2V', "/qa_W2V")
 # create_1feat_model(que_ft_emb, ans_ft_emb, 'Q_FT', 'A_FT', "/qa_FT")
 # create_1feat_model(que_pos_emb, ans_pos_emb, 'Q_POS', 'A_POS', "/qa_POS")
 # create_1feat_model(que_bc_emb, ans_bc_emb, 'Q_BC', 'A_BC', "/qa_BC")
-
-
-create_2feat_model(que_w2v_emb, ans_w2v_emb, que_pos_emb, ans_pos_emb, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', "qa_w2v_pos")
 
 # print("STARTING with overlap")
 # create_1feat_ov_model(q_ov_w2v, a_ov_w2v, 'Q_W2V', 'A_W2V', 55, "/qa_w2v_ov")
 # create_1feat_ov_model(q_ov_ft, a_ov_ft, 'Q_FT', 'A_FT', 55, "/qa_ft_ov")
 # create_1feat_ov_model(q_ov_pos, a_ov_pos, 'Q_POS', 'A_POS', 25, "/qa_pos_ov")
 # create_1feat_ov_model(q_ov_bc, a_ov_bc, 'Q_BC', 'A_BC', 25, "/qa_bc_ov")
+
+create_2feat_model(que_w2v_emb, ans_w2v_emb, que_pos_emb, ans_pos_emb, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', "qa_w2v_pos")
