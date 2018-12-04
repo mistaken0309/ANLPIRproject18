@@ -65,12 +65,12 @@ def overlap_feats(st, overlapping):
 
 ################################# FIRST PREPROCESSING OF DATASET #################################
 
-train=train.head(int(len(train.index)/100))
-dev=dev.head(int(len(dev.index)/100))
-test=test.head(int(len(test.index)/100))
-print(len(train.index))
-print(len(dev.index))
-print(len(test.index))
+# train=train.head(int(len(train.index)/100))
+# dev=dev.head(int(len(dev.index)/100))
+# test=test.head(int(len(test.index)/100))
+# print(len(train.index))
+# print(len(dev.index))
+# print(len(test.index))
 
 # lower and tokenize questions and answers
 train['Question_tok'] = train['Question'].map(preprocess) 
@@ -103,9 +103,9 @@ embW2V = KeyedVectors.load_word2vec_format('data/aquaint+wiki.txt.gz.ndim=50.bin
 print("DONE WITH loading embeddings {}".format('data/aquaint+wiki.txt.gz.ndim=50.bin'))
 
 
-# print("STARTING TO load embeddings {}".format('data/wiki-news-300d-1M.vec'))
-# embFT = KeyedVectors.load_word2vec_format('data/wiki-news-300d-1M.vec', binary=False)
-# print("DONE WITH loading embeddings {}".format('data/wiki-news-300d-1M.vec'))
+print("STARTING TO load embeddings {}".format('data/wiki-news-300d-1M.vec'))
+embFT = KeyedVectors.load_word2vec_format('data/wiki-news-300d-1M.vec', binary=False)
+print("DONE WITH loading embeddings {}".format('data/wiki-news-300d-1M.vec'))
 
 ##################################### IMPORT FT AND W2V EMB ######################################
 ########################################## DICTIONARIES ##########################################
@@ -138,8 +138,8 @@ def embeddes(x):
     
     x['Q_W2V'] = ','.join(map(str, pad_sequences([word2id(x['Question_tok'], dict_W2V)], max_len_q)[0]))
     x['A_W2V'] = ','.join(map(str, pad_sequences([word2id(x['Sentence_tok'], dict_W2V)], max_len_a)[0]))
-    # x['Q_FT'] = ','.join(map(str, pad_sequences([word2id(x['Question_tok'], dict_FT)], max_len_q)[0]))
-    # x['A_FT'] = ','.join(map(str, pad_sequences([word2id(x['Sentence_tok'], dict_FT)], max_len_a)[0]))
+    x['Q_FT'] = ','.join(map(str, pad_sequences([word2id(x['Question_tok'], dict_FT)], max_len_q)[0]))
+    x['A_FT'] = ','.join(map(str, pad_sequences([word2id(x['Sentence_tok'], dict_FT)], max_len_a)[0]))
 
     # CREATE POS TAGS AND BROWN CLUSTERS
     que = nlp(x['Question'])
@@ -201,10 +201,11 @@ def emb_matrix_unk(dictionar, dim):
 ################################### CREATE EMBEDDING, MODIFY TRAIN, AND STORE TO FILES ###################################
 print("EXTRACTING embeddings")
 
+i = 1
+print("TRAIN")
 print(len(train.index))
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
-print("TRAIN")
 train = train.apply(embeddes, axis=1)
 
 now = datetime.datetime.now()
@@ -212,7 +213,7 @@ print(now.strftime("%H:%M.%S"))
 print("WRITING TRAIN TO FILE")
 train.to_csv(path_or_buf='train_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
 
-
+i = 1
 print("DEV")
 print(len(dev.index))
 now = datetime.datetime.now()
@@ -224,7 +225,7 @@ print(now.strftime("%H:%M.%S"))
 print("WRITING DEV TO FILE")
 dev.to_csv(path_or_buf='dev_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
 
-
+i = 1
 print("TEST")
 print(len(test.index))
 now = datetime.datetime.now()
@@ -246,7 +247,7 @@ print(now.strftime("%H:%M.%S"))
 ####################################### CREATE EMBEDDING MATRICES ########################################
 print("CREATING embedding matrices")
 matrix_W2V = emb_matrix(dict_W2V, embW2V, 50)
-# matrix_FT = emb_matrix(dict_FT, embFT, 300)
+matrix_FT = emb_matrix(dict_FT, embFT, 300)
 
 matrix_POS = emb_matrix_unk(dict_POS, 20)
 matrix_BC = emb_matrix_unk(dict_BC, 20)
@@ -255,8 +256,8 @@ matrix_BC = emb_matrix_unk(dict_BC, 20)
 print("WRITING to file dictionaries and embedding matrices")
 with open('data/results/dictW2V.json', 'w') as file:
      file.write(json.dumps(dict_W2V))
-# with open('data/results/dictFT.json', 'w') as file:
-#      file.write(json.dumps(dict_FT))
+with open('data/results/dictFT.json', 'w') as file:
+     file.write(json.dumps(dict_FT))
 with open('data/results/dictPOS.json', 'w') as file:
      file.write(json.dumps(dict_POS))
 with open('data/results/dictBC.json', 'w') as file:
@@ -265,6 +266,6 @@ with open('data/results/dictBC.json', 'w') as file:
 ##########################################################################################################
 ######################################### WRITE MATRICES TO FILE #########################################
 # np.savez_compressed("data/results/matrices", w2v=matrix_W2V)
-# np.savez_compressed("data/results/matrices", w2v=matrix_W2V, ft=matrix_FT, pos=matrix_POS, bc=matrix_BC)
-np.savez_compressed("data/results/matrices", w2v=matrix_W2V, pos=matrix_POS, bc=matrix_BC)
+np.savez_compressed("data/results/matrices", w2v=matrix_W2V, ft=matrix_FT, pos=matrix_POS, bc=matrix_BC)
+# np.savez_compressed("data/results/matrices", w2v=matrix_W2V, pos=matrix_POS, bc=matrix_BC)
 ##########################################################################################################
