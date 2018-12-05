@@ -337,10 +337,10 @@ def get_results(name, colname, qid, X, lab, test):
 
 
 
-# print("##################### MODEL WITH W2V ONLY #####################")
-# create_1feat_model(que_w2v_emb, ans_w2v_emb, 'Q_W2V', 'A_W2V', "/qa_w2v")
-# (qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
-# get_results('./models/qa_w2v_basic.h5', 'pred_w2v', qid, X, lab, test)
+print("##################### MODEL WITH W2V ONLY #####################")
+create_1feat_model(que_w2v_emb, ans_w2v_emb, 'Q_W2V', 'A_W2V', "/qa_w2v")
+(qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
+get_results('./models/qa_w2v_basic.h5', 'pred_w2v', qid, X, lab, test)
 
 # create_1feat_model(que_ft_emb, ans_ft_emb, 'Q_FT', 'A_FT', "/qa_ft")
 # create_1feat_model(que_pos_emb, ans_pos_emb, 'Q_POS', 'A_POS', "/qa_pos")

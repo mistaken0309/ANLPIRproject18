@@ -1,0 +1,155 @@
+/usr/local/lib/python3.5/dist-packages/h5py/__init__.py:36: FutureWarning: Conversion of the second argument of issubdtype from `float` to `np.floating` is deprecated. In future, it will be treated as `np.float64 == np.dtype(float).type`.
+  from ._conv import register_converters as _register_converters
+Using TensorFlow backend.
+##################### MODEL WITH W2V ONLY #####################
+2018-12-05 15:04:28.689256: I tensorflow/core/platform/cpu_feature_guard.cc:140] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0
+__________________________________________________________________________________________________
+sequential_1 (Sequential)       (None, 100)          25200       input_1[0][0]
+__________________________________________________________________________________________________
+sequential_2 (Sequential)       (None, 100)          25200       input_2[0][0]
+__________________________________________________________________________________________________
+concatenate_1 (Concatenate)     (None, 200)          0           sequential_1[1][0]
+                                                                 sequential_2[1][0]
+__________________________________________________________________________________________________
+sequential_3 (Sequential)       (None, 1)            20201       concatenate_1[0][0]
+==================================================================================================
+Total params: 70,601
+Trainable params: 70,601
+Non-trainable params: 0
+__________________________________________________________________________________________________
+MODEL FIT 1 feat
+Epoch 1/100000
+ - 76s - loss: 0.3282 - acc: 0.9489
+        map_score_filtered = 0.7418
+        Best map_score_filtered: 0.7418
+Epoch 2/100000
+ - 65s - loss: 0.2013 - acc: 0.9489
+        map_score_filtered = 0.7458
+        Best map_score_filtered: 0.7458
+Epoch 3/100000
+ - 66s - loss: 0.2010 - acc: 0.9489
+        map_score_filtered = 0.7458
+Epoch 4/100000
+ - 61s - loss: 0.2001 - acc: 0.9489
+        map_score_filtered = 0.7458
+Epoch 5/100000
+ - 82s - loss: 0.1998 - acc: 0.9489
+        map_score_filtered = 0.7458
+Epoch 6/100000
+ - 83s - loss: 0.1996 - acc: 0.9489
+        map_score_filtered = 0.7458
+Epoch 7/100000
+ - 64s - loss: 0.1997 - acc: 0.9489
+        map_score_filtered = 0.7458
+
+0.7131271119590638
+0.2727994190192609
+
+
+##################### MODEL WITH W2V & POS #####################
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0
+__________________________________________________________________________________________________
+input_3 (InputLayer)            (None, 40)           0
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0
+__________________________________________________________________________________________________
+input_4 (InputLayer)            (None, 40)           0
+__________________________________________________________________________________________________
+sequential_7 (Sequential)       (None, 40, 50)       100         input_1[0][0]
+__________________________________________________________________________________________________
+sequential_8 (Sequential)       (None, 40, 20)       360         input_3[0][0]
+__________________________________________________________________________________________________
+sequential_10 (Sequential)      (None, 40, 50)       100         input_2[0][0]
+__________________________________________________________________________________________________
+sequential_11 (Sequential)      (None, 40, 20)       360         input_4[0][0]
+__________________________________________________________________________________________________
+concatenate_2 (Concatenate)     (None, 40, 70)       0           sequential_7[1][0]
+                                                                 sequential_8[1][0]
+__________________________________________________________________________________________________
+concatenate_3 (Concatenate)     (None, 40, 70)       0           sequential_10[1][0]
+                                                                 sequential_11[1][0]
+__________________________________________________________________________________________________
+sequential_9 (Sequential)       (None, 100)          35100       concatenate_2[0][0]
+__________________________________________________________________________________________________
+sequential_12 (Sequential)      (None, 100)          35100       concatenate_3[0][0]
+__________________________________________________________________________________________________
+concatenate_4 (Concatenate)     (None, 200)          0           sequential_9[1][0]
+                                                                 sequential_12[1][0]
+__________________________________________________________________________________________________
+sequential_13 (Sequential)      (None, 1)            20201       concatenate_4[0][0]
+==================================================================================================
+Total params: 91,221
+Trainable params: 91,121
+Non-trainable params: 100
+__________________________________________________________________________________________________
+Epoch 1/100000
+ - 89s - loss: 0.3120 - acc: 0.9235
+        map_score_filtered = 0.3420
+        Best map_score_filtered: 0.3420
+Epoch 2/100000
+ - 134s - loss: 0.2107 - acc: 0.9489
+        map_score_filtered = 0.3561
+        Best map_score_filtered: 0.3561
+Epoch 3/100000
+ - 95s - loss: 0.2027 - acc: 0.9489
+        map_score_filtered = 0.4923
+        Best map_score_filtered: 0.4923
+Epoch 4/100000
+ - 102s - loss: 0.1981 - acc: 0.9489
+        map_score_filtered = 0.5599
+        Best map_score_filtered: 0.5599
+Epoch 5/100000
+ - 65s - loss: 0.1959 - acc: 0.9489
+        map_score_filtered = 0.5852
+        Best map_score_filtered: 0.5852
+Epoch 6/100000
+ - 65s - loss: 0.1947 - acc: 0.9489
+        map_score_filtered = 0.5966
+        Best map_score_filtered: 0.5966
+Epoch 7/100000
+ - 64s - loss: 0.1937 - acc: 0.9489
+        map_score_filtered = 0.5858
+Epoch 8/100000
+ - 66s - loss: 0.1935 - acc: 0.9489
+        map_score_filtered = 0.5963
+Epoch 9/100000
+ - 75s - loss: 0.1929 - acc: 0.9489
+        map_score_filtered = 0.5920
+Epoch 10/100000
+ - 68s - loss: 0.1926 - acc: 0.9489
+        map_score_filtered = 0.5991
+Epoch 11/100000
+ - 70s - loss: 0.1921 - acc: 0.9489
+        map_score_filtered = 0.6003
+        Best map_score_filtered: 0.6003
+Epoch 12/100000
+ - 69s - loss: 0.1918 - acc: 0.9489
+        map_score_filtered = 0.6135
+        Best map_score_filtered: 0.6135
+Epoch 13/100000
+ - 65s - loss: 0.1916 - acc: 0.9489
+        map_score_filtered = 0.6117
+Epoch 14/100000
+ - 64s - loss: 0.1916 - acc: 0.9489
+        map_score_filtered = 0.6115
+Epoch 15/100000
+ - 64s - loss: 0.1918 - acc: 0.9489
+        map_score_filtered = 0.6118
+Epoch 16/100000
+ - 67s - loss: 0.1914 - acc: 0.9489
+        map_score_filtered = 0.6114
+Epoch 17/100000
+ - 65s - loss: 0.1913 - acc: 0.9489
+        map_score_filtered = 0.6064
+
+0.534064664332391
+0.20430092714937492
