@@ -64,7 +64,6 @@ def overlap_feats(st, overlapping):
     return [1 if word not in overlapping else 2 for word in st]
 
 ################################# FIRST PREPROCESSING OF DATASET #################################
-
 # train=train.head(int(len(train.index)/100))
 # dev=dev.head(int(len(dev.index)/100))
 # test=test.head(int(len(test.index)/100))
@@ -196,6 +195,11 @@ def emb_matrix_unk(dictionar, dim):
     embedding_matrix = np.random.uniform(-1.0, 1.0, (len(dictionar), dim))
     embedding_matrix[0] = np.zeros((1, dim))
     return embedding_matrix
+
+##########################################################################################################################
+################################################## CREATE DICTIONARIES ###################################################
+create_dict(toks, embW2V, dict_W2V)
+create_dict(toks, embFT, dict_FT)
 
 ##########################################################################################################################
 ################################### CREATE EMBEDDING, MODIFY TRAIN, AND STORE TO FILES ###################################

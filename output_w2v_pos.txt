@@ -2,7 +2,7 @@
   from ._conv import register_converters as _register_converters
 Using TensorFlow backend.
 ##################### MODEL WITH W2V ONLY #####################
-2018-12-05 15:04:28.689256: I tensorflow/core/platform/cpu_feature_guard.cc:140] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2018-12-06 11:44:06.836287: I tensorflow/core/platform/cpu_feature_guard.cc:140] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
 __________________________________________________________________________________________________
 Layer (type)                    Output Shape         Param #     Connected to
 ==================================================================================================
@@ -10,46 +10,79 @@ input_1 (InputLayer)            (None, 40)           0
 __________________________________________________________________________________________________
 input_2 (InputLayer)            (None, 40)           0
 __________________________________________________________________________________________________
-sequential_1 (Sequential)       (None, 100)          25200       input_1[0][0]
+sequential_1 (Sequential)       (None, 100)          1916000     input_1[0][0]
 __________________________________________________________________________________________________
-sequential_2 (Sequential)       (None, 100)          25200       input_2[0][0]
+sequential_2 (Sequential)       (None, 100)          1916000     input_2[0][0]
 __________________________________________________________________________________________________
 concatenate_1 (Concatenate)     (None, 200)          0           sequential_1[1][0]
                                                                  sequential_2[1][0]
 __________________________________________________________________________________________________
 sequential_3 (Sequential)       (None, 1)            20201       concatenate_1[0][0]
 ==================================================================================================
-Total params: 70,601
-Trainable params: 70,601
+Total params: 3,852,201
+Trainable params: 3,852,201
 Non-trainable params: 0
 __________________________________________________________________________________________________
 MODEL FIT 1 feat
 Epoch 1/100000
- - 76s - loss: 0.3282 - acc: 0.9489
-        map_score_filtered = 0.7418
-        Best map_score_filtered: 0.7418
+ - 75s - loss: 0.2617 - acc: 0.9070
+        map_score_filtered = 0.4741
+        Best map_score_filtered: 0.4741
 Epoch 2/100000
- - 65s - loss: 0.2013 - acc: 0.9489
-        map_score_filtered = 0.7458
-        Best map_score_filtered: 0.7458
+ - 73s - loss: 0.1970 - acc: 0.9489
+        map_score_filtered = 0.5510
+        Best map_score_filtered: 0.5510
 Epoch 3/100000
- - 66s - loss: 0.2010 - acc: 0.9489
-        map_score_filtered = 0.7458
+ - 73s - loss: 0.1914 - acc: 0.9489
+        map_score_filtered = 0.5930
+        Best map_score_filtered: 0.5930
 Epoch 4/100000
- - 61s - loss: 0.2001 - acc: 0.9489
-        map_score_filtered = 0.7458
+ - 71s - loss: 0.1852 - acc: 0.9489
+        map_score_filtered = 0.6050
+        Best map_score_filtered: 0.6050
 Epoch 5/100000
- - 82s - loss: 0.1998 - acc: 0.9489
-        map_score_filtered = 0.7458
+ - 78s - loss: 0.1789 - acc: 0.9489
+        map_score_filtered = 0.6474
+        Best map_score_filtered: 0.6474
 Epoch 6/100000
- - 83s - loss: 0.1996 - acc: 0.9489
-        map_score_filtered = 0.7458
+ - 74s - loss: 0.1721 - acc: 0.9490
+        map_score_filtered = 0.6607
+        Best map_score_filtered: 0.6607
 Epoch 7/100000
- - 64s - loss: 0.1997 - acc: 0.9489
-        map_score_filtered = 0.7458
+ - 71s - loss: 0.1651 - acc: 0.9490
+        map_score_filtered = 0.6785
+        Best map_score_filtered: 0.6785
+Epoch 8/100000
+ - 71s - loss: 0.1573 - acc: 0.9496
+        map_score_filtered = 0.6794
+Epoch 9/100000
+ - 72s - loss: 0.1488 - acc: 0.9508
+        map_score_filtered = 0.6817
+Epoch 10/100000
+ - 74s - loss: 0.1394 - acc: 0.9525
+        map_score_filtered = 0.6752
+Epoch 11/100000
+ - 77s - loss: 0.1289 - acc: 0.9543
+        map_score_filtered = 0.6827
+        Best map_score_filtered: 0.6827
+Epoch 12/100000
+ - 78s - loss: 0.1177 - acc: 0.9577
+        map_score_filtered = 0.6677
+Epoch 13/100000
+ - 79s - loss: 0.1060 - acc: 0.9617
+        map_score_filtered = 0.6685
+Epoch 14/100000
+ - 82s - loss: 0.0930 - acc: 0.9659
+        map_score_filtered = 0.6637
+Epoch 15/100000
+ - 80s - loss: 0.0806 - acc: 0.9705
+        map_score_filtered = 0.6479
+Epoch 16/100000
+ - 81s - loss: 0.0686 - acc: 0.9760
+        map_score_filtered = 0.6501
 
-0.7131271119590638
-0.2727994190192609
+0.6302429528780639
+0.24109293911684676
 
 
 ##################### MODEL WITH W2V & POS #####################
@@ -64,11 +97,11 @@ input_2 (InputLayer)            (None, 40)           0
 __________________________________________________________________________________________________
 input_4 (InputLayer)            (None, 40)           0
 __________________________________________________________________________________________________
-sequential_7 (Sequential)       (None, 40, 50)       100         input_1[0][0]
+sequential_7 (Sequential)       (None, 40, 50)       1890900     input_1[0][0]
 __________________________________________________________________________________________________
 sequential_8 (Sequential)       (None, 40, 20)       360         input_3[0][0]
 __________________________________________________________________________________________________
-sequential_10 (Sequential)      (None, 40, 50)       100         input_2[0][0]
+sequential_10 (Sequential)      (None, 40, 50)       1890900     input_2[0][0]
 __________________________________________________________________________________________________
 sequential_11 (Sequential)      (None, 40, 20)       360         input_4[0][0]
 __________________________________________________________________________________________________
@@ -87,69 +120,45 @@ concatenate_4 (Concatenate)     (None, 200)          0           sequential_9[1]
 __________________________________________________________________________________________________
 sequential_13 (Sequential)      (None, 1)            20201       concatenate_4[0][0]
 ==================================================================================================
-Total params: 91,221
+Total params: 1,982,021
 Trainable params: 91,121
-Non-trainable params: 100
+Non-trainable params: 1,890,900
 __________________________________________________________________________________________________
 Epoch 1/100000
- - 89s - loss: 0.3120 - acc: 0.9235
-        map_score_filtered = 0.3420
-        Best map_score_filtered: 0.3420
+ - 24s - loss: 0.2811 - acc: 0.9399
+        map_score_filtered = 0.3810
+        Best map_score_filtered: 0.3810
 Epoch 2/100000
- - 134s - loss: 0.2107 - acc: 0.9489
-        map_score_filtered = 0.3561
-        Best map_score_filtered: 0.3561
+ - 23s - loss: 0.2051 - acc: 0.9489
+        map_score_filtered = 0.4533
+        Best map_score_filtered: 0.4533
 Epoch 3/100000
- - 95s - loss: 0.2027 - acc: 0.9489
-        map_score_filtered = 0.4923
-        Best map_score_filtered: 0.4923
+ - 24s - loss: 0.1969 - acc: 0.9489
+        map_score_filtered = 0.5606
+        Best map_score_filtered: 0.5606
 Epoch 4/100000
- - 102s - loss: 0.1981 - acc: 0.9489
-        map_score_filtered = 0.5599
-        Best map_score_filtered: 0.5599
+ - 24s - loss: 0.1921 - acc: 0.9489
+        map_score_filtered = 0.6149
+        Best map_score_filtered: 0.6149
 Epoch 5/100000
- - 65s - loss: 0.1959 - acc: 0.9489
-        map_score_filtered = 0.5852
-        Best map_score_filtered: 0.5852
+ - 23s - loss: 0.1894 - acc: 0.9489
+        map_score_filtered = 0.6225
+        Best map_score_filtered: 0.6225
 Epoch 6/100000
- - 65s - loss: 0.1947 - acc: 0.9489
-        map_score_filtered = 0.5966
-        Best map_score_filtered: 0.5966
+ - 24s - loss: 0.1876 - acc: 0.9489
+        map_score_filtered = 0.6218
 Epoch 7/100000
- - 64s - loss: 0.1937 - acc: 0.9489
-        map_score_filtered = 0.5858
+ - 23s - loss: 0.1860 - acc: 0.9489
+        map_score_filtered = 0.6107
 Epoch 8/100000
- - 66s - loss: 0.1935 - acc: 0.9489
-        map_score_filtered = 0.5963
+ - 24s - loss: 0.1848 - acc: 0.9488
+        map_score_filtered = 0.6181
 Epoch 9/100000
- - 75s - loss: 0.1929 - acc: 0.9489
-        map_score_filtered = 0.5920
+ - 24s - loss: 0.1840 - acc: 0.9490
+        map_score_filtered = 0.6172
 Epoch 10/100000
- - 68s - loss: 0.1926 - acc: 0.9489
-        map_score_filtered = 0.5991
-Epoch 11/100000
- - 70s - loss: 0.1921 - acc: 0.9489
-        map_score_filtered = 0.6003
-        Best map_score_filtered: 0.6003
-Epoch 12/100000
- - 69s - loss: 0.1918 - acc: 0.9489
-        map_score_filtered = 0.6135
-        Best map_score_filtered: 0.6135
-Epoch 13/100000
- - 65s - loss: 0.1916 - acc: 0.9489
-        map_score_filtered = 0.6117
-Epoch 14/100000
- - 64s - loss: 0.1916 - acc: 0.9489
-        map_score_filtered = 0.6115
-Epoch 15/100000
- - 64s - loss: 0.1918 - acc: 0.9489
-        map_score_filtered = 0.6118
-Epoch 16/100000
- - 67s - loss: 0.1914 - acc: 0.9489
-        map_score_filtered = 0.6114
-Epoch 17/100000
- - 65s - loss: 0.1913 - acc: 0.9489
-        map_score_filtered = 0.6064
+ - 23s - loss: 0.1835 - acc: 0.9489
+        map_score_filtered = 0.6160
 
-0.534064664332391
-0.20430092714937492
+0.5764171502444817
+0.2205024336649526
