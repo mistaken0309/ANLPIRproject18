@@ -176,18 +176,20 @@ ans_bc = Input(shape=(max_len_a,))
 
 
 # embeddings for the basic model
-que_w2v_emb = Embedding(len(dict_w2v), 50, input_length=max_len_q, weights=[em_W2V], trainable=True)
-ans_w2v_emb = Embedding(len(dict_w2v), 50, input_length=max_len_a, weights=[em_W2V], trainable=True)
+que_w2v_emb_up = Embedding(len(dict_w2v), 50, input_length=max_len_q, weights=[em_W2V], trainable=True)
+ans_w2v_emb_up = Embedding(len(dict_w2v), 50, input_length=max_len_a, weights=[em_W2V], trainable=True)
 # que_ft_emb = Embedding(len(dict_ft), 300, input_length=max_len_q, weights=[em_FT], trainable=True)
 # ans_ft_emb = Embedding(len(dict_ft), 300, input_length=max_len_a, weights=[em_FT], trainable=True)
-que_pos_emb = Embedding(len(dict_pos), 20, input_length=max_len_q, weights=[em_POS], trainable=True)
-ans_pos_emb = Embedding(len(dict_pos), 20, input_length=max_len_a, weights=[em_POS], trainable=True)
-que_bc_emb = Embedding(len(dict_bc), 20, input_length=max_len_q, weights=[em_BC], trainable=True)
-ans_bc_emb = Embedding(len(dict_bc), 20, input_length=max_len_a, weights=[em_BC], trainable=True)
+que_pos_emb_up = Embedding(len(dict_pos), 20, input_length=max_len_q, weights=[em_POS], trainable=True)
+ans_pos_emb_up = Embedding(len(dict_pos), 20, input_length=max_len_a, weights=[em_POS], trainable=True)
+que_bc_emb_up = Embedding(len(dict_bc), 20, input_length=max_len_q, weights=[em_BC], trainable=True)
+ans_bc_emb_up = Embedding(len(dict_bc), 20, input_length=max_len_a, weights=[em_BC], trainable=True)
 
 # embeddings for combined words emb + feat emb
-que_w2v_emb_c = Embedding(len(dict_w2v), 50, input_length=max_len_q, weights=[em_W2V], trainable=False)
-ans_w2v_emb_c = Embedding(len(dict_w2v), 50, input_length=max_len_a, weights=[em_W2V], trainable=False)
+que_w2v_emb_no = Embedding(len(dict_w2v), 50, input_length=max_len_q, weights=[em_W2V], trainable=False)
+ans_w2v_emb_no = Embedding(len(dict_w2v), 50, input_length=max_len_a, weights=[em_W2V], trainable=False)
+que_pos_emb_no = Embedding(len(dict_pos), 20, input_length=max_len_q, weights=[em_POS], trainable=False)
+ans_pos_emb_no = Embedding(len(dict_pos), 20, input_length=max_len_a, weights=[em_POS], trainable=False)
 # que_ft_emb_c = Embedding(len(dict_ft), 300, input_length=max_len_q, weights=[em_FT], trainable=False)
 # ans_ft_emb_c = Embedding(len(dict_ft), 300, input_length=max_len_a, weights=[em_FT], trainable=False)
 
@@ -213,7 +215,7 @@ def create_classify(join, cl_dim):
 
 ###############################################################################################################
 ############################################## ONE FEATURE MODEL ##############################################
-def create_1feat_model(emb_q, emb_a, col_q, col_a, newname):
+def create_1feat_model(emb_q, emb_a, col_q, col_a, newname, ep):
     que_model = Sequential()
     que_model.add(emb_q) # add question embedding
     que_model.add(Convolution1D(100, 5, activation='tanh'))
@@ -238,14 +240,14 @@ def create_1feat_model(emb_q, emb_a, col_q, col_a, newname):
     print("MODEL FIT 1 feat")
     model.fit([np.vstack(train[col_q]), np.vstack(train[col_a])], np.vstack(train['Label'].tolist()), 
             batch_size=100, epochs=100000, shuffle=True, verbose=2,
-            callbacks=[EpochEval(data(dev, col_q, col_a), map_score_filtered, patience=5)])
+            callbacks=[EpochEval(data(dev, col_q, col_a), map_score_filtered, patience=ep)])
 
     nameb ='./models' + newname + '_basic.h5'
     os.rename('qa.h5', nameb)
     del model
 ###############################################################################################################
 ######################################### ONE FEAT WITH OVERLAP MODEL #########################################
-def create_1feat_ov_model(emb_q, emb_a, col_q, col_a, size, newname):
+def create_1feat_ov_model(emb_q, emb_a, col_q, col_a, size, newname, ep):
     np.random.seed(42)
 
     que_model = Sequential()
@@ -268,14 +270,14 @@ def create_1feat_ov_model(emb_q, emb_a, col_q, col_a, size, newname):
     # print("MODEL FIT 1 feat with ov")
     model_ov.fit([np.vstack(train[col_q]), np.vstack(train[col_a]), np.vstack(train['Q_OV']), np.vstack(train['A_OV']), train['count'].values],
             np.vstack(train['Label'].tolist()), batch_size=100, epochs=100000, shuffle=True, verbose=2,
-            callbacks=[EpochEval(dataOver(dev, col_q, col_a), map_score_filtered, patience=5)])
+            callbacks=[EpochEval(dataOver(dev, col_q, col_a), map_score_filtered, patience=ep)])
 
     name ='./models' + newname + 'overlap.h5'
     os.rename('qa.h5', name)
     del model
 ###############################################################################################################
 ############################################## TWO FEATURE MODEL ##############################################
-def create_2feat_model(emb_q, emb_a, emb_fq, emb_fa, col_q_1, col_a_1, col_q_2, col_a_2, newname):
+def create_2feat_model(emb_q, emb_a, emb_fq, emb_fa, col_q_1, col_a_1, col_q_2, col_a_2, newname, ep):
     
     que_in = Sequential()
     que_in.add(emb_q)
@@ -320,7 +322,7 @@ def create_2feat_model(emb_q, emb_a, emb_fq, emb_fa, col_q_1, col_a_1, col_q_2, 
     # print("MODEL FIT")
     model.fit([np.vstack(train[col_q_1]), np.vstack(train[col_a_1]), np.vstack(train[col_q_2]), np.vstack(train[col_a_2])],
             np.vstack(train['Label'].tolist()), batch_size=100, epochs=100000, shuffle=True, verbose=2,
-            callbacks=[EpochEval(dataTwo(dev, col_q_1, col_a_1, col_q_2, col_a_2), map_score_filtered, patience=5)])
+            callbacks=[EpochEval(dataTwo(dev, col_q_1, col_a_1, col_q_2, col_a_2), map_score_filtered, patience=ep)])
 
     nameb ='./models' + newname + '.h5'
     os.rename('qa.h5', nameb)
@@ -335,28 +337,45 @@ def get_results(name, colname, qid, X, lab, test):
     print(map_score(qid, lab, pred))
     test[colname] = pd.Series(y for y in pred)
 
+# print("##################### MODEL WITH W2V ONLY - NO UPDATE#####################")
+# create_1feat_model(que_w2v_emb_no, ans_w2v_emb_no, 'Q_W2V', 'A_W2V', "/qa_w2v")
+# (qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
+# get_results('./models/qa_w2v_basic.h5', 'pred_w2v', qid, X, lab, test, 5)
+# print("##################### MODEL WITH W2V ONLY - WITH UPDATE #####################")
+# create_1feat_model(que_w2v_emb_up, ans_w2v_emb_up, 'Q_W2V', 'A_W2V', "/qa_w2v")
+# (qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
+# get_results('./models/qa_w2v_basic.h5', 'pred_w2v_up', qid, X, lab, test, 5)
 
 
-print("##################### MODEL WITH W2V ONLY #####################")
-create_1feat_model(que_w2v_emb, ans_w2v_emb, 'Q_W2V', 'A_W2V', "/qa_w2v")
+# print("\n\n##################### MODEL WITH W2V & POS - NO UPDATE #####################")
+# create_2feat_model(que_w2v_emb_no, ans_w2v_emb_no, que_pos_emb_no, ans_pos_emb_no, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', "/qa_w2v_pos")
+# (qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
+# get_results('./models/qa_w2v_pos.h5', 'pred_w2v_pos', qid, X, lab, test, 5)
+# print("\n\n##################### MODEL WITH W2V & POS - WITH UPDATE #####################")
+# create_2feat_model(que_w2v_emb_up, ans_w2v_emb_up, que_pos_emb_up, ans_pos_emb_up, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', "/qa_w2v_pos")
+# (qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
+# get_results('./models/qa_w2v_pos.h5', 'pred_w2v_pos_up', qid, X, lab, test, 5)
+
+
+
+print("##################### MODEL WITH W2V ONLY - NO UPDATE - INCREMENTED PATIENCE #####################")
+create_1feat_model(que_w2v_emb_no, ans_w2v_emb_no, 'Q_W2V', 'A_W2V', "/qa_w2v", 30)
 (qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
-get_results('./models/qa_w2v_basic.h5', 'pred_w2v', qid, X, lab, test)
+get_results('./models/qa_w2v_basic.h5', 'pred_w2v_pat', qid, X, lab, test)
+print("##################### MODEL WITH W2V ONLY - WITH UPDATE - INCREMENTED PATIENCE #####################")
+create_1feat_model(que_w2v_emb_up, ans_w2v_emb_up, 'Q_W2V', 'A_W2V', "/qa_w2v", 30)
+(qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
+get_results('./models/qa_w2v_basic.h5', 'pred_w2v_up_pat', qid, X, lab, test)
 
-# create_1feat_model(que_ft_emb, ans_ft_emb, 'Q_FT', 'A_FT', "/qa_ft")
-# create_1feat_model(que_pos_emb, ans_pos_emb, 'Q_POS', 'A_POS', "/qa_pos")
-# create_1feat_model(que_bc_emb, ans_bc_emb, 'Q_BC', 'A_BC', "/qa_bc")
 
-# print("STARTING with overlap")
-# create_1feat_ov_model(q_ov_w2v, a_ov_w2v, 'Q_W2V', 'A_W2V', 55, "/qa_w2v_ov")
-# create_1feat_ov_model(q_ov_ft, a_ov_ft, 'Q_FT', 'A_FT', 55, "/qa_ft_ov")
-# create_1feat_ov_model(q_ov_pos, a_ov_pos, 'Q_POS', 'A_POS', 25, "/qa_pos_ov")
-# create_1feat_ov_model(q_ov_bc, a_ov_bc, 'Q_BC', 'A_BC', 25, "/qa_bc_ov")
-
-print("\n\n##################### MODEL WITH W2V & POS #####################")
-create_2feat_model(que_w2v_emb_c, ans_w2v_emb_c, que_pos_emb, ans_pos_emb, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', "/qa_w2v_pos")
+print("\n\n##################### MODEL WITH W2V & POS - NO UPDATE - INCREMENTED PATIENCE #####################")
+create_2feat_model(que_w2v_emb_no, ans_w2v_emb_no, que_pos_emb_no, ans_pos_emb_no, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', "/qa_w2v_pos", 30)
 (qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
-get_results('./models/qa_w2v_pos.h5', 'pred_w2v_pos', qid, X, lab, test)
+get_results('./models/qa_w2v_pos.h5', 'pred_w2v_pos_pat', qid, X, lab, test)
+print("\n\n##################### MODEL WITH W2V & POS - WITH UPDATE - INCREMENTED PATIENCE #####################")
+create_2feat_model(que_w2v_emb_up, ans_w2v_emb_up, que_pos_emb_up, ans_pos_emb_up, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', "/qa_w2v_pos", 30)
+(qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
+get_results('./models/qa_w2v_pos.h5', 'pred_w2v_pos_up_pat', qid, X, lab, test)
 
 
-# print(test[['Question', 'Q_W2V', 'Sentence', 'A_W2V', 'Label','pred_w2v', 'pred_w2v_pos']])
 test.to_csv(path_or_buf='test_w_results.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
