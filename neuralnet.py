@@ -2,6 +2,7 @@ from importlib import reload
 import os
 
 import time
+import datetime
 import csv
 import json
 
@@ -35,10 +36,15 @@ from keras.layers import (Input, Embedding, Convolution1D, Dropout, SpatialDropo
 max_len_q = 40 #25
 max_len_a = 40 # 100
 
-models_dir = ('./models')        
+models_dir = ('project/models/')
+data_dir = ('project/data/')
+results_dir = ('project/results/')
 if not os.path.isdir(models_dir):
     os.makedirs(models_dir)
     print("Home directory %s was created." %models_dir)
+if not os.path.isdir(results_dir):
+    os.makedirs(results_dir)
+    print("Home directory %s was created." %results_dir)
 
 
 def intarray(a):
@@ -46,11 +52,11 @@ def intarray(a):
     return list(map(int,a.split(',')))
 
 # LOAD DATASETS AS PANDAS DATAFRAMES
-train = pd.read_csv('train_embeddings.csv', sep=',')
+train = pd.read_csv(data_dir+'train_embeddings.csv', sep=',')
 train['Q_W2V'] = train['Q_W2V'].map(intarray)
 train['A_W2V'] = train['A_W2V'].map(intarray)
-# train['Q_FT'] = train['Q_FT'].map(intarray)
-# train['A_FT'] = train['A_FT'].map(intarray)
+train['Q_FT'] = train['Q_FT'].map(intarray)
+train['A_FT'] = train['A_FT'].map(intarray)
 train['Q_OV'] = train['Q_OV'].map(intarray)
 train['A_OV'] = train['A_OV'].map(intarray)
 train['Q_POS'] = train['Q_POS'].map(intarray)
@@ -61,11 +67,11 @@ train['A_BC'] = train['A_BC'].map(intarray)
 # print("AFTER")
 # print(train['Q_W2V'])
 
-dev = pd.read_csv('dev_embeddings.csv', sep=',')
+dev = pd.read_csv(data_dir+'dev_embeddings.csv', sep=',')
 dev['Q_W2V'] = dev['Q_W2V'].map(intarray)
 dev['A_W2V'] = dev['A_W2V'].map(intarray)
-# dev['Q_FT'] = dev['Q_FT'].map(intarray)
-# dev['A_FT'] = dev['A_FT'].map(intarray)
+dev['Q_FT'] = dev['Q_FT'].map(intarray)
+dev['A_FT'] = dev['A_FT'].map(intarray)
 dev['Q_OV'] = dev['Q_OV'].map(intarray)
 dev['A_OV'] = dev['A_OV'].map(intarray)
 dev['Q_POS'] = dev['Q_POS'].map(intarray)
@@ -74,11 +80,11 @@ dev['Q_BC'] = dev['Q_BC'].map(intarray)
 dev['A_BC'] = dev['A_BC'].map(intarray)
 
 
-test = pd.read_csv('test_embeddings.csv', sep=',')
+test = pd.read_csv(data_dir+'test_embeddings.csv', sep=',')
 test['Q_W2V'] = test['Q_W2V'].map(intarray)
 test['A_W2V'] = test['A_W2V'].map(intarray)
-# test['Q_FT'] = test['Q_FT'].map(intarray)
-# test['A_FT'] = test['A_FT'].map(intarray)
+test['Q_FT'] = test['Q_FT'].map(intarray)
+test['A_FT'] = test['A_FT'].map(intarray)
 test['Q_OV'] = test['Q_OV'].map(intarray)
 test['A_OV'] = test['A_OV'].map(intarray)
 test['Q_POS'] = test['Q_POS'].map(intarray)
@@ -88,19 +94,19 @@ test['A_BC'] = test['A_BC'].map(intarray)
 
 
 # LOAD EMBEDDING MATRICES
-em = np.load("data/results/matrices.npz")
+em = np.load(data_dir+"matrices.npz")
 em_W2V = em['w2v']
-# em_FT = em['ft']
+em_FT = em['ft']
 em_POS = em['pos']
 em_BC = em['bc']
 
-with open('data/results/dictW2V.json') as f:
+with open(data_dir+'dictW2V.json') as f:
     dict_w2v = json.load(f)
-# with open('data/results/dictFT.json') as f:
-#     dict_ft = json.load(f)
-with open('data/results/dictPOS.json') as f:
+with open(data_dir+'dictFT.json') as f:
+    dict_ft = json.load(f)
+with open(data_dir+'dictPOS.json') as f:
     dict_pos = json.load(f)
-with open('data/results/dictBC.json') as f:
+with open(data_dir+'dictBC.json') as f:
     dict_bc = json.load(f)
 
 
@@ -242,7 +248,7 @@ def create_1feat_model(emb_q, emb_a, col_q, col_a, newname, ep):
             batch_size=100, epochs=100000, shuffle=True, verbose=2,
             callbacks=[EpochEval(data(dev, col_q, col_a), map_score_filtered, patience=ep)])
 
-    nameb ='./models' + newname + '_basic.h5'
+    nameb = models_dir + newname + '.h5'
     os.rename('qa.h5', nameb)
     del model
 ###############################################################################################################
@@ -272,7 +278,7 @@ def create_1feat_ov_model(emb_q, emb_a, col_q, col_a, size, newname, ep):
             np.vstack(train['Label'].tolist()), batch_size=100, epochs=100000, shuffle=True, verbose=2,
             callbacks=[EpochEval(dataOver(dev, col_q, col_a), map_score_filtered, patience=ep)])
 
-    name ='./models' + newname + 'overlap.h5'
+    name =models_dir + newname + '.h5'
     os.rename('qa.h5', name)
     del model
 ###############################################################################################################
@@ -296,7 +302,7 @@ def create_2feat_model(emb_q, emb_a, emb_fq, emb_fa, col_q_1, col_a_1, col_q_2, 
     
 
     ans_in = Sequential()
-    ans_in.add(emb_q)
+    ans_in.add(emb_a)
     ans_emb = ans_in(ans)
 
     featA_in = Sequential()
@@ -324,7 +330,7 @@ def create_2feat_model(emb_q, emb_a, emb_fq, emb_fa, col_q_1, col_a_1, col_q_2, 
             np.vstack(train['Label'].tolist()), batch_size=100, epochs=100000, shuffle=True, verbose=2,
             callbacks=[EpochEval(dataTwo(dev, col_q_1, col_a_1, col_q_2, col_a_2), map_score_filtered, patience=ep)])
 
-    nameb ='./models' + newname + '.h5'
+    nameb = models_dir + newname + '.h5'
     os.rename('qa.h5', nameb)
     del model
 ###############################################################################################################
@@ -337,45 +343,73 @@ def get_results(name, colname, qid, X, lab, test):
     print(map_score(qid, lab, pred))
     test[colname] = pd.Series(y for y in pred)
 
-# print("##################### MODEL WITH W2V ONLY - NO UPDATE#####################")
-# create_1feat_model(que_w2v_emb_no, ans_w2v_emb_no, 'Q_W2V', 'A_W2V', "/qa_w2v")
-# (qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
-# get_results('./models/qa_w2v_basic.h5', 'pred_w2v', qid, X, lab, test, 5)
-# print("##################### MODEL WITH W2V ONLY - WITH UPDATE #####################")
-# create_1feat_model(que_w2v_emb_up, ans_w2v_emb_up, 'Q_W2V', 'A_W2V', "/qa_w2v")
-# (qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
-# get_results('./models/qa_w2v_basic.h5', 'pred_w2v_up', qid, X, lab, test, 5)
 
 
-# print("\n\n##################### MODEL WITH W2V & POS - NO UPDATE #####################")
-# create_2feat_model(que_w2v_emb_no, ans_w2v_emb_no, que_pos_emb_no, ans_pos_emb_no, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', "/qa_w2v_pos")
-# (qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
-# get_results('./models/qa_w2v_pos.h5', 'pred_w2v_pos', qid, X, lab, test, 5)
-# print("\n\n##################### MODEL WITH W2V & POS - WITH UPDATE #####################")
-# create_2feat_model(que_w2v_emb_up, ans_w2v_emb_up, que_pos_emb_up, ans_pos_emb_up, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', "/qa_w2v_pos")
-# (qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
-# get_results('./models/qa_w2v_pos.h5', 'pred_w2v_pos_up', qid, X, lab, test, 5)
-
-
-
-print("##################### MODEL WITH W2V ONLY - NO UPDATE - INCREMENTED PATIENCE #####################")
-create_1feat_model(que_w2v_emb_no, ans_w2v_emb_no, 'Q_W2V', 'A_W2V', "/qa_w2v", 30)
+print("##################### MODEL WITH W2V ONLY - NO UPDATE #####################")
+now = datetime.datetime.now()
+print(now.strftime("%H:%M.%S"))
+name = 'w2v'
+create_1feat_model(que_w2v_emb_no, ans_w2v_emb_no, 'Q_W2V', 'A_W2V', name, 5)
 (qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
-get_results('./models/qa_w2v_basic.h5', 'pred_w2v_pat', qid, X, lab, test)
-print("##################### MODEL WITH W2V ONLY - WITH UPDATE - INCREMENTED PATIENCE #####################")
-create_1feat_model(que_w2v_emb_up, ans_w2v_emb_up, 'Q_W2V', 'A_W2V', "/qa_w2v", 30)
-(qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
-get_results('./models/qa_w2v_basic.h5', 'pred_w2v_up_pat', qid, X, lab, test)
+get_results(models_dir+name+'.h5', 'pred_w2v', qid, X, lab, test)
 
+print("\n\n##################### MODEL WITH W2V ONLY - WITH UPDATE #####################")
+now = datetime.datetime.now()
+print(now.strftime("%H:%M.%S"))
+name = 'w2v_up'
+create_1feat_model(que_w2v_emb_up, ans_w2v_emb_up, 'Q_W2V', 'A_W2V', name, 5)
+(qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
+get_results(models_dir+name+'.h5', name , qid, X, lab, test)
+
+print("\n\n##################### MODEL WITH W2V ONLY - NO UPDATE - INCREMENTED PATIENCE #####################")
+now = datetime.datetime.now()
+print(now.strftime("%H:%M.%S"))
+name = 'w2v_pat'
+create_1feat_model(que_w2v_emb_no, ans_w2v_emb_no, 'Q_W2V', 'A_W2V', name, 30)
+(qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
+get_results(models_dir+name+'.h5', name, qid, X, lab, test)
+
+print("\n\n##################### MODEL WITH W2V ONLY - WITH UPDATE - INCREMENTED PATIENCE #####################")
+now = datetime.datetime.now()
+print(now.strftime("%H:%M.%S"))
+name = 'w2v_up_pat'
+create_1feat_model(que_w2v_emb_up, ans_w2v_emb_up, 'Q_W2V', 'A_W2V', name, 30)
+(qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
+get_results(models_dir+name+'.h5', name, qid, X, lab, test)
+
+
+print("\n\n##################### MODEL WITH W2V & POS - NO UPDATE #####################")
+now = datetime.datetime.now()
+print(now.strftime("%H:%M.%S"))
+name = 'w2v_pos'
+create_2feat_model(que_w2v_emb_no, ans_w2v_emb_no, que_pos_emb_no, ans_pos_emb_no, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', name, 5)
+(qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
+get_results(models_dir+name+'.h5', name, qid, X, lab, test)
+
+print("\n\n##################### MODEL WITH W2V & POS - WITH UPDATE #####################")
+now = datetime.datetime.now()
+print(now.strftime("%H:%M.%S"))
+name = 'w2v_pos_up'
+create_2feat_model(que_w2v_emb_up, ans_w2v_emb_up, que_pos_emb_up, ans_pos_emb_up, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', name, 5)
+(qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
+get_results(models_dir+ name +'.h5', name, qid, X, lab, test)
 
 print("\n\n##################### MODEL WITH W2V & POS - NO UPDATE - INCREMENTED PATIENCE #####################")
-create_2feat_model(que_w2v_emb_no, ans_w2v_emb_no, que_pos_emb_no, ans_pos_emb_no, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', "/qa_w2v_pos", 30)
+now = datetime.datetime.now()
+print(now.strftime("%H:%M.%S"))
+name = 'w2v_pos_pat'
+create_2feat_model(que_w2v_emb_no, ans_w2v_emb_no, que_pos_emb_no, ans_pos_emb_no, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', name, 30)
 (qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
-get_results('./models/qa_w2v_pos.h5', 'pred_w2v_pos_pat', qid, X, lab, test)
+get_results(models_dir + name +'.h5', name, qid, X, lab, test)
+
 print("\n\n##################### MODEL WITH W2V & POS - WITH UPDATE - INCREMENTED PATIENCE #####################")
-create_2feat_model(que_w2v_emb_up, ans_w2v_emb_up, que_pos_emb_up, ans_pos_emb_up, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', "/qa_w2v_pos", 30)
+now = datetime.datetime.now()
+print(now.strftime("%H:%M.%S"))
+name = 'w2v_pos_up_pat'
+create_2feat_model(que_w2v_emb_up, ans_w2v_emb_up, que_pos_emb_up, ans_pos_emb_up, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', name, 30)
 (qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
-get_results('./models/qa_w2v_pos.h5', 'pred_w2v_pos_up_pat', qid, X, lab, test)
+get_results(models_dir + name + '.h5', name, qid, X, lab, test)
 
 
-test.to_csv(path_or_buf='test_w_results.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+
+test.to_csv(path_or_buf=results_dir+'test_w_results.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')

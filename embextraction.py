@@ -27,6 +27,13 @@ from keras.preprocessing.sequence import pad_sequences
 
 import spacy
 
+
+data_dir = ('project/data/')
+if not os.path.isdir(data_dir):
+    os.makedirs(data_dir)
+    print("Home directory %s was created." %data_dir)
+
+
 ########################################### READ FILES ###########################################
 # we import the datasets in pandas dataframes
 train = pd.read_csv('data/WikiQA-train.tsv', sep='\t')
@@ -215,7 +222,7 @@ train = train.apply(embeddes, axis=1)
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
 print("WRITING TRAIN TO FILE")
-train.to_csv(path_or_buf='train_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+train.to_csv(path_or_buf=data_dir+'train_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
 
 i = 1
 print("DEV")
@@ -227,7 +234,7 @@ dev = dev.apply(embeddes, axis=1)
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
 print("WRITING DEV TO FILE")
-dev.to_csv(path_or_buf='dev_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+dev.to_csv(path_or_buf=data_dir+'dev_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
 
 i = 1
 print("TEST")
@@ -239,7 +246,7 @@ test = test.apply(embeddes, axis=1)
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
 print("WRITING TEST TO FILE")
-test.to_csv(path_or_buf='test_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+test.to_csv(path_or_buf=data_dir+'test_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
 
@@ -258,18 +265,19 @@ matrix_BC = emb_matrix_unk(dict_BC, 20)
 ##########################################################################################################
 ####################################### WRITE DICTIONARIES TO FILE #######################################
 print("WRITING to file dictionaries and embedding matrices")
-with open('data/results/dictW2V.json', 'w') as file:
+with open(data_dir+'dictW2V.json', 'w') as file:
      file.write(json.dumps(dict_W2V))
-with open('data/results/dictFT.json', 'w') as file:
+with open(data_dir+'dictFT.json', 'w') as file:
      file.write(json.dumps(dict_FT))
-with open('data/results/dictPOS.json', 'w') as file:
+with open(data_dir+'dictPOS.json', 'w') as file:
      file.write(json.dumps(dict_POS))
-with open('data/results/dictBC.json', 'w') as file:
+with open(data_dir+'dictBC.json', 'w') as file:
      file.write(json.dumps(dict_BC))
 
 ##########################################################################################################
 ######################################### WRITE MATRICES TO FILE #########################################
-# np.savez_compressed("data/results/matrices", w2v=matrix_W2V)
-np.savez_compressed("data/results/matrices", w2v=matrix_W2V, ft=matrix_FT, pos=matrix_POS, bc=matrix_BC)
-# np.savez_compressed("data/results/matrices", w2v=matrix_W2V, pos=matrix_POS, bc=matrix_BC)
+# np.savez_compressed("project/data/matrices", w2v=matrix_W2V)
+np.savez_compressed(data_dir+'matrices', w2v=matrix_W2V, ft=matrix_FT, pos=matrix_POS, bc=matrix_BC)
+# np.savez_compressed("project/data/matrices", w2v=matrix_W2V, pos=matrix_POS, bc=matrix_BC)
 ##########################################################################################################
+
