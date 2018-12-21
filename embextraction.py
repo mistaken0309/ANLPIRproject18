@@ -280,4 +280,3 @@ with open(data_dir+'dictBC.json', 'w') as file:
 np.savez_compressed(data_dir+'matrices', w2v=matrix_W2V, ft=matrix_FT, pos=matrix_POS, bc=matrix_BC)
 # np.savez_compressed("project/data/matrices", w2v=matrix_W2V, pos=matrix_POS, bc=matrix_BC)
 ##########################################################################################################
-
