@@ -1,18 +1,24 @@
 # ANLPIR Project 2018 - 
 
 ## Usage
-To run the project, clone the project
+To clone the project
 ```
 $ git clone https://github.com/mistaken0309/ANLPIRproject18
 ```
-and then run from the folder containing the folder data, containing the dataset, and the scripts (metrics.py and script.py)
+From the folder containing the folder of the project, to extract the embeddings and to create the weigths matrices, run 
+
 ```
-$ python script.py
+$ python <project-folder>/embextraction.py
 ```
 
-To create a new result file run 
+To run different the neural networks 
 ```
-$ python script.py | tee results_file_name.txt
+$ python <project-folder>/neuralnet.py
+```
+
+To create also a result file run 
+```
+$ python <project-folder>/neuralnet.py | tee <name of the file>
 ```
 
 ## Built With (to update)
@@ -21,6 +27,7 @@ $ python script.py | tee results_file_name.txt
 * TensorFlow
 * Keras
 * pandas
+* numpy
 * Natural Language Toolkit (NLTK)
 * scikit-learn
 * gensim
