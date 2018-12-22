@@ -1,0 +1,1647 @@
+
+
+##################### MODEL WITH W2V ONLY - NO UPDATE #####################
+22:52.32
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+sequential_1 (Sequential)       (None, 100)          1916000     input_1[0][0]                    
+__________________________________________________________________________________________________
+sequential_2 (Sequential)       (None, 100)          1916000     input_2[0][0]                    
+__________________________________________________________________________________________________
+concatenate_9 (Concatenate)     (None, 200)          0           sequential_1[1][0]               
+                                                                 sequential_2[1][0]               
+__________________________________________________________________________________________________
+sequential_3 (Sequential)       (None, 1)            20201       concatenate_9[0][0]              
+==================================================================================================
+Total params: 3,852,201
+Trainable params: 70,401
+Non-trainable params: 3,781,800
+__________________________________________________________________________________________________
+MODEL FIT 1 feat
+Epoch 1/100000
+ - 16s - loss: 0.2626 - acc: 0.9063
+	map_score_filtered = 0.4583
+	Best map_score_filtered: 0.4583
+Epoch 2/100000
+ - 17s - loss: 0.1982 - acc: 0.9489
+	map_score_filtered = 0.5415
+	Best map_score_filtered: 0.5415
+Epoch 3/100000
+ - 13s - loss: 0.1941 - acc: 0.9489
+	map_score_filtered = 0.5795
+	Best map_score_filtered: 0.5795
+Epoch 4/100000
+ - 13s - loss: 0.1897 - acc: 0.9489
+	map_score_filtered = 0.5912
+	Best map_score_filtered: 0.5912
+Epoch 5/100000
+ - 13s - loss: 0.1858 - acc: 0.9489
+	map_score_filtered = 0.6183
+	Best map_score_filtered: 0.6183
+Epoch 6/100000
+ - 13s - loss: 0.1819 - acc: 0.9489
+	map_score_filtered = 0.6434
+	Best map_score_filtered: 0.6434
+Epoch 7/100000
+ - 13s - loss: 0.1782 - acc: 0.9490
+	map_score_filtered = 0.6648
+	Best map_score_filtered: 0.6648
+Epoch 8/100000
+ - 13s - loss: 0.1744 - acc: 0.9490
+	map_score_filtered = 0.6791
+	Best map_score_filtered: 0.6791
+Epoch 9/100000
+ - 13s - loss: 0.1707 - acc: 0.9491
+	map_score_filtered = 0.6827
+	Best map_score_filtered: 0.6827
+Epoch 10/100000
+ - 13s - loss: 0.1667 - acc: 0.9493
+	map_score_filtered = 0.6921
+	Best map_score_filtered: 0.6921
+Epoch 11/100000
+ - 13s - loss: 0.1623 - acc: 0.9496
+	map_score_filtered = 0.6875
+Epoch 12/100000
+ - 13s - loss: 0.1580 - acc: 0.9501
+	map_score_filtered = 0.6858
+Epoch 13/100000
+ - 13s - loss: 0.1535 - acc: 0.9505
+	map_score_filtered = 0.6840
+Epoch 14/100000
+ - 13s - loss: 0.1482 - acc: 0.9512
+	map_score_filtered = 0.6797
+Epoch 15/100000
+ - 13s - loss: 0.1428 - acc: 0.9520
+	map_score_filtered = 0.6744
+
+0.6213034660447239
+0.23767323066155302
+
+
+##################### MODEL WITH FT ONLY - NO UPDATE #####################
+22:56.01
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+sequential_7 (Sequential)       (None, 100)          10137400    input_1[0][0]                    
+__________________________________________________________________________________________________
+sequential_8 (Sequential)       (None, 100)          10137400    input_2[0][0]                    
+__________________________________________________________________________________________________
+concatenate_10 (Concatenate)    (None, 200)          0           sequential_7[1][0]               
+                                                                 sequential_8[1][0]               
+__________________________________________________________________________________________________
+sequential_9 (Sequential)       (None, 1)            20201       concatenate_10[0][0]             
+==================================================================================================
+Total params: 20,295,001
+Trainable params: 320,401
+Non-trainable params: 19,974,600
+__________________________________________________________________________________________________
+MODEL FIT 1 feat
+Epoch 1/100000
+ - 34s - loss: 0.2283 - acc: 0.9300
+	map_score_filtered = 0.5763
+	Best map_score_filtered: 0.5763
+Epoch 2/100000
+ - 34s - loss: 0.1940 - acc: 0.9489
+	map_score_filtered = 0.6053
+	Best map_score_filtered: 0.6053
+Epoch 3/100000
+ - 34s - loss: 0.1872 - acc: 0.9489
+	map_score_filtered = 0.6415
+	Best map_score_filtered: 0.6415
+Epoch 4/100000
+ - 34s - loss: 0.1776 - acc: 0.9489
+	map_score_filtered = 0.6666
+	Best map_score_filtered: 0.6666
+Epoch 5/100000
+ - 34s - loss: 0.1680 - acc: 0.9490
+	map_score_filtered = 0.6863
+	Best map_score_filtered: 0.6863
+Epoch 6/100000
+ - 34s - loss: 0.1582 - acc: 0.9494
+	map_score_filtered = 0.6911
+	Best map_score_filtered: 0.6911
+Epoch 7/100000
+ - 34s - loss: 0.1472 - acc: 0.9504
+	map_score_filtered = 0.6961
+	Best map_score_filtered: 0.6961
+Epoch 8/100000
+ - 34s - loss: 0.1355 - acc: 0.9529
+	map_score_filtered = 0.6907
+Epoch 9/100000
+ - 34s - loss: 0.1220 - acc: 0.9561
+	map_score_filtered = 0.6874
+Epoch 10/100000
+ - 34s - loss: 0.1082 - acc: 0.9614
+	map_score_filtered = 0.7093
+	Best map_score_filtered: 0.7093
+Epoch 11/100000
+ - 34s - loss: 0.0918 - acc: 0.9667
+	map_score_filtered = 0.6957
+Epoch 12/100000
+ - 34s - loss: 0.0758 - acc: 0.9737
+	map_score_filtered = 0.6933
+Epoch 13/100000
+ - 34s - loss: 0.0607 - acc: 0.9807
+	map_score_filtered = 0.6928
+Epoch 14/100000
+ - 34s - loss: 0.0472 - acc: 0.9877
+	map_score_filtered = 0.6850
+Epoch 15/100000
+ - 35s - loss: 0.0356 - acc: 0.9922
+	map_score_filtered = 0.6729
+
+0.6444511769987451
+0.2465281486614247
+
+
+##################### MODEL WITH W2V & POS - NO UPDATE #####################
+23:05.06
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_3 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_4 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+sequential_13 (Sequential)      (None, 40, 50)       1890900     input_1[0][0]                    
+__________________________________________________________________________________________________
+sequential_14 (Sequential)      (None, 40, 20)       1060        input_3[0][0]                    
+__________________________________________________________________________________________________
+sequential_16 (Sequential)      (None, 40, 50)       1890900     input_2[0][0]                    
+__________________________________________________________________________________________________
+sequential_17 (Sequential)      (None, 40, 20)       1060        input_4[0][0]                    
+__________________________________________________________________________________________________
+concatenate_11 (Concatenate)    (None, 40, 70)       0           sequential_13[1][0]              
+                                                                 sequential_14[1][0]              
+__________________________________________________________________________________________________
+concatenate_12 (Concatenate)    (None, 40, 70)       0           sequential_16[1][0]              
+                                                                 sequential_17[1][0]              
+__________________________________________________________________________________________________
+sequential_15 (Sequential)      (None, 100)          35100       concatenate_11[0][0]             
+__________________________________________________________________________________________________
+sequential_18 (Sequential)      (None, 100)          35100       concatenate_12[0][0]             
+__________________________________________________________________________________________________
+concatenate_13 (Concatenate)    (None, 200)          0           sequential_15[1][0]              
+                                                                 sequential_18[1][0]              
+__________________________________________________________________________________________________
+sequential_19 (Sequential)      (None, 1)            20201       concatenate_13[0][0]             
+==================================================================================================
+Total params: 3,874,321
+Trainable params: 90,401
+Non-trainable params: 3,783,920
+__________________________________________________________________________________________________
+Epoch 1/100000
+ - 11s - loss: 0.2785 - acc: 0.9473
+	map_score_filtered = 0.3545
+	Best map_score_filtered: 0.3545
+Epoch 2/100000
+ - 11s - loss: 0.2099 - acc: 0.9489
+	map_score_filtered = 0.4262
+	Best map_score_filtered: 0.4262
+Epoch 3/100000
+ - 11s - loss: 0.1997 - acc: 0.9489
+	map_score_filtered = 0.5750
+	Best map_score_filtered: 0.5750
+Epoch 4/100000
+ - 11s - loss: 0.1936 - acc: 0.9488
+	map_score_filtered = 0.6199
+	Best map_score_filtered: 0.6199
+Epoch 5/100000
+ - 11s - loss: 0.1900 - acc: 0.9489
+	map_score_filtered = 0.6116
+Epoch 6/100000
+ - 11s - loss: 0.1874 - acc: 0.9489
+	map_score_filtered = 0.6093
+Epoch 7/100000
+ - 11s - loss: 0.1860 - acc: 0.9488
+	map_score_filtered = 0.6015
+Epoch 8/100000
+ - 11s - loss: 0.1847 - acc: 0.9488
+	map_score_filtered = 0.6020
+Epoch 9/100000
+ - 11s - loss: 0.1835 - acc: 0.9491
+	map_score_filtered = 0.6156
+
+0.5622733486873285
+0.21509186830737495
+
+
+##################### MODEL WITH W2V & BROWN CLUSTERS - NO UPDATE #####################
+23:06.53
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_3 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_4 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+sequential_27 (Sequential)      (None, 40, 50)       1890900     input_1[0][0]                    
+__________________________________________________________________________________________________
+sequential_28 (Sequential)      (None, 40, 20)       20000       input_3[0][0]                    
+__________________________________________________________________________________________________
+sequential_30 (Sequential)      (None, 40, 50)       1890900     input_2[0][0]                    
+__________________________________________________________________________________________________
+sequential_31 (Sequential)      (None, 40, 20)       20000       input_4[0][0]                    
+__________________________________________________________________________________________________
+concatenate_14 (Concatenate)    (None, 40, 70)       0           sequential_27[1][0]              
+                                                                 sequential_28[1][0]              
+__________________________________________________________________________________________________
+concatenate_15 (Concatenate)    (None, 40, 70)       0           sequential_30[1][0]              
+                                                                 sequential_31[1][0]              
+__________________________________________________________________________________________________
+sequential_29 (Sequential)      (None, 100)          35100       concatenate_14[0][0]             
+__________________________________________________________________________________________________
+sequential_32 (Sequential)      (None, 100)          35100       concatenate_15[0][0]             
+__________________________________________________________________________________________________
+concatenate_16 (Concatenate)    (None, 200)          0           sequential_29[1][0]              
+                                                                 sequential_32[1][0]              
+__________________________________________________________________________________________________
+sequential_33 (Sequential)      (None, 1)            20201       concatenate_16[0][0]             
+==================================================================================================
+Total params: 3,912,201
+Trainable params: 90,401
+Non-trainable params: 3,821,800
+__________________________________________________________________________________________________
+Epoch 1/100000
+ - 11s - loss: 0.2928 - acc: 0.9418
+	map_score_filtered = 0.3467
+	Best map_score_filtered: 0.3467
+Epoch 2/100000
+ - 10s - loss: 0.2095 - acc: 0.9489
+	map_score_filtered = 0.4434
+	Best map_score_filtered: 0.4434
+Epoch 3/100000
+ - 10s - loss: 0.1996 - acc: 0.9489
+	map_score_filtered = 0.5760
+	Best map_score_filtered: 0.5760
+Epoch 4/100000
+ - 10s - loss: 0.1934 - acc: 0.9488
+	map_score_filtered = 0.6144
+	Best map_score_filtered: 0.6144
+Epoch 5/100000
+ - 10s - loss: 0.1895 - acc: 0.9487
+	map_score_filtered = 0.6197
+	Best map_score_filtered: 0.6197
+Epoch 6/100000
+ - 10s - loss: 0.1867 - acc: 0.9486
+	map_score_filtered = 0.6210
+Epoch 7/100000
+ - 10s - loss: 0.1851 - acc: 0.9489
+	map_score_filtered = 0.6428
+	Best map_score_filtered: 0.6428
+Epoch 8/100000
+ - 10s - loss: 0.1837 - acc: 0.9488
+	map_score_filtered = 0.6449
+Epoch 9/100000
+ - 10s - loss: 0.1826 - acc: 0.9489
+	map_score_filtered = 0.6494
+	Best map_score_filtered: 0.6494
+Epoch 10/100000
+ - 10s - loss: 0.1818 - acc: 0.9489
+	map_score_filtered = 0.6588
+	Best map_score_filtered: 0.6588
+Epoch 11/100000
+ - 10s - loss: 0.1810 - acc: 0.9489
+	map_score_filtered = 0.6499
+Epoch 12/100000
+ - 11s - loss: 0.1806 - acc: 0.9489
+	map_score_filtered = 0.6598
+Epoch 13/100000
+ - 10s - loss: 0.1801 - acc: 0.9489
+	map_score_filtered = 0.6668
+	Best map_score_filtered: 0.6668
+Epoch 14/100000
+ - 10s - loss: 0.1797 - acc: 0.9490
+	map_score_filtered = 0.6600
+Epoch 15/100000
+ - 11s - loss: 0.1793 - acc: 0.9490
+	map_score_filtered = 0.6546
+Epoch 16/100000
+ - 10s - loss: 0.1789 - acc: 0.9489
+	map_score_filtered = 0.6602
+Epoch 17/100000
+ - 10s - loss: 0.1785 - acc: 0.9489
+	map_score_filtered = 0.6547
+Epoch 18/100000
+ - 10s - loss: 0.1785 - acc: 0.9488
+	map_score_filtered = 0.6605
+
+0.6014210281600885
+0.23006740918504984
+
+
+##################### MODEL WITH W2V ONLY - NO UPDATE - INCREMENTED PATIENCE #####################
+23:10.17
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+sequential_41 (Sequential)      (None, 100)          1916000     input_1[0][0]                    
+__________________________________________________________________________________________________
+sequential_42 (Sequential)      (None, 100)          1916000     input_2[0][0]                    
+__________________________________________________________________________________________________
+concatenate_17 (Concatenate)    (None, 200)          0           sequential_41[1][0]              
+                                                                 sequential_42[1][0]              
+__________________________________________________________________________________________________
+sequential_43 (Sequential)      (None, 1)            20201       concatenate_17[0][0]             
+==================================================================================================
+Total params: 3,852,201
+Trainable params: 70,401
+Non-trainable params: 3,781,800
+__________________________________________________________________________________________________
+MODEL FIT 1 feat
+Epoch 1/100000
+ - 11s - loss: 0.2350 - acc: 0.9385
+	map_score_filtered = 0.4516
+	Best map_score_filtered: 0.4516
+Epoch 2/100000
+ - 11s - loss: 0.1978 - acc: 0.9489
+	map_score_filtered = 0.5287
+	Best map_score_filtered: 0.5287
+Epoch 3/100000
+ - 11s - loss: 0.1934 - acc: 0.9489
+	map_score_filtered = 0.5447
+	Best map_score_filtered: 0.5447
+Epoch 4/100000
+ - 10s - loss: 0.1893 - acc: 0.9489
+	map_score_filtered = 0.5639
+	Best map_score_filtered: 0.5639
+Epoch 5/100000
+ - 11s - loss: 0.1857 - acc: 0.9489
+	map_score_filtered = 0.5830
+	Best map_score_filtered: 0.5830
+Epoch 6/100000
+ - 10s - loss: 0.1818 - acc: 0.9489
+	map_score_filtered = 0.6177
+	Best map_score_filtered: 0.6177
+Epoch 7/100000
+ - 11s - loss: 0.1781 - acc: 0.9490
+	map_score_filtered = 0.6392
+	Best map_score_filtered: 0.6392
+Epoch 8/100000
+ - 11s - loss: 0.1742 - acc: 0.9491
+	map_score_filtered = 0.6623
+	Best map_score_filtered: 0.6623
+Epoch 9/100000
+ - 11s - loss: 0.1700 - acc: 0.9490
+	map_score_filtered = 0.6634
+Epoch 10/100000
+ - 11s - loss: 0.1655 - acc: 0.9492
+	map_score_filtered = 0.6670
+	Best map_score_filtered: 0.6670
+Epoch 11/100000
+ - 11s - loss: 0.1608 - acc: 0.9496
+	map_score_filtered = 0.6732
+	Best map_score_filtered: 0.6732
+Epoch 12/100000
+ - 10s - loss: 0.1559 - acc: 0.9504
+	map_score_filtered = 0.6791
+	Best map_score_filtered: 0.6791
+Epoch 13/100000
+ - 10s - loss: 0.1506 - acc: 0.9509
+	map_score_filtered = 0.6850
+	Best map_score_filtered: 0.6850
+Epoch 14/100000
+ - 10s - loss: 0.1456 - acc: 0.9518
+	map_score_filtered = 0.6814
+Epoch 15/100000
+ - 11s - loss: 0.1392 - acc: 0.9532
+	map_score_filtered = 0.6748
+Epoch 16/100000
+ - 11s - loss: 0.1336 - acc: 0.9541
+	map_score_filtered = 0.6767
+Epoch 17/100000
+ - 11s - loss: 0.1271 - acc: 0.9562
+	map_score_filtered = 0.6722
+Epoch 18/100000
+ - 11s - loss: 0.1204 - acc: 0.9574
+	map_score_filtered = 0.6757
+Epoch 19/100000
+ - 11s - loss: 0.1131 - acc: 0.9592
+	map_score_filtered = 0.6754
+Epoch 20/100000
+ - 11s - loss: 0.1059 - acc: 0.9617
+	map_score_filtered = 0.6732
+Epoch 21/100000
+ - 10s - loss: 0.0989 - acc: 0.9635
+	map_score_filtered = 0.6544
+Epoch 22/100000
+ - 11s - loss: 0.0919 - acc: 0.9662
+	map_score_filtered = 0.6571
+Epoch 23/100000
+ - 11s - loss: 0.0852 - acc: 0.9697
+	map_score_filtered = 0.6384
+Epoch 24/100000
+ - 11s - loss: 0.0779 - acc: 0.9724
+	map_score_filtered = 0.6423
+Epoch 25/100000
+ - 10s - loss: 0.0712 - acc: 0.9752
+	map_score_filtered = 0.6296
+Epoch 26/100000
+ - 11s - loss: 0.0652 - acc: 0.9781
+	map_score_filtered = 0.6324
+Epoch 27/100000
+ - 11s - loss: 0.0594 - acc: 0.9804
+	map_score_filtered = 0.6255
+Epoch 28/100000
+ - 11s - loss: 0.0528 - acc: 0.9829
+	map_score_filtered = 0.6154
+Epoch 29/100000
+ - 10s - loss: 0.0477 - acc: 0.9857
+	map_score_filtered = 0.6112
+Epoch 30/100000
+ - 11s - loss: 0.0431 - acc: 0.9881
+	map_score_filtered = 0.6086
+Epoch 31/100000
+ - 11s - loss: 0.0382 - acc: 0.9905
+	map_score_filtered = 0.6080
+Epoch 32/100000
+ - 11s - loss: 0.0338 - acc: 0.9926
+	map_score_filtered = 0.6069
+Epoch 33/100000
+ - 10s - loss: 0.0300 - acc: 0.9946
+	map_score_filtered = 0.6043
+Epoch 34/100000
+ - 10s - loss: 0.0266 - acc: 0.9959
+	map_score_filtered = 0.6012
+Epoch 35/100000
+ - 10s - loss: 0.0236 - acc: 0.9967
+	map_score_filtered = 0.6036
+Epoch 36/100000
+ - 10s - loss: 0.0208 - acc: 0.9976
+	map_score_filtered = 0.5993
+Epoch 37/100000
+ - 11s - loss: 0.0186 - acc: 0.9980
+	map_score_filtered = 0.5952
+Epoch 38/100000
+ - 11s - loss: 0.0165 - acc: 0.9981
+	map_score_filtered = 0.6013
+Epoch 39/100000
+ - 11s - loss: 0.0150 - acc: 0.9984
+	map_score_filtered = 0.6014
+Epoch 40/100000
+ - 11s - loss: 0.0135 - acc: 0.9983
+	map_score_filtered = 0.6037
+Epoch 41/100000
+ - 10s - loss: 0.0120 - acc: 0.9985
+	map_score_filtered = 0.6008
+Epoch 42/100000
+ - 11s - loss: 0.0113 - acc: 0.9985
+	map_score_filtered = 0.6068
+Epoch 43/100000
+ - 11s - loss: 0.0106 - acc: 0.9986
+	map_score_filtered = 0.6040
+
+0.6260411623667514
+0.2394855875085509
+
+
+##################### MODEL WITH W2V ONLY - WITH UPDATE #####################
+23:18.15
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+sequential_47 (Sequential)      (None, 100)          1916000     input_1[0][0]                    
+__________________________________________________________________________________________________
+sequential_48 (Sequential)      (None, 100)          1916000     input_2[0][0]                    
+__________________________________________________________________________________________________
+concatenate_18 (Concatenate)    (None, 200)          0           sequential_47[1][0]              
+                                                                 sequential_48[1][0]              
+__________________________________________________________________________________________________
+sequential_49 (Sequential)      (None, 1)            20201       concatenate_18[0][0]             
+==================================================================================================
+Total params: 3,852,201
+Trainable params: 3,852,201
+Non-trainable params: 0
+__________________________________________________________________________________________________
+MODEL FIT 1 feat
+Epoch 1/100000
+ - 52s - loss: 0.2615 - acc: 0.9073
+	map_score_filtered = 0.4739
+	Best map_score_filtered: 0.4739
+Epoch 2/100000
+ - 50s - loss: 0.1970 - acc: 0.9489
+	map_score_filtered = 0.5510
+	Best map_score_filtered: 0.5510
+Epoch 3/100000
+ - 50s - loss: 0.1914 - acc: 0.9489
+	map_score_filtered = 0.5930
+	Best map_score_filtered: 0.5930
+Epoch 4/100000
+ - 51s - loss: 0.1852 - acc: 0.9489
+	map_score_filtered = 0.6050
+	Best map_score_filtered: 0.6050
+Epoch 5/100000
+ - 50s - loss: 0.1789 - acc: 0.9489
+	map_score_filtered = 0.6478
+	Best map_score_filtered: 0.6478
+Epoch 6/100000
+ - 50s - loss: 0.1721 - acc: 0.9490
+	map_score_filtered = 0.6607
+	Best map_score_filtered: 0.6607
+Epoch 7/100000
+ - 50s - loss: 0.1651 - acc: 0.9491
+	map_score_filtered = 0.6784
+	Best map_score_filtered: 0.6784
+Epoch 8/100000
+ - 50s - loss: 0.1573 - acc: 0.9496
+	map_score_filtered = 0.6834
+	Best map_score_filtered: 0.6834
+Epoch 9/100000
+ - 50s - loss: 0.1488 - acc: 0.9508
+	map_score_filtered = 0.6803
+Epoch 10/100000
+ - 50s - loss: 0.1394 - acc: 0.9525
+	map_score_filtered = 0.6752
+Epoch 11/100000
+ - 51s - loss: 0.1288 - acc: 0.9544
+	map_score_filtered = 0.6787
+Epoch 12/100000
+ - 51s - loss: 0.1176 - acc: 0.9577
+	map_score_filtered = 0.6601
+Epoch 13/100000
+ - 50s - loss: 0.1059 - acc: 0.9616
+	map_score_filtered = 0.6660
+
+0.6196649888564397
+0.2370464481180983
+
+
+##################### MODEL WITH W2V ONLY - WITH UPDATE - INCREMENTED PATIENCE #####################
+23:29.21
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+sequential_53 (Sequential)      (None, 100)          1916000     input_1[0][0]                    
+__________________________________________________________________________________________________
+sequential_54 (Sequential)      (None, 100)          1916000     input_2[0][0]                    
+__________________________________________________________________________________________________
+concatenate_19 (Concatenate)    (None, 200)          0           sequential_53[1][0]              
+                                                                 sequential_54[1][0]              
+__________________________________________________________________________________________________
+sequential_55 (Sequential)      (None, 1)            20201       concatenate_19[0][0]             
+==================================================================================================
+Total params: 3,852,201
+Trainable params: 3,852,201
+Non-trainable params: 0
+__________________________________________________________________________________________________
+MODEL FIT 1 feat
+Epoch 1/100000
+ - 41s - loss: 0.2322 - acc: 0.9379
+	map_score_filtered = 0.4936
+	Best map_score_filtered: 0.4936
+Epoch 2/100000
+ - 40s - loss: 0.1920 - acc: 0.9489
+	map_score_filtered = 0.5429
+	Best map_score_filtered: 0.5429
+Epoch 3/100000
+ - 40s - loss: 0.1831 - acc: 0.9489
+	map_score_filtered = 0.5746
+	Best map_score_filtered: 0.5746
+Epoch 4/100000
+ - 40s - loss: 0.1735 - acc: 0.9489
+	map_score_filtered = 0.6128
+	Best map_score_filtered: 0.6128
+Epoch 5/100000
+ - 41s - loss: 0.1631 - acc: 0.9490
+	map_score_filtered = 0.6406
+	Best map_score_filtered: 0.6406
+Epoch 6/100000
+ - 40s - loss: 0.1518 - acc: 0.9498
+	map_score_filtered = 0.6564
+	Best map_score_filtered: 0.6564
+Epoch 7/100000
+ - 40s - loss: 0.1402 - acc: 0.9516
+	map_score_filtered = 0.6579
+Epoch 8/100000
+ - 40s - loss: 0.1285 - acc: 0.9545
+	map_score_filtered = 0.6612
+	Best map_score_filtered: 0.6612
+Epoch 9/100000
+ - 41s - loss: 0.1167 - acc: 0.9572
+	map_score_filtered = 0.6551
+Epoch 10/100000
+ - 41s - loss: 0.1046 - acc: 0.9608
+	map_score_filtered = 0.6653
+	Best map_score_filtered: 0.6653
+Epoch 11/100000
+ - 40s - loss: 0.0924 - acc: 0.9652
+	map_score_filtered = 0.6518
+Epoch 12/100000
+ - 39s - loss: 0.0803 - acc: 0.9703
+	map_score_filtered = 0.6503
+Epoch 13/100000
+ - 39s - loss: 0.0685 - acc: 0.9760
+	map_score_filtered = 0.6434
+Epoch 14/100000
+ - 40s - loss: 0.0575 - acc: 0.9818
+	map_score_filtered = 0.6432
+Epoch 15/100000
+ - 40s - loss: 0.0474 - acc: 0.9856
+	map_score_filtered = 0.6524
+Epoch 16/100000
+ - 40s - loss: 0.0386 - acc: 0.9893
+	map_score_filtered = 0.6439
+Epoch 17/100000
+ - 41s - loss: 0.0310 - acc: 0.9927
+	map_score_filtered = 0.6386
+Epoch 18/100000
+ - 40s - loss: 0.0245 - acc: 0.9951
+	map_score_filtered = 0.6286
+Epoch 19/100000
+ - 40s - loss: 0.0196 - acc: 0.9964
+	map_score_filtered = 0.6343
+Epoch 20/100000
+ - 40s - loss: 0.0155 - acc: 0.9972
+	map_score_filtered = 0.6300
+Epoch 21/100000
+ - 40s - loss: 0.0128 - acc: 0.9977
+	map_score_filtered = 0.6287
+Epoch 22/100000
+ - 40s - loss: 0.0104 - acc: 0.9983
+	map_score_filtered = 0.6313
+Epoch 23/100000
+ - 40s - loss: 0.0088 - acc: 0.9981
+	map_score_filtered = 0.6305
+Epoch 24/100000
+ - 40s - loss: 0.0076 - acc: 0.9986
+	map_score_filtered = 0.6284
+Epoch 25/100000
+ - 40s - loss: 0.0067 - acc: 0.9983
+	map_score_filtered = 0.6326
+Epoch 26/100000
+ - 40s - loss: 0.0061 - acc: 0.9985
+	map_score_filtered = 0.6266
+Epoch 27/100000
+ - 40s - loss: 0.0058 - acc: 0.9983
+	map_score_filtered = 0.6323
+Epoch 28/100000
+ - 40s - loss: 0.0052 - acc: 0.9985
+	map_score_filtered = 0.6377
+Epoch 29/100000
+ - 39s - loss: 0.0049 - acc: 0.9986
+	map_score_filtered = 0.6283
+Epoch 30/100000
+ - 40s - loss: 0.0049 - acc: 0.9983
+	map_score_filtered = 0.6281
+Epoch 31/100000
+ - 40s - loss: 0.0047 - acc: 0.9987
+	map_score_filtered = 0.6280
+Epoch 32/100000
+ - 41s - loss: 0.0044 - acc: 0.9986
+	map_score_filtered = 0.6274
+Epoch 33/100000
+ - 40s - loss: 0.0043 - acc: 0.9985
+	map_score_filtered = 0.6346
+Epoch 34/100000
+ - 40s - loss: 0.0043 - acc: 0.9986
+	map_score_filtered = 0.6330
+Epoch 35/100000
+ - 40s - loss: 0.0045 - acc: 0.9985
+	map_score_filtered = 0.6313
+Epoch 36/100000
+ - 40s - loss: 0.0044 - acc: 0.9985
+	map_score_filtered = 0.6254
+Epoch 37/100000
+ - 40s - loss: 0.0042 - acc: 0.9984
+	map_score_filtered = 0.6147
+Epoch 38/100000
+ - 40s - loss: 0.0041 - acc: 0.9985
+	map_score_filtered = 0.6248
+Epoch 39/100000
+ - 42s - loss: 0.0044 - acc: 0.9987
+	map_score_filtered = 0.6287
+Epoch 40/100000
+ - 40s - loss: 0.0037 - acc: 0.9987
+	map_score_filtered = 0.6201
+
+0.6252294954426083
+0.2391750927010613
+
+
+##################### MODEL WITH FT ONLY - WITH UPDATE #####################
+23:56.32
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+sequential_59 (Sequential)      (None, 100)          10137400    input_1[0][0]                    
+__________________________________________________________________________________________________
+sequential_60 (Sequential)      (None, 100)          10137400    input_2[0][0]                    
+__________________________________________________________________________________________________
+concatenate_20 (Concatenate)    (None, 200)          0           sequential_59[1][0]              
+                                                                 sequential_60[1][0]              
+__________________________________________________________________________________________________
+sequential_61 (Sequential)      (None, 1)            20201       concatenate_20[0][0]             
+==================================================================================================
+Total params: 20,295,001
+Trainable params: 20,295,001
+Non-trainable params: 0
+__________________________________________________________________________________________________
+MODEL FIT 1 feat
+Epoch 1/100000
+ - 299s - loss: 0.2275 - acc: 0.9303
+	map_score_filtered = 0.5782
+	Best map_score_filtered: 0.5782
+Epoch 2/100000
+ - 295s - loss: 0.1903 - acc: 0.9489
+	map_score_filtered = 0.6134
+	Best map_score_filtered: 0.6134
+Epoch 3/100000
+ - 294s - loss: 0.1763 - acc: 0.9489
+	map_score_filtered = 0.6731
+	Best map_score_filtered: 0.6731
+Epoch 4/100000
+ - 294s - loss: 0.1548 - acc: 0.9491
+	map_score_filtered = 0.6959
+	Best map_score_filtered: 0.6959
+Epoch 5/100000
+ - 294s - loss: 0.1288 - acc: 0.9525
+	map_score_filtered = 0.6898
+Epoch 6/100000
+ - 296s - loss: 0.0994 - acc: 0.9634
+	map_score_filtered = 0.6919
+Epoch 7/100000
+ - 294s - loss: 0.0704 - acc: 0.9752
+	map_score_filtered = 0.6850
+Epoch 8/100000
+ - 294s - loss: 0.0466 - acc: 0.9871
+	map_score_filtered = 0.6822
+Epoch 9/100000
+ - 293s - loss: 0.0293 - acc: 0.9938
+	map_score_filtered = 0.6735
+
+0.624236526209862
+0.23879524256599496
+
+
+##################### MODEL WITH W2V & POS - NO UPDATE - INCREMENTED PATIENCE #####################
+00:41.17
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_3 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_4 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+sequential_65 (Sequential)      (None, 40, 50)       1890900     input_1[0][0]                    
+__________________________________________________________________________________________________
+sequential_66 (Sequential)      (None, 40, 20)       1060        input_3[0][0]                    
+__________________________________________________________________________________________________
+sequential_68 (Sequential)      (None, 40, 50)       1890900     input_2[0][0]                    
+__________________________________________________________________________________________________
+sequential_69 (Sequential)      (None, 40, 20)       1060        input_4[0][0]                    
+__________________________________________________________________________________________________
+concatenate_21 (Concatenate)    (None, 40, 70)       0           sequential_65[1][0]              
+                                                                 sequential_66[1][0]              
+__________________________________________________________________________________________________
+concatenate_22 (Concatenate)    (None, 40, 70)       0           sequential_68[1][0]              
+                                                                 sequential_69[1][0]              
+__________________________________________________________________________________________________
+sequential_67 (Sequential)      (None, 100)          35100       concatenate_21[0][0]             
+__________________________________________________________________________________________________
+sequential_70 (Sequential)      (None, 100)          35100       concatenate_22[0][0]             
+__________________________________________________________________________________________________
+concatenate_23 (Concatenate)    (None, 200)          0           sequential_67[1][0]              
+                                                                 sequential_70[1][0]              
+__________________________________________________________________________________________________
+sequential_71 (Sequential)      (None, 1)            20201       concatenate_23[0][0]             
+==================================================================================================
+Total params: 3,874,321
+Trainable params: 90,401
+Non-trainable params: 3,783,920
+__________________________________________________________________________________________________
+Epoch 1/100000
+ - 7s - loss: 0.2940 - acc: 0.9407
+	map_score_filtered = 0.3492
+	Best map_score_filtered: 0.3492
+Epoch 2/100000
+ - 6s - loss: 0.2123 - acc: 0.9489
+	map_score_filtered = 0.4140
+	Best map_score_filtered: 0.4140
+Epoch 3/100000
+ - 6s - loss: 0.2011 - acc: 0.9489
+	map_score_filtered = 0.5389
+	Best map_score_filtered: 0.5389
+Epoch 4/100000
+ - 6s - loss: 0.1945 - acc: 0.9488
+	map_score_filtered = 0.6006
+	Best map_score_filtered: 0.6006
+Epoch 5/100000
+ - 6s - loss: 0.1906 - acc: 0.9488
+	map_score_filtered = 0.6190
+	Best map_score_filtered: 0.6190
+Epoch 6/100000
+ - 6s - loss: 0.1879 - acc: 0.9489
+	map_score_filtered = 0.6113
+Epoch 7/100000
+ - 6s - loss: 0.1862 - acc: 0.9487
+	map_score_filtered = 0.6043
+Epoch 8/100000
+ - 6s - loss: 0.1850 - acc: 0.9487
+	map_score_filtered = 0.6102
+Epoch 9/100000
+ - 6s - loss: 0.1840 - acc: 0.9488
+	map_score_filtered = 0.6049
+Epoch 10/100000
+ - 6s - loss: 0.1830 - acc: 0.9487
+	map_score_filtered = 0.6057
+Epoch 11/100000
+ - 6s - loss: 0.1823 - acc: 0.9487
+	map_score_filtered = 0.6048
+Epoch 12/100000
+ - 6s - loss: 0.1818 - acc: 0.9488
+	map_score_filtered = 0.6232
+	Best map_score_filtered: 0.6232
+Epoch 13/100000
+ - 6s - loss: 0.1812 - acc: 0.9488
+	map_score_filtered = 0.6191
+Epoch 14/100000
+ - 6s - loss: 0.1809 - acc: 0.9488
+	map_score_filtered = 0.6248
+Epoch 15/100000
+ - 6s - loss: 0.1803 - acc: 0.9489
+	map_score_filtered = 0.6313
+	Best map_score_filtered: 0.6313
+Epoch 16/100000
+ - 6s - loss: 0.1804 - acc: 0.9489
+	map_score_filtered = 0.6324
+Epoch 17/100000
+ - 6s - loss: 0.1796 - acc: 0.9488
+	map_score_filtered = 0.6217
+Epoch 18/100000
+ - 6s - loss: 0.1794 - acc: 0.9488
+	map_score_filtered = 0.6211
+Epoch 19/100000
+ - 6s - loss: 0.1792 - acc: 0.9489
+	map_score_filtered = 0.6293
+Epoch 20/100000
+ - 6s - loss: 0.1787 - acc: 0.9486
+	map_score_filtered = 0.6224
+Epoch 21/100000
+ - 6s - loss: 0.1783 - acc: 0.9488
+	map_score_filtered = 0.6355
+	Best map_score_filtered: 0.6355
+Epoch 22/100000
+ - 6s - loss: 0.1782 - acc: 0.9487
+	map_score_filtered = 0.6348
+Epoch 23/100000
+ - 6s - loss: 0.1781 - acc: 0.9488
+	map_score_filtered = 0.6234
+Epoch 24/100000
+ - 6s - loss: 0.1777 - acc: 0.9486
+	map_score_filtered = 0.6279
+Epoch 25/100000
+ - 6s - loss: 0.1775 - acc: 0.9487
+	map_score_filtered = 0.6208
+Epoch 26/100000
+ - 6s - loss: 0.1774 - acc: 0.9489
+	map_score_filtered = 0.6251
+Epoch 27/100000
+ - 6s - loss: 0.1773 - acc: 0.9489
+	map_score_filtered = 0.6275
+Epoch 28/100000
+ - 6s - loss: 0.1767 - acc: 0.9488
+	map_score_filtered = 0.6327
+Epoch 29/100000
+ - 6s - loss: 0.1769 - acc: 0.9486
+	map_score_filtered = 0.6295
+Epoch 30/100000
+ - 6s - loss: 0.1765 - acc: 0.9489
+	map_score_filtered = 0.6356
+Epoch 31/100000
+ - 6s - loss: 0.1765 - acc: 0.9487
+	map_score_filtered = 0.6398
+	Best map_score_filtered: 0.6398
+Epoch 32/100000
+ - 6s - loss: 0.1763 - acc: 0.9489
+	map_score_filtered = 0.6321
+Epoch 33/100000
+ - 6s - loss: 0.1762 - acc: 0.9484
+	map_score_filtered = 0.6460
+	Best map_score_filtered: 0.6460
+Epoch 34/100000
+ - 6s - loss: 0.1757 - acc: 0.9485
+	map_score_filtered = 0.6445
+Epoch 35/100000
+ - 6s - loss: 0.1757 - acc: 0.9483
+	map_score_filtered = 0.6392
+Epoch 36/100000
+ - 6s - loss: 0.1754 - acc: 0.9488
+	map_score_filtered = 0.6492
+Epoch 37/100000
+ - 6s - loss: 0.1753 - acc: 0.9486
+	map_score_filtered = 0.6487
+Epoch 38/100000
+ - 6s - loss: 0.1752 - acc: 0.9486
+	map_score_filtered = 0.6372
+Epoch 39/100000
+ - 6s - loss: 0.1752 - acc: 0.9486
+	map_score_filtered = 0.6304
+Epoch 40/100000
+ - 6s - loss: 0.1749 - acc: 0.9487
+	map_score_filtered = 0.6457
+Epoch 41/100000
+ - 6s - loss: 0.1742 - acc: 0.9486
+	map_score_filtered = 0.6462
+Epoch 42/100000
+ - 6s - loss: 0.1744 - acc: 0.9488
+	map_score_filtered = 0.6460
+Epoch 43/100000
+ - 6s - loss: 0.1742 - acc: 0.9484
+	map_score_filtered = 0.6448
+Epoch 44/100000
+ - 6s - loss: 0.1742 - acc: 0.9487
+	map_score_filtered = 0.6362
+Epoch 45/100000
+ - 6s - loss: 0.1740 - acc: 0.9482
+	map_score_filtered = 0.6487
+Epoch 46/100000
+ - 6s - loss: 0.1741 - acc: 0.9484
+	map_score_filtered = 0.6419
+Epoch 47/100000
+ - 6s - loss: 0.1740 - acc: 0.9486
+	map_score_filtered = 0.6392
+Epoch 48/100000
+ - 6s - loss: 0.1731 - acc: 0.9486
+	map_score_filtered = 0.6430
+Epoch 49/100000
+ - 6s - loss: 0.1730 - acc: 0.9485
+	map_score_filtered = 0.6481
+Epoch 50/100000
+ - 6s - loss: 0.1728 - acc: 0.9487
+	map_score_filtered = 0.6413
+Epoch 51/100000
+ - 6s - loss: 0.1730 - acc: 0.9487
+	map_score_filtered = 0.6376
+Epoch 52/100000
+ - 6s - loss: 0.1723 - acc: 0.9487
+	map_score_filtered = 0.6397
+Epoch 53/100000
+ - 6s - loss: 0.1723 - acc: 0.9484
+	map_score_filtered = 0.6388
+Epoch 54/100000
+ - 6s - loss: 0.1720 - acc: 0.9487
+	map_score_filtered = 0.6378
+Epoch 55/100000
+ - 6s - loss: 0.1718 - acc: 0.9486
+	map_score_filtered = 0.6389
+Epoch 56/100000
+ - 6s - loss: 0.1715 - acc: 0.9488
+	map_score_filtered = 0.6361
+Epoch 57/100000
+ - 6s - loss: 0.1715 - acc: 0.9486
+	map_score_filtered = 0.6368
+Epoch 58/100000
+ - 6s - loss: 0.1714 - acc: 0.9488
+	map_score_filtered = 0.6363
+Epoch 59/100000
+ - 6s - loss: 0.1710 - acc: 0.9488
+	map_score_filtered = 0.6454
+Epoch 60/100000
+ - 6s - loss: 0.1710 - acc: 0.9486
+	map_score_filtered = 0.6392
+Epoch 61/100000
+ - 6s - loss: 0.1706 - acc: 0.9485
+	map_score_filtered = 0.6313
+Epoch 62/100000
+ - 6s - loss: 0.1703 - acc: 0.9489
+	map_score_filtered = 0.6323
+Epoch 63/100000
+ - 6s - loss: 0.1707 - acc: 0.9486
+	map_score_filtered = 0.6444
+
+0.6004093881298983
+0.22968041672905634
+
+
+##################### MODEL WITH W2V & POS - WITH UPDATE #####################
+00:48.00
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_3 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_4 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+sequential_79 (Sequential)      (None, 40, 50)       1890900     input_1[0][0]                    
+__________________________________________________________________________________________________
+sequential_80 (Sequential)      (None, 40, 20)       1060        input_3[0][0]                    
+__________________________________________________________________________________________________
+sequential_82 (Sequential)      (None, 40, 50)       1890900     input_2[0][0]                    
+__________________________________________________________________________________________________
+sequential_83 (Sequential)      (None, 40, 20)       1060        input_4[0][0]                    
+__________________________________________________________________________________________________
+concatenate_24 (Concatenate)    (None, 40, 70)       0           sequential_79[1][0]              
+                                                                 sequential_80[1][0]              
+__________________________________________________________________________________________________
+concatenate_25 (Concatenate)    (None, 40, 70)       0           sequential_82[1][0]              
+                                                                 sequential_83[1][0]              
+__________________________________________________________________________________________________
+sequential_81 (Sequential)      (None, 100)          35100       concatenate_24[0][0]             
+__________________________________________________________________________________________________
+sequential_84 (Sequential)      (None, 100)          35100       concatenate_25[0][0]             
+__________________________________________________________________________________________________
+concatenate_26 (Concatenate)    (None, 200)          0           sequential_81[1][0]              
+                                                                 sequential_84[1][0]              
+__________________________________________________________________________________________________
+sequential_85 (Sequential)      (None, 1)            20201       concatenate_26[0][0]             
+==================================================================================================
+Total params: 3,874,321
+Trainable params: 3,874,321
+Non-trainable params: 0
+__________________________________________________________________________________________________
+Epoch 1/100000
+ - 24s - loss: 0.2417 - acc: 0.9465
+	map_score_filtered = 0.5553
+	Best map_score_filtered: 0.5553
+Epoch 2/100000
+ - 22s - loss: 0.1810 - acc: 0.9487
+	map_score_filtered = 0.6424
+	Best map_score_filtered: 0.6424
+Epoch 3/100000
+ - 22s - loss: 0.1651 - acc: 0.9487
+	map_score_filtered = 0.6289
+Epoch 4/100000
+ - 23s - loss: 0.1473 - acc: 0.9504
+	map_score_filtered = 0.6358
+Epoch 5/100000
+ - 23s - loss: 0.1275 - acc: 0.9544
+	map_score_filtered = 0.6249
+Epoch 6/100000
+ - 22s - loss: 0.1077 - acc: 0.9607
+	map_score_filtered = 0.5894
+Epoch 7/100000
+ - 22s - loss: 0.0892 - acc: 0.9660
+	map_score_filtered = 0.5837
+
+0.5994052074515686
+0.22929627777115555
+
+
+##################### MODEL WITH W2V & POS - WITH UPDATE - INCREMENTED PATIENCE #####################
+00:50.52
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_3 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_4 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+sequential_93 (Sequential)      (None, 40, 50)       1890900     input_1[0][0]                    
+__________________________________________________________________________________________________
+sequential_94 (Sequential)      (None, 40, 20)       1060        input_3[0][0]                    
+__________________________________________________________________________________________________
+sequential_96 (Sequential)      (None, 40, 50)       1890900     input_2[0][0]                    
+__________________________________________________________________________________________________
+sequential_97 (Sequential)      (None, 40, 20)       1060        input_4[0][0]                    
+__________________________________________________________________________________________________
+concatenate_27 (Concatenate)    (None, 40, 70)       0           sequential_93[1][0]              
+                                                                 sequential_94[1][0]              
+__________________________________________________________________________________________________
+concatenate_28 (Concatenate)    (None, 40, 70)       0           sequential_96[1][0]              
+                                                                 sequential_97[1][0]              
+__________________________________________________________________________________________________
+sequential_95 (Sequential)      (None, 100)          35100       concatenate_27[0][0]             
+__________________________________________________________________________________________________
+sequential_98 (Sequential)      (None, 100)          35100       concatenate_28[0][0]             
+__________________________________________________________________________________________________
+concatenate_29 (Concatenate)    (None, 200)          0           sequential_95[1][0]              
+                                                                 sequential_98[1][0]              
+__________________________________________________________________________________________________
+sequential_99 (Sequential)      (None, 1)            20201       concatenate_29[0][0]             
+==================================================================================================
+Total params: 3,874,321
+Trainable params: 3,874,321
+Non-trainable params: 0
+__________________________________________________________________________________________________
+Epoch 1/100000
+ - 23s - loss: 0.2467 - acc: 0.9449
+	map_score_filtered = 0.5749
+	Best map_score_filtered: 0.5749
+Epoch 2/100000
+ - 21s - loss: 0.1794 - acc: 0.9486
+	map_score_filtered = 0.6472
+	Best map_score_filtered: 0.6472
+Epoch 3/100000
+ - 21s - loss: 0.1575 - acc: 0.9491
+	map_score_filtered = 0.6276
+Epoch 4/100000
+ - 21s - loss: 0.1314 - acc: 0.9533
+	map_score_filtered = 0.6420
+Epoch 5/100000
+ - 20s - loss: 0.1055 - acc: 0.9607
+	map_score_filtered = 0.6123
+Epoch 6/100000
+ - 21s - loss: 0.0835 - acc: 0.9688
+	map_score_filtered = 0.5919
+Epoch 7/100000
+ - 21s - loss: 0.0675 - acc: 0.9752
+	map_score_filtered = 0.5829
+Epoch 8/100000
+ - 21s - loss: 0.0552 - acc: 0.9799
+	map_score_filtered = 0.5729
+Epoch 9/100000
+ - 21s - loss: 0.0470 - acc: 0.9830
+	map_score_filtered = 0.5649
+Epoch 10/100000
+ - 23s - loss: 0.0395 - acc: 0.9864
+	map_score_filtered = 0.5632
+Epoch 11/100000
+ - 21s - loss: 0.0340 - acc: 0.9885
+	map_score_filtered = 0.5599
+Epoch 12/100000
+ - 21s - loss: 0.0297 - acc: 0.9898
+	map_score_filtered = 0.5586
+Epoch 13/100000
+ - 21s - loss: 0.0262 - acc: 0.9912
+	map_score_filtered = 0.5596
+Epoch 14/100000
+ - 21s - loss: 0.0226 - acc: 0.9929
+	map_score_filtered = 0.5499
+Epoch 15/100000
+ - 21s - loss: 0.0201 - acc: 0.9937
+	map_score_filtered = 0.5588
+Epoch 16/100000
+ - 22s - loss: 0.0185 - acc: 0.9942
+	map_score_filtered = 0.5479
+Epoch 17/100000
+ - 21s - loss: 0.0159 - acc: 0.9950
+	map_score_filtered = 0.5534
+Epoch 18/100000
+ - 21s - loss: 0.0143 - acc: 0.9954
+	map_score_filtered = 0.5423
+Epoch 19/100000
+ - 21s - loss: 0.0126 - acc: 0.9960
+	map_score_filtered = 0.5435
+Epoch 20/100000
+ - 22s - loss: 0.0113 - acc: 0.9965
+	map_score_filtered = 0.5470
+Epoch 21/100000
+ - 21s - loss: 0.0106 - acc: 0.9968
+	map_score_filtered = 0.5443
+Epoch 22/100000
+ - 21s - loss: 0.0100 - acc: 0.9970
+	map_score_filtered = 0.5421
+Epoch 23/100000
+ - 20s - loss: 0.0088 - acc: 0.9975
+	map_score_filtered = 0.5273
+Epoch 24/100000
+ - 22s - loss: 0.0080 - acc: 0.9975
+	map_score_filtered = 0.5285
+Epoch 25/100000
+ - 21s - loss: 0.0074 - acc: 0.9976
+	map_score_filtered = 0.5301
+Epoch 26/100000
+ - 21s - loss: 0.0071 - acc: 0.9976
+	map_score_filtered = 0.5319
+Epoch 27/100000
+ - 21s - loss: 0.0067 - acc: 0.9981
+	map_score_filtered = 0.5246
+Epoch 28/100000
+ - 21s - loss: 0.0065 - acc: 0.9981
+	map_score_filtered = 0.5404
+Epoch 29/100000
+ - 21s - loss: 0.0060 - acc: 0.9981
+	map_score_filtered = 0.5265
+Epoch 30/100000
+ - 21s - loss: 0.0060 - acc: 0.9979
+	map_score_filtered = 0.5264
+Epoch 31/100000
+ - 21s - loss: 0.0055 - acc: 0.9981
+	map_score_filtered = 0.5267
+Epoch 32/100000
+ - 21s - loss: 0.0058 - acc: 0.9976
+	map_score_filtered = 0.5308
+
+0.614791187428706
+0.23518202566717158
+
+
+##################### MODEL WITH W2V & OV - WITH UPDATE #####################
+01:02.33
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_7 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_8 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+embedding_17 (Embedding)        (None, 40, 5)        15          input_7[0][0]                    
+__________________________________________________________________________________________________
+embedding_19 (Embedding)        (None, 40, 50)       1890900     input_1[0][0]                    
+__________________________________________________________________________________________________
+embedding_18 (Embedding)        (None, 40, 5)        15          input_8[0][0]                    
+__________________________________________________________________________________________________
+embedding_20 (Embedding)        (None, 40, 50)       1890900     input_2[0][0]                    
+__________________________________________________________________________________________________
+concatenate_1 (Concatenate)     (None, 40, 55)       0           embedding_17[0][0]               
+                                                                 embedding_19[0][0]               
+__________________________________________________________________________________________________
+concatenate_2 (Concatenate)     (None, 40, 55)       0           embedding_18[0][0]               
+                                                                 embedding_20[0][0]               
+__________________________________________________________________________________________________
+sequential_107 (Sequential)     (None, 100)          27600       concatenate_1[0][0]              
+__________________________________________________________________________________________________
+sequential_108 (Sequential)     (None, 100)          27600       concatenate_2[0][0]              
+__________________________________________________________________________________________________
+input_9 (InputLayer)            (None, 1)            0                                            
+__________________________________________________________________________________________________
+concatenate_30 (Concatenate)    (None, 201)          0           sequential_107[1][0]             
+                                                                 sequential_108[1][0]             
+                                                                 input_9[0][0]                    
+__________________________________________________________________________________________________
+sequential_109 (Sequential)     (None, 1)            20301       concatenate_30[0][0]             
+==================================================================================================
+Total params: 3,857,331
+Trainable params: 3,857,331
+Non-trainable params: 0
+__________________________________________________________________________________________________
+Epoch 1/100000
+ - 23s - loss: 0.2391 - acc: 0.9352
+	map_score_filtered = 0.4534
+	Best map_score_filtered: 0.4534
+Epoch 2/100000
+ - 22s - loss: 0.1952 - acc: 0.9489
+	map_score_filtered = 0.5837
+	Best map_score_filtered: 0.5837
+Epoch 3/100000
+ - 21s - loss: 0.1859 - acc: 0.9489
+	map_score_filtered = 0.6381
+	Best map_score_filtered: 0.6381
+Epoch 4/100000
+ - 21s - loss: 0.1773 - acc: 0.9489
+	map_score_filtered = 0.6771
+	Best map_score_filtered: 0.6771
+Epoch 5/100000
+ - 22s - loss: 0.1695 - acc: 0.9489
+	map_score_filtered = 0.7067
+	Best map_score_filtered: 0.7067
+Epoch 6/100000
+ - 20s - loss: 0.1619 - acc: 0.9492
+	map_score_filtered = 0.7102
+	Best map_score_filtered: 0.7102
+Epoch 7/100000
+ - 21s - loss: 0.1547 - acc: 0.9503
+	map_score_filtered = 0.7099
+Epoch 8/100000
+ - 21s - loss: 0.1474 - acc: 0.9514
+	map_score_filtered = 0.7133
+Epoch 9/100000
+ - 21s - loss: 0.1397 - acc: 0.9530
+	map_score_filtered = 0.7098
+Epoch 10/100000
+ - 21s - loss: 0.1310 - acc: 0.9547
+	map_score_filtered = 0.7192
+	Best map_score_filtered: 0.7192
+Epoch 11/100000
+ - 22s - loss: 0.1215 - acc: 0.9567
+	map_score_filtered = 0.7258
+	Best map_score_filtered: 0.7258
+Epoch 12/100000
+ - 21s - loss: 0.1111 - acc: 0.9595
+	map_score_filtered = 0.7229
+Epoch 13/100000
+ - 21s - loss: 0.1001 - acc: 0.9632
+	map_score_filtered = 0.7185
+Epoch 14/100000
+ - 21s - loss: 0.0888 - acc: 0.9675
+	map_score_filtered = 0.7092
+Epoch 15/100000
+ - 20s - loss: 0.0768 - acc: 0.9720
+	map_score_filtered = 0.7105
+Epoch 16/100000
+ - 21s - loss: 0.0655 - acc: 0.9777
+	map_score_filtered = 0.7031
+
+0.6721593184473209
+0.2571276122949276
+
+
+##################### MODEL WITH W2V & POS & OV - WITH UPDATE #####################
+01:08.29
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_7 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_8 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+embedding_17 (Embedding)        (None, 40, 5)        15          input_7[0][0]                    
+__________________________________________________________________________________________________
+embedding_19 (Embedding)        (None, 40, 50)       1890900     input_1[0][0]                    
+__________________________________________________________________________________________________
+input_3 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+embedding_18 (Embedding)        (None, 40, 5)        15          input_8[0][0]                    
+__________________________________________________________________________________________________
+embedding_20 (Embedding)        (None, 40, 50)       1890900     input_2[0][0]                    
+__________________________________________________________________________________________________
+input_4 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+concatenate_1 (Concatenate)     (None, 40, 55)       0           embedding_17[0][0]               
+                                                                 embedding_19[0][0]               
+__________________________________________________________________________________________________
+sequential_113 (Sequential)     (None, 40, 20)       1060        input_3[0][0]                    
+__________________________________________________________________________________________________
+concatenate_2 (Concatenate)     (None, 40, 55)       0           embedding_18[0][0]               
+                                                                 embedding_20[0][0]               
+__________________________________________________________________________________________________
+sequential_115 (Sequential)     (None, 40, 20)       1060        input_4[0][0]                    
+__________________________________________________________________________________________________
+concatenate_31 (Concatenate)    (None, 40, 75)       0           concatenate_1[0][0]              
+                                                                 sequential_113[1][0]             
+__________________________________________________________________________________________________
+concatenate_32 (Concatenate)    (None, 40, 75)       0           concatenate_2[0][0]              
+                                                                 sequential_115[1][0]             
+__________________________________________________________________________________________________
+sequential_114 (Sequential)     (None, 100)          37600       concatenate_31[0][0]             
+__________________________________________________________________________________________________
+sequential_116 (Sequential)     (None, 100)          37600       concatenate_32[0][0]             
+__________________________________________________________________________________________________
+input_9 (InputLayer)            (None, 1)            0                                            
+__________________________________________________________________________________________________
+concatenate_33 (Concatenate)    (None, 201)          0           sequential_114[1][0]             
+                                                                 sequential_116[1][0]             
+                                                                 input_9[0][0]                    
+__________________________________________________________________________________________________
+sequential_117 (Sequential)     (None, 1)            20301       concatenate_33[0][0]             
+==================================================================================================
+Total params: 3,879,451
+Trainable params: 3,879,451
+Non-trainable params: 0
+__________________________________________________________________________________________________
+Epoch 1/100000
+ - 21s - loss: 0.2610 - acc: 0.9449
+	map_score_filtered = 0.4293
+	Best map_score_filtered: 0.4293
+Epoch 2/100000
+ - 20s - loss: 0.1923 - acc: 0.9489
+	map_score_filtered = 0.6043
+	Best map_score_filtered: 0.6043
+Epoch 3/100000
+ - 19s - loss: 0.1789 - acc: 0.9488
+	map_score_filtered = 0.6465
+	Best map_score_filtered: 0.6465
+Epoch 4/100000
+ - 19s - loss: 0.1689 - acc: 0.9490
+	map_score_filtered = 0.6615
+	Best map_score_filtered: 0.6615
+Epoch 5/100000
+ - 18s - loss: 0.1609 - acc: 0.9492
+	map_score_filtered = 0.6784
+	Best map_score_filtered: 0.6784
+Epoch 6/100000
+ - 19s - loss: 0.1527 - acc: 0.9505
+	map_score_filtered = 0.6721
+Epoch 7/100000
+ - 18s - loss: 0.1443 - acc: 0.9517
+	map_score_filtered = 0.6649
+Epoch 8/100000
+ - 19s - loss: 0.1351 - acc: 0.9539
+	map_score_filtered = 0.6568
+Epoch 9/100000
+ - 19s - loss: 0.1254 - acc: 0.9554
+	map_score_filtered = 0.6625
+Epoch 10/100000
+ - 19s - loss: 0.1146 - acc: 0.9586
+	map_score_filtered = 0.6521
+
+0.6529306673897071
+0.24977189022368176
+
+
+##################### MODEL WITH W2V & BROWN CLUSTERS & OV - WITH UPDATE #####################
+01:11.56
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_7 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_8 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+embedding_17 (Embedding)        (None, 40, 5)        15          input_7[0][0]                    
+__________________________________________________________________________________________________
+embedding_19 (Embedding)        (None, 40, 50)       1890900     input_1[0][0]                    
+__________________________________________________________________________________________________
+input_3 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+embedding_18 (Embedding)        (None, 40, 5)        15          input_8[0][0]                    
+__________________________________________________________________________________________________
+embedding_20 (Embedding)        (None, 40, 50)       1890900     input_2[0][0]                    
+__________________________________________________________________________________________________
+input_4 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+concatenate_1 (Concatenate)     (None, 40, 55)       0           embedding_17[0][0]               
+                                                                 embedding_19[0][0]               
+__________________________________________________________________________________________________
+sequential_123 (Sequential)     (None, 40, 20)       20000       input_3[0][0]                    
+__________________________________________________________________________________________________
+concatenate_2 (Concatenate)     (None, 40, 55)       0           embedding_18[0][0]               
+                                                                 embedding_20[0][0]               
+__________________________________________________________________________________________________
+sequential_125 (Sequential)     (None, 40, 20)       20000       input_4[0][0]                    
+__________________________________________________________________________________________________
+concatenate_34 (Concatenate)    (None, 40, 75)       0           concatenate_1[0][0]              
+                                                                 sequential_123[1][0]             
+__________________________________________________________________________________________________
+concatenate_35 (Concatenate)    (None, 40, 75)       0           concatenate_2[0][0]              
+                                                                 sequential_125[1][0]             
+__________________________________________________________________________________________________
+sequential_124 (Sequential)     (None, 100)          37600       concatenate_34[0][0]             
+__________________________________________________________________________________________________
+sequential_126 (Sequential)     (None, 100)          37600       concatenate_35[0][0]             
+__________________________________________________________________________________________________
+input_9 (InputLayer)            (None, 1)            0                                            
+__________________________________________________________________________________________________
+concatenate_36 (Concatenate)    (None, 201)          0           sequential_124[1][0]             
+                                                                 sequential_126[1][0]             
+                                                                 input_9[0][0]                    
+__________________________________________________________________________________________________
+sequential_127 (Sequential)     (None, 1)            20301       concatenate_36[0][0]             
+==================================================================================================
+Total params: 3,917,331
+Trainable params: 3,917,331
+Non-trainable params: 0
+__________________________________________________________________________________________________
+Epoch 1/100000
+ - 20s - loss: 0.2475 - acc: 0.9424
+	map_score_filtered = 0.6237
+	Best map_score_filtered: 0.6237
+Epoch 2/100000
+ - 18s - loss: 0.1724 - acc: 0.9487
+	map_score_filtered = 0.6941
+	Best map_score_filtered: 0.6941
+Epoch 3/100000
+ - 18s - loss: 0.1537 - acc: 0.9493
+	map_score_filtered = 0.6900
+Epoch 4/100000
+ - 18s - loss: 0.1360 - acc: 0.9528
+	map_score_filtered = 0.6895
+Epoch 5/100000
+ - 18s - loss: 0.1194 - acc: 0.9571
+	map_score_filtered = 0.6640
+Epoch 6/100000
+ - 18s - loss: 0.1042 - acc: 0.9620
+	map_score_filtered = 0.6544
+Epoch 7/100000
+ - 17s - loss: 0.0905 - acc: 0.9668
+	map_score_filtered = 0.6420
+
+0.6378457205940082
+0.24400129946532712
+
+
+##################### MODEL WITH ALL - WITH UPDATE #####################
+01:14.22
+__________________________________________________________________________________________________
+Layer (type)                    Output Shape         Param #     Connected to                     
+==================================================================================================
+input_7 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_1 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_8 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_2 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+embedding_17 (Embedding)        (None, 40, 5)        15          input_7[0][0]                    
+__________________________________________________________________________________________________
+embedding_19 (Embedding)        (None, 40, 50)       1890900     input_1[0][0]                    
+__________________________________________________________________________________________________
+input_3 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_5 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+embedding_18 (Embedding)        (None, 40, 5)        15          input_8[0][0]                    
+__________________________________________________________________________________________________
+embedding_20 (Embedding)        (None, 40, 50)       1890900     input_2[0][0]                    
+__________________________________________________________________________________________________
+input_4 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+input_6 (InputLayer)            (None, 40)           0                                            
+__________________________________________________________________________________________________
+concatenate_1 (Concatenate)     (None, 40, 55)       0           embedding_17[0][0]               
+                                                                 embedding_19[0][0]               
+__________________________________________________________________________________________________
+sequential_133 (Sequential)     (None, 40, 20)       1060        input_3[0][0]                    
+__________________________________________________________________________________________________
+sequential_134 (Sequential)     (None, 40, 20)       20000       input_5[0][0]                    
+__________________________________________________________________________________________________
+concatenate_2 (Concatenate)     (None, 40, 55)       0           embedding_18[0][0]               
+                                                                 embedding_20[0][0]               
+__________________________________________________________________________________________________
+sequential_136 (Sequential)     (None, 40, 20)       1060        input_4[0][0]                    
+__________________________________________________________________________________________________
+sequential_137 (Sequential)     (None, 40, 20)       20000       input_6[0][0]                    
+__________________________________________________________________________________________________
+concatenate_37 (Concatenate)    (None, 40, 95)       0           concatenate_1[0][0]              
+                                                                 sequential_133[1][0]             
+                                                                 sequential_134[1][0]             
+__________________________________________________________________________________________________
+concatenate_38 (Concatenate)    (None, 40, 95)       0           concatenate_2[0][0]              
+                                                                 sequential_136[1][0]             
+                                                                 sequential_137[1][0]             
+__________________________________________________________________________________________________
+sequential_135 (Sequential)     (None, 100)          47600       concatenate_37[0][0]             
+__________________________________________________________________________________________________
+sequential_138 (Sequential)     (None, 100)          47600       concatenate_38[0][0]             
+__________________________________________________________________________________________________
+input_9 (InputLayer)            (None, 1)            0                                            
+__________________________________________________________________________________________________
+concatenate_39 (Concatenate)    (None, 201)          0           sequential_135[1][0]             
+                                                                 sequential_138[1][0]             
+                                                                 input_9[0][0]                    
+__________________________________________________________________________________________________
+sequential_139 (Sequential)     (None, 1)            20301       concatenate_39[0][0]             
+==================================================================================================
+Total params: 3,939,451
+Trainable params: 3,939,451
+Non-trainable params: 0
+__________________________________________________________________________________________________
+Epoch 1/100000
+ - 21s - loss: 0.2370 - acc: 0.9488
+	map_score_filtered = 0.5501
+	Best map_score_filtered: 0.5501
+Epoch 2/100000
+ - 19s - loss: 0.1700 - acc: 0.9488
+	map_score_filtered = 0.6722
+	Best map_score_filtered: 0.6722
+Epoch 3/100000
+ - 19s - loss: 0.1408 - acc: 0.9511
+	map_score_filtered = 0.6809
+	Best map_score_filtered: 0.6809
+Epoch 4/100000
+ - 19s - loss: 0.1143 - acc: 0.9588
+	map_score_filtered = 0.6648
+Epoch 5/100000
+ - 19s - loss: 0.0926 - acc: 0.9661
+	map_score_filtered = 0.6314
+Epoch 6/100000
+ - 19s - loss: 0.0764 - acc: 0.9722
+	map_score_filtered = 0.6286
+Epoch 7/100000
+ - 19s - loss: 0.0654 - acc: 0.9761
+	map_score_filtered = 0.6269
+Epoch 8/100000
+ - 19s - loss: 0.0563 - acc: 0.9809
+	map_score_filtered = 0.6141
+
+0.6434005273147618
+0.2461262334648534
