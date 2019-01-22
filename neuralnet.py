@@ -51,8 +51,11 @@ def intarray(a):
     a = a.replace('\n', '')
     return list(map(int,a.split(',')))
 
+d = 'Unnamed: 0'
 # LOAD DATASETS AS PANDAS DATAFRAMES
 train = pd.read_csv(data_dir+'train_embeddings.csv', sep=',')
+if d in train:
+    train = train.drop(columns=d)
 train['Q_W2V'] = train['Q_W2V'].map(intarray)
 train['A_W2V'] = train['A_W2V'].map(intarray)
 train['Q_FT'] = train['Q_FT'].map(intarray)
@@ -68,6 +71,8 @@ train['A_BC'] = train['A_BC'].map(intarray)
 # print(train['Q_W2V'])
 
 dev = pd.read_csv(data_dir+'dev_embeddings.csv', sep=',')
+if d in dev:
+    dev = dev.drop(columns=d)
 dev['Q_W2V'] = dev['Q_W2V'].map(intarray)
 dev['A_W2V'] = dev['A_W2V'].map(intarray)
 dev['Q_FT'] = dev['Q_FT'].map(intarray)
@@ -81,6 +86,8 @@ dev['A_BC'] = dev['A_BC'].map(intarray)
 
 
 test = pd.read_csv(data_dir+'test_embeddings.csv', sep=',')
+if d in test:
+    test = test.drop(columns=d)
 test['Q_W2V'] = test['Q_W2V'].map(intarray)
 test['A_W2V'] = test['A_W2V'].map(intarray)
 test['Q_FT'] = test['Q_FT'].map(intarray)
@@ -463,155 +470,185 @@ def get_results(name, colname, qid, X, lab, test):
     test[colname] = pd.Series(y for y in pred)
     del model
 
-############################################## BASELINE MODEL ##############################################
-
-print("\n\n##################### MODEL WITH W2V ONLY - NO UPDATE #####################")
-now = datetime.datetime.now()
-print(now.strftime("%H:%M.%S"))
-name = 'w2v'
-create_1feat_model(que_w2v_emb_no, ans_w2v_emb_no, 'Q_W2V', 'A_W2V', name, 5)
-(qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
-get_results(models_dir+name+'.h5', 'pred_w2v', qid, X, lab, test)
-
-print("\n\n##################### MODEL WITH FT ONLY - NO UPDATE #####################")
-now = datetime.datetime.now()
-print(now.strftime("%H:%M.%S"))
-name = 'ft'
-create_1feat_model(que_ft_emb_no, ans_ft_emb_no, 'Q_FT', 'A_FT', name, 5)
-(qid,_ ), X, lab = data(test, 'Q_FT', 'A_FT')
-get_results(models_dir+name+'.h5', 'pred_ft', qid, X, lab, test)
+# ########################################### BASELINE MODEL - W2V ###########################################
+# print("\n\n#################################### BASELINE - W2V - NO UPDATE #################################")
+# now = datetime.datetime.now()
+# print(now.strftime("%H:%M.%S"))
+# name = 'w2v'
+# # create_1feat_model(que_w2v_emb_no, ans_w2v_emb_no, 'Q_W2V', 'A_W2V', name, 5)
+# (qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
+# get_results(models_dir+name+'.h5', 'pred_w2v', qid, X, lab, test)
 
 
-print("\n\n##################### MODEL WITH W2V & POS - NO UPDATE #####################")
+# print("\n\n####################### BASELINE - W2V - NO UPDATE - INCREMENTED PATIENCE #######################")
+# now = datetime.datetime.now()
+# print(now.strftime("%H:%M.%S"))
+# name = 'w2v_pat'
+# # create_1feat_model(que_w2v_emb_no, ans_w2v_emb_no, 'Q_W2V', 'A_W2V', name, 30)
+# (qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
+# get_results(models_dir+name+'.h5', name, qid, X, lab, test)
+
+# print("\n\n################################# BASELINE - W2V - WITH UPDATE ##################################")
+# now = datetime.datetime.now()
+# print(now.strftime("%H:%M.%S"))
+# name = 'w2v_up' 
+# # create_1feat_model(que_w2v_emb_up, ans_w2v_emb_up, 'Q_W2V', 'A_W2V', name, 5)
+# (qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
+# get_results(models_dir+name+'.h5', name , qid, X, lab, test)
+
+# print("\n\n###################### BASELINE - W2V - WITH UPDATE - INCREMENTED PATIENCE ######################")
+# now = datetime.datetime.now()
+# print(now.strftime("%H:%M.%S"))
+# name = 'w2v_up_pat'
+# # create_1feat_model(que_w2v_emb_up, ans_w2v_emb_up, 'Q_W2V', 'A_W2V', name, 30)
+# (qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
+# get_results(models_dir+name+'.h5', name, qid, X, lab, test)
+
+# ########################################### BASELINE MODEL - W2V ###########################################
+# ########################################### BASELINE MODEL - FT ############################################
+
+# print("\n\n################################## BASELINE - FT - NO UPDATE ####################################")
+# now = datetime.datetime.now()
+# print(now.strftime("%H:%M.%S"))
+# name = 'ft'
+# # create_1feat_model(que_ft_emb_no, ans_ft_emb_no, 'Q_FT', 'A_FT', name, 5)
+# (qid,_ ), X, lab = data(test, 'Q_FT', 'A_FT')
+# get_results(models_dir+name+'.h5', 'pred_ft', qid, X, lab, test)
+
+# print("\n\n################################# BASELINE - FT - WITH UPDATE ###################################")
+# now = datetime.datetime.now()
+# print(now.strftime("%H:%M.%S"))
+# name = 'ft_up'
+# # create_1feat_model(que_ft_emb_up, ans_ft_emb_up, 'Q_FT', 'A_FT', name, 5)
+# (qid,_ ), X, lab = data(test, 'Q_FT', 'A_FT')
+# get_results(models_dir+name+'.h5', name, qid, X, lab, test)
+
+# ########################################### BASELINE MODEL - FT ############################################
+
+# test.to_csv(path_or_buf=results_dir+'baseline_test.csv', sep=',', na_rep='', header=1, index=False, index_label=None, mode='w')
+# test = test.drop(columns=['pred_w2v', 'w2v_pat', 'w2v_up', 'w2v_up_pat', 'pred_ft','ft_up'])
+
+# ############################################## OVERLAP MODEL ###############################################
+# print("\n\n################################## OVERLAP - W2V - WITH UPDATE ##################################")
+# now = datetime.datetime.now()
+# print(now.strftime("%H:%M.%S"))
+# name = 'w2v_ov'
+# create_1feat_ov_model(que_w2v_ov_emb, ans_w2v_ov_emb, 'Q_W2V', 'A_W2V', 55, name, 5)
+# (qid,_ ), X, lab = dataOver(test, 'Q_W2V', 'A_W2V')
+# get_results(models_dir+name+'.h5', name, qid, X, lab, test)
+
+# ############################################## OVERLAP MODEL ###############################################
+
+# test.to_csv(path_or_buf=results_dir+'overlap_test.csv', sep=',', na_rep='', header=1, index=False, index_label=None, mode='w')
+# test = test.drop(columns='w2v_ov')
+
+########################################### ONE FEAT MODEL - POS ###########################################
+print("\n\n############################### ONE FEAT - W2V & POS - NO UPDATE ################################")
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
 name = 'w2v_pos'
-create_2feat_model(que_w2v_emb_no, ans_w2v_emb_no, que_pos_emb_no, ans_pos_emb_no, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', name, 5)
+# create_2feat_model(que_w2v_emb_no, ans_w2v_emb_no, que_pos_emb_no, ans_pos_emb_no, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', name, 5)
 (qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
 get_results(models_dir+name+'.h5', name, qid, X, lab, test)
 
-print("\n\n##################### MODEL WITH W2V & BROWN CLUSTERS - NO UPDATE #####################")
-now = datetime.datetime.now()
-print(now.strftime("%H:%M.%S"))
-name = 'w2v_bc'
-create_2feat_model(que_w2v_emb_no, ans_w2v_emb_no, que_bc_emb_no, ans_bc_emb_no, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC', name, 5)
-(qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC')
-get_results(models_dir+name+'.h5', name, qid, X, lab, test)
-
-############################################## BASELINE MODEL ##############################################
-############################################## BASELINE MODEL ##############################################
-
-print("\n\n##################### MODEL WITH W2V ONLY - NO UPDATE - INCREMENTED PATIENCE #####################")
-now = datetime.datetime.now()
-print(now.strftime("%H:%M.%S"))
-name = 'w2v_pat'
-create_1feat_model(que_w2v_emb_no, ans_w2v_emb_no, 'Q_W2V', 'A_W2V', name, 30)
-(qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
-get_results(models_dir+name+'.h5', name, qid, X, lab, test)
-
-print("\n\n##################### MODEL WITH W2V ONLY - WITH UPDATE #####################")
-now = datetime.datetime.now()
-print(now.strftime("%H:%M.%S"))
-name = 'w2v_up'
-create_1feat_model(que_w2v_emb_up, ans_w2v_emb_up, 'Q_W2V', 'A_W2V', name, 5)
-(qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
-get_results(models_dir+name+'.h5', name , qid, X, lab, test)
-
-print("\n\n##################### MODEL WITH W2V ONLY - WITH UPDATE - INCREMENTED PATIENCE #####################")
-now = datetime.datetime.now()
-print(now.strftime("%H:%M.%S"))
-name = 'w2v_up_pat'
-create_1feat_model(que_w2v_emb_up, ans_w2v_emb_up, 'Q_W2V', 'A_W2V', name, 30)
-(qid,_ ), X, lab = data(test, 'Q_W2V', 'A_W2V')
-get_results(models_dir+name+'.h5', name, qid, X, lab, test)
-
-############################################## BASELINE MODEL ##############################################
-############################################## BASELINE MODEL ##############################################
-
-print("\n\n##################### MODEL WITH FT ONLY - WITH UPDATE #####################")
-now = datetime.datetime.now()
-print(now.strftime("%H:%M.%S"))
-name = 'ft_up'
-create_1feat_model(que_ft_emb_up, ans_ft_emb_up, 'Q_FT', 'A_FT', name, 5)
-(qid,_ ), X, lab = data(test, 'Q_FT', 'A_FT')
-get_results(models_dir+name+'.h5', name, qid, X, lab, test)
-
-############################################## BASELINE MODEL ##############################################
-############################################## BASELINE MODEL ##############################################
-
-print("\n\n##################### MODEL WITH W2V & POS - NO UPDATE - INCREMENTED PATIENCE #####################")
+print("\n\n##################### ONE FEAT - W2V & POS - NO UPDATE - INCREMENTED PATIENCE #####################")
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
 name = 'w2v_pos_pat'
-create_2feat_model(que_w2v_emb_no, ans_w2v_emb_no, que_pos_emb_no, ans_pos_emb_no, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', name, 30)
+# create_2feat_model(que_w2v_emb_no, ans_w2v_emb_no, que_pos_emb_no, ans_pos_emb_no, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', name, 30)
 (qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
 get_results(models_dir + name +'.h5', name, qid, X, lab, test)
 
-print("\n\n##################### MODEL WITH W2V & POS - WITH UPDATE #####################")
+print("\n\n############################### ONE FEAT - W2V & POS - WITH UPDATE ################################")
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
 name = 'w2v_pos_up'
-create_2feat_model(que_w2v_emb_up, ans_w2v_emb_up, que_pos_emb_up, ans_pos_emb_up, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', name, 5)
+# create_2feat_model(que_w2v_emb_up, ans_w2v_emb_up, que_pos_emb_up, ans_pos_emb_up, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', name, 5)
 (qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
 get_results(models_dir+ name +'.h5', name, qid, X, lab, test)
 
-print("\n\n##################### MODEL WITH W2V & POS - WITH UPDATE - INCREMENTED PATIENCE #####################")
+print("\n\n#################### ONE FEAT - W2V & POS - WITH UPDATE - INCREMENTED PATIENCE ####################")
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
 name = 'w2v_pos_up_pat'
-create_2feat_model(que_w2v_emb_up, ans_w2v_emb_up, que_pos_emb_up, ans_pos_emb_up, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', name, 30)
+# create_2feat_model(que_w2v_emb_up, ans_w2v_emb_up, que_pos_emb_up, ans_pos_emb_up, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', name, 30)
 (qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
 get_results(models_dir + name + '.h5', name, qid, X, lab, test)
-
-############################################## BASELINE MODEL ##############################################
-############################################## OVERLAP MODELS ##############################################
-
-print("\n\n##################### MODEL WITH W2V & OV - WITH UPDATE #####################")
+########################################### ONE FEAT MODEL - POS ###########################################
+########################################### ONE FEAT MODEL - BC ############################################
+print("\n\n########################### ONE FEAT - W2V & BROWN CLUSTERS - NO UPDATE ###########################")
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
-name = 'w2v_ov'
-create_1feat_ov_model(que_w2v_ov_emb, ans_w2v_ov_emb, 'Q_W2V', 'A_W2V', 55, name, 5)
-(qid,_ ), X, lab = dataOver(test, 'Q_W2V', 'A_W2V')
+name = 'w2v_bc'
+# create_2feat_model(que_w2v_emb_no, ans_w2v_emb_no, que_bc_emb_no, ans_bc_emb_no, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC', name, 5)
+(qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC')
 get_results(models_dir+name+'.h5', name, qid, X, lab, test)
 
-print("\n\n##################### MODEL WITH W2V & POS & OV - WITH UPDATE #####################")
+print("\n\n################ ONE FEAT - W2V & BROWN CLUSTERS - NO UPDATE - INCREMENTED PATIENCE ###############")
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
-name = 'w2v_pos_ov'
-create_2feat_ov_model(que_w2v_ov_emb, ans_w2v_ov_emb, que_pos_emb_up, ans_pos_emb_up, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', 75, name, 5)
-(qid,_ ), X, lab = dataTwoOv(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
+name = 'w2v_bc_pat'
+create_2feat_model(que_w2v_emb_no, ans_w2v_emb_no, que_bc_emb_no, ans_bc_emb_no, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC', name, 30)
+(qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC')
 get_results(models_dir+name+'.h5', name, qid, X, lab, test)
 
-print("\n\n##################### MODEL WITH W2V & BROWN CLUSTERS & OV - WITH UPDATE #####################")
+
+print("\n\n########################## ONE FEAT - W2V & BROWN CLUSTERS - WITH UPDATE ##########################")
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
-name = 'w2v_bc_ov'
-create_2feat_ov_model(que_w2v_ov_emb, ans_w2v_ov_emb, que_bc_emb_up, ans_bc_emb_up, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC', 75, name, 5)
-(qid,_ ), X, lab = dataTwoOv(test, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC')
+name = 'w2v_bc_up'
+create_2feat_model(que_w2v_emb_up, ans_w2v_emb_up, que_bc_emb_up, ans_bc_emb_up, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC', name, 5)
+(qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC')
 get_results(models_dir+name+'.h5', name, qid, X, lab, test)
 
-############################################## OVERLAP MODELS ##############################################
-############################################## COMPLETE MODEL ##############################################
 
-print("\n\n##################### MODEL WITH ALL - WITH UPDATE #####################")
+print("\n\n############### ONE FEAT - W2V & BROWN CLUSTERS - WITH UPDATE - INCREMENTED PATIENCE ##############")
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
-name = 'w2v_all_ov'
-create_complete_model(que_w2v_ov_emb, ans_w2v_ov_emb, que_pos_emb_up, ans_pos_emb_up, que_bc_emb_up, ans_bc_emb_up, 'Q_W2V', 'A_W2V', 95, name, 5)
-(qid,_ ), X, lab = dataAllOv(test, 'Q_W2V', 'A_W2V')
+name = 'w2v_bc_up_pat'
+create_2feat_model(que_w2v_emb_up, ans_w2v_emb_up, que_bc_emb_up, ans_bc_emb_up, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC', name, 30)
+(qid,_ ), X, lab = dataTwo(test, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC')
 get_results(models_dir+name+'.h5', name, qid, X, lab, test)
 
-############################################## COMPLETE MODEL ##############################################
-# ############################################## COMPLETE MODEL ##############################################
+########################################### ONE FEAT MODEL - BC ############################################
 
-# print("\n\n##################### MODEL WITH ALL - WITH UPDATE #####################")
+test.to_csv(path_or_buf=results_dir+'onefeat_test.csv', sep=',', na_rep='', header=1, index=False, index_label=None, mode='w')
+test = test.drop(columns=['w2v_pos', 'w2v_pos_pat', 'w2v_pos_up', 'w2v_pos_up_pat', 'w2v_bc', 'w2v_bc_pat', 'w2v_bc_up', 'w2v_bc_up_pat'])
+
+# ####################################### ONE FEAT OVERLAP MODEL - POS #######################################
+
+# print("\n\n########################### ONE FEAT OVERLAP - W2V & POS - WITH UPDATE ############################")
 # now = datetime.datetime.now()
 # print(now.strftime("%H:%M.%S"))
-# name = 'w2v_all_ov'
+# name = 'w2v_pos_ov'
+# create_2feat_ov_model(que_w2v_ov_emb, ans_w2v_ov_emb, que_pos_emb_up, ans_pos_emb_up, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS', 75, name, 5)
+# (qid,_ ), X, lab = dataTwoOv(test, 'Q_W2V', 'A_W2V', 'Q_POS', 'A_POS')
+# get_results(models_dir+name+'.h5', name, qid, X, lab, test)
+
+# ####################################### ONE FEAT OVERLAP MODEL - POS #######################################
+# ####################################### ONE FEAT OVERLAP MODEL - BC ########################################
+# print("\n\n###################### ONE FEAT OVERLAP - W2V & BROWN CLUSTERS - WITH UPDATE ######################")
+# now = datetime.datetime.now()
+# print(now.strftime("%H:%M.%S"))
+# name = 'w2v_bc_ov'
+# create_2feat_ov_model(que_w2v_ov_emb, ans_w2v_ov_emb, que_bc_emb_up, ans_bc_emb_up, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC', 75, name, 5)
+# (qid,_ ), X, lab = dataTwoOv(test, 'Q_W2V', 'A_W2V', 'Q_BC', 'A_BC')
+# get_results(models_dir+name+'.h5', name, qid, X, lab, test)
+
+# ####################################### ONE FEAT OVERLAP MODEL - BC ########################################
+
+# test.to_csv(path_or_buf=results_dir+'onefeat_ov_test.csv', sep=',', na_rep='', header=1, index=False, index_label=None, mode='w')
+# test = test.drop(columns=['w2v_pos_ov', 'w2v_bc_ov'])
+
+# ############################################## COMPLETE MODEL ##############################################
+# print("\n\n################################## COMPLETE MODEL - WITH UPDATE ###################################")
+# now = datetime.datetime.now()
+# print(now.strftime("%H:%M.%S"))
+# name = 'w2v_all'
 # create_complete_model(que_w2v_ov_emb, ans_w2v_ov_emb, que_pos_emb_up, ans_pos_emb_up, que_bc_emb_up, ans_bc_emb_up, 'Q_W2V', 'A_W2V', 95, name, 5)
 # (qid,_ ), X, lab = dataAllOv(test, 'Q_W2V', 'A_W2V')
 # get_results(models_dir+name+'.h5', name, qid, X, lab, test)
 
 # ############################################## COMPLETE MODEL ##############################################
 
-test.to_csv(path_or_buf=results_dir+'test_w_results.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+# test.to_csv(path_or_buf=results_dir+'complete.csv', sep=',', na_rep='', header=1, index=False, index_label=None, mode='w')

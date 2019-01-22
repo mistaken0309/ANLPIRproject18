@@ -150,27 +150,33 @@ def embeddes(x):
     # CREATE POS TAGS AND BROWN CLUSTERS
     que = nlp(x['Question'])
     tags_Q = list()
+    tags_u_Q = list()
     bcs_Q = list()
     
     for w in que:
         p = update_dict(w.tag_, dict_POS)
         bc = update_dict(w.cluster, dict_BC)
         tags_Q.append(p)
+        tags_u_Q.append(w.tag_)
         bcs_Q.append(bc)
         
 
     ans = nlp(x['Sentence'])
     tags_A = list()
+    tags_u_A = list()
     bcs_A = list()
     for w in ans:
         p = update_dict(w.tag_, dict_POS)
         bc = update_dict(w.cluster, dict_BC)
         tags_A.append(p)
+        tags_u_A.append(w.tag_)
         bcs_A.append(bc)
 
     
     x['Q_POS'] = ','.join(map(str, pad_sequences([tags_Q], max_len_q)[0]))
+    x['Q_U_POS'] = ','.join(map(str, tags_u_Q))
     x['A_POS'] = ','.join(map(str, pad_sequences([tags_A], max_len_a)[0]))
+    x['A_U_POS'] = ','.join(map(str, tags_u_A))
     
     x['Q_BC'] = ','.join(map(str, pad_sequences([bcs_Q], max_len_q)[0]))
     x['A_BC'] = ','.join(map(str, pad_sequences([bcs_A], max_len_a)[0]))
@@ -186,16 +192,17 @@ def embeddes(x):
 def create_dict(toks, embed, dictionar):
     i = 2
     for _, tok in enumerate(toks):
-        if tok in embed:
+        # if tok in embed:
             dictionar[tok] = i
             i+=1
 
 ##################################### CREATE EMBEDDING MATRIX ####################################
 def emb_matrix(dictionar, emb_, dim):      
-    embedding_matrix = np.zeros((len(dictionar), dim))
+    embedding_matrix = np.random.uniform(-1.0, 1.0, (len(dictionar), dim))
     for word in dictionar:
         if word in emb_:
             embedding_matrix[dictionar[word]] = emb_[word]
+    embedding_matrix[0] = np.zeros((1, dim))
     return embedding_matrix
 
 def emb_matrix_unk(dictionar, dim):        
@@ -222,7 +229,7 @@ train = train.apply(embeddes, axis=1)
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
 print("WRITING TRAIN TO FILE")
-train.to_csv(path_or_buf=data_dir+'train_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+train.to_csv(path_or_buf=data_dir+'train_embeddings.csv', sep=',', na_rep='', header=1, index=False, index_label=None, mode='w')
 
 i = 1
 print("DEV")
@@ -234,7 +241,7 @@ dev = dev.apply(embeddes, axis=1)
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
 print("WRITING DEV TO FILE")
-dev.to_csv(path_or_buf=data_dir+'dev_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+dev.to_csv(path_or_buf=data_dir+'dev_embeddings.csv', sep=',', na_rep='', header=1, index=False, index_label=None, mode='w')
 
 i = 1
 print("TEST")
@@ -246,7 +253,7 @@ test = test.apply(embeddes, axis=1)
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
 print("WRITING TEST TO FILE")
-test.to_csv(path_or_buf=data_dir+'test_embeddings.csv', sep=',', na_rep='', header=1, index=True, index_label=None, mode='w')
+test.to_csv(path_or_buf=data_dir+'test_embeddings.csv', sep=',', na_rep='', header=1, index=False, index_label=None, mode='w')
 now = datetime.datetime.now()
 print(now.strftime("%H:%M.%S"))
 
